@@ -61,8 +61,8 @@ export const Home: React.FC = () => {
       <Navbar />
       <main className="flex-grow">
         <Hero />
-        <QuickStats />
         <VisionSection />
+        <QuickStats />
         <ImpactAreas />
         <VideoGallery 
             videos={videos} 

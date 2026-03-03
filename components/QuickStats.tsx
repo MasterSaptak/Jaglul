@@ -9,66 +9,66 @@ export const QuickStats: React.FC = () => {
       value: "30+",
       label: "Years of Service",
       sublabel: "Bangladesh Army",
-      color: "from-emerald-500 to-emerald-700",
-      bgColor: "bg-emerald-500",
-      lightBg: "bg-emerald-50",
-      textColor: "text-emerald-600",
-      borderColor: "border-emerald-200"
+      color: "from-[#006A4E] to-[#004D38]",
+      bgColor: "bg-[#006A4E]",
+      lightBg: "bg-[#006A4E]/10",
+      textColor: "text-[#006A4E]",
+      borderColor: "border-[#006A4E]/30"
     },
     {
       icon: <Crosshair className="w-6 h-6" />,
       value: "1990",
       label: "Commissioned",
       sublabel: "Artillery Regiment",
-      color: "from-blue-500 to-blue-700",
-      bgColor: "bg-blue-500",
-      lightBg: "bg-blue-50",
-      textColor: "text-blue-600",
-      borderColor: "border-blue-200"
+      color: "from-[#F42A41] to-[#D91E36]",
+      bgColor: "bg-[#F42A41]",
+      lightBg: "bg-[#F42A41]/10",
+      textColor: "text-[#F42A41]",
+      borderColor: "border-[#F42A41]/30"
     },
     {
       icon: <Globe className="w-6 h-6" />,
       value: "2",
       label: "UN Missions",
       sublabel: "Sierra Leone & Mali",
-      color: "from-cyan-500 to-cyan-700",
-      bgColor: "bg-cyan-500",
-      lightBg: "bg-cyan-50",
-      textColor: "text-cyan-600",
-      borderColor: "border-cyan-200"
+      color: "from-[#006A4E] to-[#004D38]",
+      bgColor: "bg-[#006A4E]",
+      lightBg: "bg-[#006A4E]/10",
+      textColor: "text-[#006A4E]",
+      borderColor: "border-[#006A4E]/30"
     },
     {
       icon: <Award className="w-6 h-6" />,
       value: "SUP",
       label: "Sena Utkarsh Padak",
       sublabel: "Awarded 2019",
-      color: "from-amber-500 to-amber-700",
-      bgColor: "bg-amber-500",
-      lightBg: "bg-amber-50",
-      textColor: "text-amber-600",
-      borderColor: "border-amber-200"
+      color: "from-[#D4AF37] to-[#B8960B]",
+      bgColor: "bg-[#D4AF37]",
+      lightBg: "bg-[#D4AF37]/10",
+      textColor: "text-[#B8960B]",
+      borderColor: "border-[#D4AF37]/30"
     },
     {
       icon: <BookOpen className="w-6 h-6" />,
       value: "PhD",
       label: "In Progress",
       sublabel: "Lifelong Learner",
-      color: "from-purple-500 to-purple-700",
-      bgColor: "bg-purple-500",
-      lightBg: "bg-purple-50",
-      textColor: "text-purple-600",
-      borderColor: "border-purple-200"
+      color: "from-[#006A4E] to-[#004D38]",
+      bgColor: "bg-[#006A4E]",
+      lightBg: "bg-[#006A4E]/10",
+      textColor: "text-[#006A4E]",
+      borderColor: "border-[#006A4E]/30"
     },
     {
       icon: <Users className="w-6 h-6" />,
       value: "Active",
       label: "Veterans Advisor",
       sublabel: "Welfare Advocate",
-      color: "from-rose-500 to-rose-700",
-      bgColor: "bg-rose-500",
-      lightBg: "bg-rose-50",
-      textColor: "text-rose-600",
-      borderColor: "border-rose-200"
+      color: "from-[#F42A41] to-[#D91E36]",
+      bgColor: "bg-[#F42A41]",
+      lightBg: "bg-[#F42A41]/10",
+      textColor: "text-[#F42A41]",
+      borderColor: "border-[#F42A41]/30"
     }
   ];
 

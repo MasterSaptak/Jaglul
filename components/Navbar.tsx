@@ -57,8 +57,8 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
-      ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-[#006A4E]/10'
-      : 'bg-white shadow-md border-b border-[#006A4E]/10'
+      ? 'bg-[#F42A41]/98 backdrop-blur-md shadow-lg border-b border-[#D91E36]'
+      : 'bg-[#F42A41] shadow-md border-b border-[#D91E36]'
       }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
@@ -66,7 +66,7 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center gap-3 group">
               {/* Portrait with BD Flag colors */}
-              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#D4AF37] shadow-md group-hover:border-[#F42A41] group-hover:scale-110 transition-all duration-300 relative bg-white">
+              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/80 shadow-md group-hover:border-[#D4AF37] group-hover:scale-110 transition-all duration-300 relative bg-white">
                 <img
                   src="/colonel-jaglul.png"
                   alt="Col. Jaglul Ahsan"
@@ -74,10 +74,10 @@ export const Navbar: React.FC = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="font-serif font-black text-xl text-[#006A4E] leading-none tracking-wide" style={{ fontFamily: 'Playfair Display, Georgia, serif', letterSpacing: '0.05em' }}>
+                <span className="font-serif font-black text-xl text-white leading-none tracking-wide" style={{ fontFamily: 'Playfair Display, Georgia, serif', letterSpacing: '0.05em' }}>
                   JAGLUL AHSAN
                 </span>
-                <span className="text-xs font-medium text-[#006A4E]/60 tracking-wide mt-0.5">
+                <span className="text-xs font-medium text-white/80 tracking-wide mt-0.5">
                   Colonel (Retd.) • SUP, psc, G
                 </span>
               </div>
@@ -91,8 +91,8 @@ export const Navbar: React.FC = () => {
                 key={link.name}
                 to={link.path}
                 className={`px-4 py-2 rounded-md font-medium transition-all duration-200 ${isActive(link.path)
-                  ? 'text-[#006A4E] bg-[#006A4E]/5'
-                  : 'text-gray-600 hover:text-[#006A4E] hover:bg-[#006A4E]/5'
+                  ? 'text-white bg-white/20'
+                  : 'text-white/90 hover:text-white hover:bg-white/15'
                   }`}
               >
                 {link.name}
@@ -104,8 +104,8 @@ export const Navbar: React.FC = () => {
               <button
                 onClick={() => setImpactDropdown(!impactDropdown)}
                 className={`px-4 py-2 rounded-md font-medium transition-all duration-200 flex items-center gap-1 ${isImpactActive()
-                  ? 'text-[#006A4E] bg-[#006A4E]/5'
-                  : 'text-gray-600 hover:text-[#006A4E] hover:bg-[#006A4E]/5'
+                  ? 'text-white bg-white/20'
+                  : 'text-white/90 hover:text-white hover:bg-white/15'
                   }`}
               >
                 Impact
@@ -114,15 +114,15 @@ export const Navbar: React.FC = () => {
 
               {/* Dropdown Menu */}
               {impactDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#006A4E]/10 py-2 animate-fade-in">
+                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#F42A41]/30 py-2 animate-fade-in">
                   {impactLinks.map((link) => (
                     <Link
                       key={link.path}
                       to={link.path}
                       onClick={() => setImpactDropdown(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-gray-600 hover:bg-[#006A4E]/5 hover:text-[#006A4E] transition-colors"
+                      className="flex items-center gap-3 px-4 py-2.5 text-[#006A4E] hover:bg-[#006A4E]/10 transition-colors"
                     >
-                      <span className="text-[#006A4E]/60">{link.icon}</span>
+                      <span className="text-[#F42A41]">{link.icon}</span>
                       {link.name}
                     </Link>
                   ))}
@@ -134,8 +134,8 @@ export const Navbar: React.FC = () => {
             <Link
               to="/gallery"
               className={`px-4 py-2 rounded-md font-medium transition-all duration-200 flex items-center gap-1.5 ${location.pathname === '/gallery'
-                ? 'text-[#006A4E] bg-[#006A4E]/5'
-                : 'text-gray-600 hover:text-[#006A4E] hover:bg-[#006A4E]/5'
+                ? 'text-white bg-white/20'
+                : 'text-white/90 hover:text-white hover:bg-white/15'
                 }`}
             >
               <Image size={16} />
@@ -146,8 +146,8 @@ export const Navbar: React.FC = () => {
             <Link
               to="/contact"
               className={`px-4 py-2 rounded-md font-medium transition-all duration-200 ${location.pathname === '/contact'
-                ? 'text-[#006A4E] bg-[#006A4E]/5'
-                : 'text-gray-600 hover:text-[#006A4E] hover:bg-[#006A4E]/5'
+                ? 'text-white bg-white/20'
+                : 'text-white/90 hover:text-white hover:bg-white/15'
                 }`}
             >
               Contact
@@ -156,16 +156,16 @@ export const Navbar: React.FC = () => {
             {/* Join Me CTA - BD Red with Animation */}
             <Link
               to="/contact"
-              className="ml-4 relative bg-[#F42A41] text-white px-6 py-2.5 rounded-md font-bold hover:bg-[#D91E36] hover:-translate-y-1 hover:scale-105 hover:shadow-xl hover:shadow-red-500/40 transition-all duration-300 shadow-md btn-military overflow-hidden group"
+              className="ml-4 relative bg-white text-[#F42A41] px-6 py-2.5 rounded-md font-bold hover:bg-[#D4AF37] hover:text-[#006A4E] hover:-translate-y-1 hover:scale-105 hover:shadow-xl transition-all duration-300 shadow-md btn-military overflow-hidden group"
             >
               <span className="relative z-10">Join Me</span>
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
             </Link>
 
             {isAdmin && (
-              <div className="flex items-center gap-3 ml-4 pl-4 border-l border-[#006A4E]/20">
-                <span className="text-xs font-bold text-[#006A4E] bg-[#006A4E]/10 px-2 py-1 rounded">ADMIN</span>
-                <button onClick={logout} className="text-sm text-gray-500 hover:text-[#F42A41] transition-colors">Logout</button>
+              <div className="flex items-center gap-3 ml-4 pl-4 border-l border-white/30">
+                <span className="text-xs font-bold text-white bg-white/20 px-2 py-1 rounded">ADMIN</span>
+                <button onClick={logout} className="text-sm text-white/80 hover:text-white transition-colors">Logout</button>
               </div>
             )}
           </div>
@@ -174,7 +174,7 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-[#006A4E] hover:text-[#F42A41] hover:bg-[#006A4E]/5 focus:outline-none transition-colors"
+              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-white/20 focus:outline-none transition-colors"
             >
               {isOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
@@ -185,15 +185,15 @@ export const Navbar: React.FC = () => {
       {/* Mobile Menu */}
       <div className={`md:hidden transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
         }`}>
-        <div className="bg-white border-t border-[#006A4E]/10 px-4 pt-2 pb-4 space-y-1">
+        <div className="bg-[#D91E36] border-t border-white/20 px-4 pt-2 pb-4 space-y-1">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               to={link.path}
               onClick={() => setIsOpen(false)}
               className={`block px-4 py-3 rounded-md font-medium transition-colors ${isActive(link.path)
-                ? 'text-[#006A4E] bg-[#006A4E]/5'
-                : 'text-gray-600 hover:text-[#006A4E] hover:bg-[#006A4E]/5'
+                ? 'text-white bg-white/20'
+                : 'text-white/90 hover:text-white hover:bg-white/15'
                 }`}
             >
               {link.name}
@@ -201,10 +201,10 @@ export const Navbar: React.FC = () => {
           ))}
 
           {/* Mobile Impact Dropdown */}
-          <div className="border-t border-[#006A4E]/10 pt-2 mt-2">
+          <div className="border-t border-white/20 pt-2 mt-2">
             <button
               onClick={() => setMobileImpactOpen(!mobileImpactOpen)}
-              className="w-full flex items-center justify-between px-4 py-3 rounded-md font-medium text-gray-600"
+              className="w-full flex items-center justify-between px-4 py-3 rounded-md font-medium text-white/90"
             >
               <span>Impact Focus Areas</span>
               <ChevronDown size={16} className={`transition-transform duration-200 ${mobileImpactOpen ? 'rotate-180' : ''}`} />
@@ -217,9 +217,9 @@ export const Navbar: React.FC = () => {
                     key={link.path}
                     to={link.path}
                     onClick={() => { setIsOpen(false); setMobileImpactOpen(false); }}
-                    className="flex items-center gap-3 px-4 py-2.5 text-gray-600 hover:text-[#006A4E] rounded-md transition-colors"
+                    className="flex items-center gap-3 px-4 py-2.5 text-white/90 hover:text-white hover:bg-white/15 rounded-md transition-colors"
                   >
-                    <span className="text-[#006A4E]/60">{link.icon}</span>
+                    <span className="text-white/70">{link.icon}</span>
                     {link.name}
                   </Link>
                 ))}
@@ -231,7 +231,7 @@ export const Navbar: React.FC = () => {
           <Link
             to="/gallery"
             onClick={() => setIsOpen(false)}
-            className="flex items-center gap-2 px-4 py-3 rounded-md font-medium text-gray-600 hover:text-[#006A4E] hover:bg-[#006A4E]/5 transition-colors"
+            className="flex items-center gap-2 px-4 py-3 rounded-md font-medium text-white/90 hover:text-white hover:bg-white/15 transition-colors"
           >
             <Image size={16} />
             Media Gallery
@@ -241,7 +241,7 @@ export const Navbar: React.FC = () => {
           <Link
             to="/contact"
             onClick={() => setIsOpen(false)}
-            className="block px-4 py-3 rounded-md font-medium text-gray-600 hover:text-[#006A4E] hover:bg-[#006A4E]/5 transition-colors"
+            className="block px-4 py-3 rounded-md font-medium text-white/90 hover:text-white hover:bg-white/15 transition-colors"
           >
             Contact
           </Link>
@@ -249,7 +249,7 @@ export const Navbar: React.FC = () => {
           <Link
             to="/contact"
             onClick={() => setIsOpen(false)}
-            className="block w-full text-center mt-4 relative bg-[#F42A41] text-white px-5 py-3 rounded-md font-bold hover:bg-[#D91E36] hover:scale-[1.02] hover:shadow-lg hover:shadow-red-500/30 transition-all duration-300 overflow-hidden group"
+            className="block w-full text-center mt-4 relative bg-white text-[#F42A41] px-5 py-3 rounded-md font-bold hover:bg-[#D4AF37] hover:text-[#006A4E] hover:scale-[1.02] hover:shadow-lg transition-all duration-300 overflow-hidden group"
           >
             <span className="relative z-10">Join Me</span>
             <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>

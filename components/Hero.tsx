@@ -4,33 +4,46 @@ import { ChevronRight, Shield, Award, Globe } from 'lucide-react';
 export const Hero: React.FC = () => {
   return (
     <div className="relative h-[85vh] overflow-hidden">
-      {/* Background Image - Army with Motto */}
+      {/* Background - background new pc.png from public folder */}
       <div className="absolute inset-0">
         <img
-          src="/hero-army-motto-mobile.png"
-          alt="Bangladesh Army motto background"
-          className="w-full h-full object-cover block lg:hidden"
+          src="/background%20new%20pc.png"
+          alt=""
+          className="w-full h-full object-cover object-center"
+          aria-hidden
         />
-        <img
-          src="/hero-army-motto.png"
-          alt="Bangladesh Army motto background"
-          className="w-full h-full object-cover hidden lg:block"
-        />
-        {/* Very light overlay on left for text */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent"></div>
+        {/* Overlay for text readability - patriotic green tint */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#006A4E]/60 via-[#006A4E]/30 to-transparent"></div>
       </div>
 
       {/* Top accent - BD Flag colors */}
       <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-[#006A4E] via-[#F42A41] to-[#006A4E] z-20"></div>
 
-      {/* Content - TOP HALF ONLY */}
-      <div className="relative z-10 h-[55%] px-4 sm:px-6 lg:px-8 pt-4">
+      {/* Content - Full height for better layout */}
+      <div className="relative z-10 min-h-[70%] px-4 sm:px-6 lg:px-8 pt-6 pb-8">
         <div className="max-w-7xl mx-auto h-full">
-          <div className="flex items-start justify-between gap-6 h-full">
+          <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-6 h-full">
+            {/* Mobile: Colonel image at top for first-glance visibility */}
+            <div className="md:hidden w-48 mx-auto flex-shrink-0">
+              <img
+                src="/colonel-jaglul.png"
+                alt="Colonel (Retd.) Md. Jaglul Ahsan"
+                className="w-full h-auto drop-shadow-2xl rounded-lg border-2 border-[#D4AF37]/40"
+              />
+            </div>
 
             {/* Left - Text Box with BD/Army Colors */}
             <div className="max-w-md flex-shrink-0">
               <div className="bg-gradient-to-br from-[#006A4E]/95 to-[#004D38]/95 backdrop-blur-md rounded-xl p-5 lg:p-6 border border-[#D4AF37]/30 shadow-xl">
+
+                {/* Vision & Mission - FIRST GLANCE (Colonel's priority) */}
+                <p className="text-[#D4AF37] font-bold text-sm sm:text-base tracking-wide uppercase mb-2">
+                  A Visionary Leader
+                </p>
+                <p className="text-white font-semibold text-base sm:text-lg leading-snug mb-5">
+                  Leading with Integrity, Inspiring with Vision, Serving with Dedication.
+                </p>
+                <div className="h-px w-16 bg-[#F42A41] mb-5"></div>
 
                 {/* Badge */}
                 <div className="inline-flex items-center gap-2 bg-white/10 border border-[#D4AF37]/40 rounded-full px-4 py-2 mb-4">
@@ -93,9 +106,9 @@ export const Hero: React.FC = () => {
               </div>
             </div>
 
-            {/* Right - BIG Portrait */}
-            <div className="hidden lg:flex items-start justify-end flex-1">
-              <div className="w-[380px] xl:w-[450px] 2xl:w-[500px] animate-float">
+            {/* Right - LARGE Portrait (Colonel prominent) - visible on tablet+ */}
+            <div className="hidden md:flex items-end justify-end flex-1 min-h-[300px] lg:min-h-[400px]">
+              <div className="w-[280px] sm:w-[320px] lg:w-[420px] xl:w-[520px] 2xl:w-[600px] animate-float">
                 <img
                   src="/colonel-jaglul.png"
                   alt="Colonel (Retd.) Md. Jaglul Ahsan"

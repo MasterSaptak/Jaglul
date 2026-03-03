@@ -49,20 +49,22 @@ const VISION_ITEMS = [
 
 export const VisionSection: React.FC = () => {
   return (
-    <section id="vision" className="py-24 bg-army-cream relative overflow-hidden">
+    <section id="vision" className="py-24 bg-[#FAFAF8] relative overflow-hidden">
       {/* Subtle Background Decoration */}
       <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white to-transparent z-0"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Header */}
+        {/* Section Header - Patriotic BD colors: green + red */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-serif font-black text-army-green tracking-tight mb-6 relative inline-block">
-            Vision & Mission
+          <h2 className="text-4xl md:text-5xl font-serif font-black tracking-tight mb-6 relative inline-block">
+            <span className="text-[#006A4E]">Vision</span>
+            <span className="text-[#F42A41] mx-1">&</span>
+            <span className="text-[#006A4E]">Mission</span>
             {/* Animated accent underline */}
-            <div className="absolute -bottom-3 left-0 right-0 h-1.5 bg-gradient-to-r from-transparent via-army-red to-transparent opacity-80 rounded-full"></div>
+            <div className="absolute -bottom-3 left-0 right-0 h-1.5 bg-gradient-to-r from-[#006A4E] via-[#F42A41] to-[#006A4E] opacity-80 rounded-full"></div>
           </h2>
 
-          <p className="max-w-2xl mx-auto text-army-oliveDark/80 text-lg font-medium leading-relaxed">
+          <p className="max-w-2xl mx-auto text-[#3A4A1C]/90 text-lg font-medium leading-relaxed">
             Colonel Ahsan's steadfast commitment to national strength, veteran welfare, youth empowerment, and ethical leadership.
           </p>
         </div>
@@ -98,7 +100,7 @@ export const VisionSection: React.FC = () => {
 
                   {/* CTA Button - Smooth fade in */}
                   <div className="opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100 flex items-center pt-3 transform translate-y-2 group-hover:translate-y-0">
-                    <span className="text-amber-400 font-bold text-sm uppercase tracking-widest flex items-center gap-2">
+                    <span className="text-[#F42A41] font-bold text-sm uppercase tracking-widest flex items-center gap-2">
                       See More
                       <ArrowRight size={18} className="transform group-hover:translate-x-1.5 transition-transform duration-300 ease-out" />
                     </span>
@@ -107,7 +109,7 @@ export const VisionSection: React.FC = () => {
               </div>
 
               {/* Interactive Border on Hover */}
-              <div className="absolute inset-0 border-2 border-transparent group-hover:border-amber-400/70 rounded-2xl transition-all duration-500 pointer-events-none z-30"></div>
+              <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#F42A41]/70 rounded-2xl transition-all duration-500 pointer-events-none z-30"></div>
             </a>
           ))}
         </div>
