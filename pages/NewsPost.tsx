@@ -88,7 +88,7 @@ export const NewsPost: React.FC = () => {
         {/* Hero Header */}
         <section className="relative">
           {/* Featured Image */}
-          <div className="h-[40vh] md:h-[50vh] relative overflow-hidden">
+          <div className="h-[35vh] sm:h-[40vh] md:h-[50vh] relative overflow-hidden">
             <img 
               src={post.imageUrl} 
               alt={post.title}
@@ -99,7 +99,7 @@ export const NewsPost: React.FC = () => {
           
           {/* Header Content */}
           <div className="absolute bottom-0 left-0 right-0">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+            <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 pb-6 sm:pb-8">
               {/* Back Button */}
               <button 
                 onClick={() => navigate(-1)}
@@ -122,7 +122,7 @@ export const NewsPost: React.FC = () => {
               </div>
               
               {/* Title */}
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white leading-tight mb-4">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white leading-tight mb-4">
                 {post.title}
               </h1>
               
@@ -148,9 +148,9 @@ export const NewsPost: React.FC = () => {
         </section>
 
         {/* Content Section */}
-        <section className="py-12">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-3 gap-8">
+        <section className="py-8 sm:py-12">
+          <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
               {/* Main Content */}
               <div className="lg:col-span-2">
                 {/* Event Summary Card - Standardized for all posts */}
@@ -184,7 +184,7 @@ export const NewsPost: React.FC = () => {
               {/* Sidebar */}
               <div className="lg:col-span-1">
                 {/* Share Card */}
-                <div className="bg-white rounded-xl border border-army-green/10 p-5 mb-6 sticky top-24">
+                <div className="bg-white rounded-xl border border-army-green/10 p-4 sm:p-5 mb-6 lg:sticky lg:top-24">
                   <h4 className="font-semibold text-army-navy mb-4 flex items-center gap-2">
                     <Share2 size={18} />
                     Share This Article

@@ -13,11 +13,11 @@ const iconMap: { [key: string]: React.ReactNode } = {
 };
 
 const colorMap: { [key: string]: { bg: string; text: string; border: string } } = {
-  humanitarian: { bg: 'bg-army-red/10', text: 'text-army-red', border: 'border-army-red/30' },
-  education: { bg: 'bg-army-gold/10', text: 'text-army-gold', border: 'border-army-gold/30' },
-  security: { bg: 'bg-army-navy/10', text: 'text-army-navy', border: 'border-army-navy/30' },
-  veterans: { bg: 'bg-army-green/10', text: 'text-army-green', border: 'border-army-green/30' },
-  civic: { bg: 'bg-army-olive/10', text: 'text-army-olive', border: 'border-army-olive/30' }
+  humanitarian: { bg: 'bg-[#F42A41]/10', text: 'text-[#F42A41]/90', border: 'border-[#F42A41]/25' },
+  education: { bg: 'bg-[#D4AF37]/10', text: 'text-[#D4AF37]/90', border: 'border-[#D4AF37]/25' },
+  security: { bg: 'bg-army-navy/10', text: 'text-army-navy/90', border: 'border-army-navy/25' },
+  veterans: { bg: 'bg-[#006A4E]/10', text: 'text-[#006A4E]/90', border: 'border-[#006A4E]/25' },
+  civic: { bg: 'bg-army-olive/10', text: 'text-army-olive/90', border: 'border-army-olive/25' }
 };
 
 export const ImpactAreas: React.FC = () => {
@@ -30,19 +30,19 @@ export const ImpactAreas: React.FC = () => {
   const featuredAreas = ['humanitarian', 'education', 'veterans', 'security'];
 
   return (
-    <section className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-10 sm:py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-army-green mb-2">Areas of Impact</h2>
-          <div className="h-1 w-24 bg-army-red mx-auto mb-4"></div>
-          <p className="text-army-oliveDark/80 max-w-2xl mx-auto">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-[#006A4E]/90 mb-2">Areas of Impact</h2>
+          <div className="h-1 w-24 bg-[#F42A41]/80 mx-auto mb-4"></div>
+          <p className="text-army-oliveDark/80 max-w-2xl mx-auto text-sm sm:text-base px-2">
             Colonel Ahsan's work spans multiple areas of public service, from humanitarian relief to national security discourse.
           </p>
         </div>
 
         {/* Impact Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {featuredAreas.map((key) => {
             const config = THEMATIC_AREAS[key as ThematicArea];
             const colors = colorMap[key];
@@ -52,7 +52,7 @@ export const ImpactAreas: React.FC = () => {
               <Link
                 key={key}
                 to={`/impact/${key}`}
-                className="group relative bg-army-cream rounded-xl p-6 border border-army-green/10 card-lift overflow-hidden"
+                className="group relative bg-army-cream rounded-xl p-4 sm:p-6 border border-army-green/10 card-lift overflow-hidden"
               >
                 {/* Background Accent */}
                 <div className={`absolute top-0 right-0 w-32 h-32 ${colors.bg} rounded-bl-full opacity-50 group-hover:opacity-100 transition-opacity`}></div>
@@ -63,7 +63,7 @@ export const ImpactAreas: React.FC = () => {
                 </div>
                 
                 {/* Content */}
-                <h3 className="font-serif font-bold text-army-navy text-lg mb-1 relative z-10 group-hover:text-army-green transition-colors">
+                <h3 className="font-serif font-bold text-army-navy text-lg mb-1 relative z-10 group-hover:text-[#006A4E]/90 transition-colors">
                   {config.title}
                 </h3>
                 <p className="text-sm text-army-olive/70 mb-3 relative z-10">
@@ -89,7 +89,7 @@ export const ImpactAreas: React.FC = () => {
           </p>
           <Link
             to="/news"
-            className="inline-flex items-center gap-2 bg-army-green text-white px-6 py-3 rounded-lg font-semibold hover:bg-army-olive transition-colors btn-military"
+            className="inline-flex items-center gap-2 bg-[#006A4E]/90 text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#006A4E]/80 transition-colors btn-military"
           >
             View Complete Archive
             <ArrowRight size={18} />

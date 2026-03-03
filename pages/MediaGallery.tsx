@@ -71,24 +71,24 @@ export const MediaGallery: React.FC = () => {
       
       <main className="flex-grow">
         {/* Hero */}
-        <section className="relative bg-gradient-to-br from-army-green via-army-olive to-army-forest py-16 md:py-20">
+        <section className="relative bg-gradient-to-br from-army-green via-army-olive to-army-forest py-10 sm:py-16 md:py-20">
           <div className="absolute inset-0 opacity-[0.03]" style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
           }}></div>
           
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center">
               <div className="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-6 text-white border border-white/20">
                 <Image size={32} />
               </div>
-              <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Media Gallery</h1>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white mb-4">Media Gallery</h1>
               <div className="gold-line w-24 mx-auto mb-6"></div>
               <p className="text-green-100/80 max-w-2xl mx-auto">
                 Visual documentation of events, initiatives, and public engagements. Browse by year or focus area.
               </p>
               
               {/* Stats */}
-              <div className="flex justify-center gap-8 mt-8 text-white/80">
+              <div className="flex justify-center gap-4 sm:gap-8 mt-6 sm:mt-8 text-white/80">
                 <div className="text-center">
                   <p className="text-3xl font-bold text-white">{MEDIA_GALLERY.length}</p>
                   <p className="text-sm">Total Images</p>
@@ -104,9 +104,9 @@ export const MediaGallery: React.FC = () => {
         </section>
 
         {/* Filters */}
-        <section className="bg-white border-b border-army-green/10 sticky top-20 z-40 shadow-sm">
+        <section className="bg-white border-b border-army-green/10 sticky top-[4.5rem] sm:top-20 z-40 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-between gap-3 sm:gap-4">
               <div className="flex items-center gap-2">
                 <Grid size={18} className="text-army-olive" />
                 <span className="text-army-navy font-medium">
@@ -115,7 +115,7 @@ export const MediaGallery: React.FC = () => {
                 </span>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                 {/* Year Filter */}
                 <select
                   value={selectedYear}
@@ -172,7 +172,7 @@ export const MediaGallery: React.FC = () => {
                     </div>
 
                     {/* Image Grid */}
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                       {images.map((item, index) => {
                         const globalIndex = filteredMedia.findIndex(m => m.id === item.id);
                         return (
@@ -248,26 +248,26 @@ export const MediaGallery: React.FC = () => {
           className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
           onClick={closeLightbox}
         >
-          {/* Close Button */}
+          {/* Close Button - touch friendly */}
           <button 
-            className="absolute top-4 right-4 text-white/80 hover:text-white p-2 z-50"
+            className="absolute top-4 right-4 text-white/80 hover:text-white p-3 sm:p-2 z-50 min-w-[44px] min-h-[44px] flex items-center justify-center"
             onClick={closeLightbox}
           >
-            <X size={32} />
+            <X size={28} className="sm:w-8 sm:h-8" />
           </button>
 
-          {/* Navigation */}
+          {/* Navigation - touch friendly */}
           <button 
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors z-50"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-3 sm:p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors z-50 min-w-[48px] min-h-[48px] flex items-center justify-center"
             onClick={(e) => { e.stopPropagation(); navigateLightbox('prev'); }}
           >
-            <ChevronLeft size={32} />
+            <ChevronLeft size={28} className="sm:w-8 sm:h-8" />
           </button>
           <button 
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors z-50"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-3 sm:p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors z-50 min-w-[48px] min-h-[48px] flex items-center justify-center"
             onClick={(e) => { e.stopPropagation(); navigateLightbox('next'); }}
           >
-            <ChevronRight size={32} />
+            <ChevronRight size={28} className="sm:w-8 sm:h-8" />
           </button>
 
           {/* Image */}

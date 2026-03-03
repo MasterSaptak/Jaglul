@@ -57,27 +57,27 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
-      ? 'bg-[#F42A41]/98 backdrop-blur-md shadow-lg border-b border-[#D91E36]'
-      : 'bg-[#F42A41] shadow-md border-b border-[#D91E36]'
+      ? 'bg-[#F42A41]/95 backdrop-blur-md shadow-lg border-b border-[#D91E36]/80'
+      : 'bg-[#F42A41]/95 shadow-md border-b border-[#D91E36]/80'
       }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-20">
+        <div className="flex justify-between items-center h-16 sm:h-20">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center gap-3 group">
+            <Link to="/" className="flex-shrink-0 flex items-center gap-2 sm:gap-3 group min-w-0">
               {/* Portrait with BD Flag colors */}
-              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/80 shadow-md group-hover:border-[#D4AF37] group-hover:scale-110 transition-all duration-300 relative bg-white">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-white/80 shadow-md group-hover:border-[#D4AF37] group-hover:scale-110 transition-all duration-300 relative bg-white flex-shrink-0">
                 <img
                   src="/colonel-jaglul.png"
                   alt="Col. Jaglul Ahsan"
                   className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-300"
                 />
               </div>
-              <div className="flex flex-col">
-                <span className="font-serif font-black text-xl text-white leading-none tracking-wide" style={{ fontFamily: 'Playfair Display, Georgia, serif', letterSpacing: '0.05em' }}>
+              <div className="flex flex-col min-w-0">
+                <span className="font-serif font-black text-base sm:text-xl text-white leading-none tracking-wide truncate" style={{ fontFamily: 'Playfair Display, Georgia, serif', letterSpacing: '0.05em' }}>
                   JAGLUL AHSAN
                 </span>
-                <span className="text-xs font-medium text-white/80 tracking-wide mt-0.5">
+                <span className="text-[10px] sm:text-xs font-medium text-white/80 tracking-wide mt-0.5 hidden sm:block">
                   Colonel (Retd.) • SUP, psc, G
                 </span>
               </div>
@@ -183,7 +183,7 @@ export const Navbar: React.FC = () => {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`md:hidden transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0'
+      <div className={`md:hidden transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-[80vh] opacity-100 overflow-y-auto' : 'max-h-0 opacity-0'
         }`}>
         <div className="bg-[#D91E36] border-t border-white/20 px-4 pt-2 pb-4 space-y-1">
           {navLinks.map((link) => (

@@ -22,20 +22,20 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ posts, onDeletePost })
   };
 
   return (
-    <section id="news" className="py-16 bg-army-cream">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-army-green">Latest News & Updates</h2>
-          <div className="h-1 w-24 bg-army-red mx-auto mt-4"></div>
-          <p className="mt-4 text-army-oliveDark/80 max-w-2xl mx-auto">
+    <section id="news" className="py-10 sm:py-16 bg-[#F7FAF8]">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-[#006A4E]/90">Latest News & Updates</h2>
+          <div className="h-1 w-24 bg-[#F42A41]/80 mx-auto mt-4"></div>
+          <p className="mt-4 text-army-oliveDark/80 max-w-2xl mx-auto text-sm sm:text-base px-2">
             Stay informed about Colonel Ahsan's advocacy work, veteran welfare initiatives, and public engagements.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {posts.slice(0, 3).map((post) => (
-            <article key={post.id} className="bg-white rounded-xl overflow-hidden shadow-sm border border-army-green/10 flex flex-col card-lift group hover-shine">
-              <Link to={`/news/${post.id}`} className="relative h-48 overflow-hidden block img-zoom">
+            <article key={post.id} className="bg-white rounded-xl overflow-hidden shadow-sm border border-[#006A4E]/15 flex flex-col card-lift group hover-shine">
+              <Link to={`/news/${post.id}`} className="relative h-40 sm:h-48 overflow-hidden block img-zoom">
                 <img 
                   src={post.imageUrl} 
                   alt={post.title} 
@@ -48,14 +48,14 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ posts, onDeletePost })
                 </div>
                 {/* Comment Badge - Always show if comments enabled */}
                 {post.commentsEnabled && (
-                  <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-sm text-army-navy text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-2 shadow-lg group-hover:bg-army-green group-hover:text-white transition-colors duration-300">
+                  <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur-sm text-army-navy text-xs font-bold px-3 py-2 rounded-lg flex items-center gap-2 shadow-lg group-hover:bg-[#006A4E]/90 group-hover:text-white transition-colors duration-300">
                     <MessageSquare size={14} className="group-hover:animate-pulse" />
                     <span>{post.commentCount > 0 ? `${post.commentCount} Responses` : 'Join Discussion'}</span>
                   </div>
                 )}
               </Link>
               
-              <div className="p-6 flex-1 flex flex-col">
+              <div className="p-4 sm:p-6 flex-1 flex flex-col">
                 {/* Tags */}
                 {post.tags && post.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mb-3">
@@ -73,7 +73,7 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ posts, onDeletePost })
                 </div>
                 
                 <Link to={`/news/${post.id}`}>
-                  <h3 className="text-xl font-bold text-army-navy mb-3 line-clamp-2 leading-tight group-hover:text-army-green transition-colors">
+                  <h3 className="text-lg sm:text-xl font-bold text-army-navy mb-3 line-clamp-2 leading-tight group-hover:text-army-green transition-colors">
                     {post.title}
                   </h3>
                 </Link>
@@ -121,7 +121,7 @@ export const NewsSection: React.FC<NewsSectionProps> = ({ posts, onDeletePost })
         <div className="text-center mt-12">
           <Link 
             to="/news"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-army-green text-white font-medium rounded-lg hover:bg-army-olive transition-colors btn-military"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#006A4E]/90 text-white font-medium rounded-lg hover:bg-[#006A4E]/80 transition-colors btn-military"
           >
             View All News & Events
             <ArrowRight size={18} />

@@ -6,12 +6,12 @@ export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gradient-to-br from-[#006A4E] via-[#004D38] to-[#1A3A2A] text-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
+    <footer className="bg-gradient-to-br from-[#006A4E]/90 via-[#004D38]/90 to-[#1A3A2A]/90 text-gray-200">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-10">
         {/* Top stripe - BD flag colors */}
-        <div className="h-1 w-full bg-gradient-to-r from-[#006A4E] via-[#F42A41] to-[#D4AF37] rounded-full mb-8 opacity-90" />
+        <div className="h-1 w-full bg-gradient-to-r from-[#006A4E]/85 via-[#F42A41]/85 to-[#D4AF37]/85 rounded-full mb-8" />
 
-        <div className="grid gap-8 md:gap-10 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-start">
+        <div className="grid gap-6 sm:gap-8 md:gap-10 grid-cols-1 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] items-start">
           {/* Brand / Identity */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
@@ -67,7 +67,7 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Links & Contact */}
-          <div className="grid sm:grid-cols-3 gap-6 md:gap-8 text-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 text-sm">
             {/* Navigation */}
             <div>
               <h4 className="text-xs font-semibold tracking-[0.18em] uppercase text-gray-400 mb-4">
@@ -195,8 +195,8 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-6 pt-4 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 text-[12px] text-gray-500">
-          <p>© {currentYear} Colonel (Retd) Md. Jaglul Ahsan. All rights reserved.</p>
+        <div className="mt-6 pt-4 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 text-[11px] sm:text-[12px] text-gray-500 text-center md:text-left">
+          <p className="break-words">© {currentYear} Colonel (Retd) Md. Jaglul Ahsan. All rights reserved.</p>
           <p className="text-gray-600">
             Designed with discipline &amp; dedication.
           </p>

@@ -10,12 +10,12 @@ export const NewsTicker: React.FC<NewsTickerProps> = ({ updates }) => {
   const { isAdmin } = useAuth();
 
   return (
-    <div className="bg-gradient-to-r from-[#006A4E] via-[#004D38] to-[#006A4E] text-white relative flex items-center h-12 overflow-hidden border-b-2 border-[#D4AF37]/60 z-40">
-      {/* BD Flag Red accent */}
-      <div className="bg-[#F42A41] h-full px-5 flex items-center justify-center z-10 shadow-lg relative">
+    <div className="bg-gradient-to-r from-[#006A4E]/90 via-[#004D38]/90 to-[#006A4E]/90 text-white relative flex items-center min-h-[44px] sm:h-12 overflow-hidden border-b-2 border-[#D4AF37]/50 z-40">
+      {/* BD Flag Red accent - compact on mobile */}
+      <div className="bg-[#F42A41]/90 h-full px-3 sm:px-5 flex items-center justify-center z-10 shadow-lg relative flex-shrink-0">
         <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#D4AF37]"></div>
-        <span className="font-bold text-sm uppercase tracking-wider flex items-center gap-2">
-          <Bell size={16} className="animate-pulse" />
+        <span className="font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-1.5 sm:gap-2">
+          <Bell size={14} className="animate-pulse flex-shrink-0 sm:w-4 sm:h-4" />
           Latest Updates
         </span>
       </div>

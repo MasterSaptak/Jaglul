@@ -68,36 +68,36 @@ export const ContactSection: React.FC = () => {
   ];
 
   return (
-    <section id="contact" className="py-20 bg-gradient-to-b from-white to-army-cream relative overflow-hidden">
+    <section id="contact" className="py-12 sm:py-20 bg-gradient-to-b from-white to-[#F7FAF8] relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-army-green/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 animate-pulse"></div>
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-army-red/5 rounded-full blur-3xl translate-x-1/2 translate-y-1/2 animate-pulse" style={{ animationDelay: '1s' }}></div>
       <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-army-gold/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-army-green/10 text-army-green px-4 py-2 rounded-full text-sm font-semibold mb-4">
+        <div className="text-center mb-10 sm:mb-16">
+          <div className="inline-flex items-center gap-2 bg-[#006A4E]/15 text-[#006A4E]/90 px-4 py-2 rounded-full text-sm font-semibold mb-4">
             <Sparkles size={16} />
             Get Connected
           </div>
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-army-green mb-4">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-serif font-bold text-[#006A4E]/90 mb-3 sm:mb-4">
             Let's Start a Conversation
           </h2>
-          <p className="text-army-olive/80 max-w-2xl mx-auto text-lg">
+          <p className="text-army-olive/80 max-w-2xl mx-auto text-sm sm:text-lg px-2">
             For media inquiries, speaking engagements, veteran welfare matters, or collaboration proposals.
           </p>
         </div>
 
         {/* Contact Methods Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-10 sm:mb-16">
           {contactMethods.map((method, index) => (
             <a
               key={index}
               href={method.action}
               target={method.title === 'Visit' || method.title === 'WhatsApp' ? '_blank' : undefined}
               rel="noopener noreferrer"
-              className="group relative bg-white rounded-2xl p-6 border border-army-green/10 hover:border-transparent hover:shadow-2xl hover:shadow-army-green/10 transition-all duration-500 overflow-hidden"
+              className="group relative bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#006A4E]/15 hover:border-transparent hover:shadow-2xl hover:shadow-[#006A4E]/10 transition-all duration-500 overflow-hidden"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               {/* Gradient Background on Hover */}
@@ -105,11 +105,11 @@ export const ContactSection: React.FC = () => {
               
               {/* Content */}
               <div className="relative z-10">
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${method.color} flex items-center justify-center text-white mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}>
+                <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br ${method.color} flex items-center justify-center text-white mb-3 sm:mb-4 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300`}>
                   {method.icon}
                 </div>
                 
-                <h3 className="font-bold text-army-navy text-lg mb-1 group-hover:text-white transition-colors duration-300">
+                <h3 className="font-bold text-army-navy text-base sm:text-lg mb-1 group-hover:text-white transition-colors duration-300">
                   {method.title}
                 </h3>
                 <p className="text-army-green font-semibold text-sm mb-1 group-hover:text-white/90 transition-colors duration-300">
@@ -129,7 +129,7 @@ export const ContactSection: React.FC = () => {
         </div>
 
         {/* Main Contact Form */}
-        <div className="grid lg:grid-cols-5 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 sm:gap-8 items-start">
           {/* Left Side - Info */}
           <div className="lg:col-span-2 space-y-8">
             <div>
@@ -181,7 +181,7 @@ export const ContactSection: React.FC = () => {
 
           {/* Right Side - Form */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-3xl shadow-xl shadow-army-green/5 p-8 md:p-10 border border-army-green/10 relative overflow-hidden">
+            <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl shadow-[#006A4E]/5 p-4 sm:p-6 md:p-10 border border-[#006A4E]/15 relative overflow-hidden">
               {/* Decorative Element */}
               <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-army-green/5 to-army-gold/5 rounded-bl-full"></div>
               

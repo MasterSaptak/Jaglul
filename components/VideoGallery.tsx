@@ -26,11 +26,11 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({ videos, onAddVideo, 
   };
 
   return (
-    <section id="videos" className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-end mb-8">
-          <div>
-            <h2 className="text-3xl font-serif font-bold text-army-green">Video Messages</h2>
+    <section id="videos" className="py-10 sm:py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-6 sm:mb-8">
+          <div className="min-w-0">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#006A4E]/90">Video Messages</h2>
             <p className="text-army-olive/70 text-sm mt-1">Speeches, reflections, and public addresses</p>
             <div className="h-1 w-20 bg-army-red mt-2"></div>
           </div>
@@ -74,9 +74,9 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({ videos, onAddVideo, 
           </div>
         )}
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Main Video Player */}
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+          {/* Main Video Player - first on desktop, second on mobile */}
+          <div className="lg:col-span-2 order-2 lg:order-1">
             <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-xl">
               <iframe 
                 width="100%" 
@@ -89,13 +89,13 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({ videos, onAddVideo, 
               ></iframe>
             </div>
             <div className="mt-4">
-              <h3 className="text-2xl font-bold text-gray-900">{mainVideo.title}</h3>
+              <h3 className="text-lg sm:text-2xl font-bold text-gray-900 line-clamp-2">{mainVideo.title}</h3>
               <p className="text-gray-500 font-medium">{mainVideo.date}</p>
             </div>
           </div>
 
-          {/* Side List */}
-          <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+          {/* Side List - first on mobile (compact), sidebar on desktop */}
+          <div className="space-y-4 max-h-[200px] sm:max-h-[280px] lg:max-h-[500px] overflow-y-auto pr-2 custom-scrollbar order-1 lg:order-2">
             <h4 className="font-serif font-bold text-army-olive uppercase tracking-widest text-sm mb-4">
               Previous Addresses
             </h4>
@@ -103,16 +103,16 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({ videos, onAddVideo, 
               <div 
                 key={video.id}
                 onClick={() => setMainVideo(video)}
-                className={`group flex gap-4 p-3 rounded-lg cursor-pointer transition-all duration-300 ${mainVideo.id === video.id ? 'bg-army-green/5 border-l-4 border-army-green' : 'hover:bg-army-cream hover:translate-x-1'}`}
+                className={`group flex gap-4 p-3 rounded-lg cursor-pointer transition-all duration-300 ${mainVideo.id === video.id ? 'bg-[#006A4E]/10 border-l-4 border-[#006A4E]/80' : 'hover:bg-army-cream hover:translate-x-1'}`}
               >
-                <div className="relative w-32 flex-shrink-0 aspect-video bg-army-olive/20 rounded overflow-hidden">
+                <div className="relative w-24 sm:w-32 flex-shrink-0 aspect-video bg-army-olive/20 rounded overflow-hidden">
                   <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   <div className="absolute inset-0 bg-army-green/30 group-hover:bg-army-green/10 transition-colors flex items-center justify-center">
                      <Play size={16} className="text-white fill-current group-hover:scale-125 transition-transform duration-300" />
                   </div>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h5 className="font-bold text-gray-800 text-sm line-clamp-2 leading-snug group-hover:text-army-green transition-colors duration-300">{video.title}</h5>
+                  <h5 className="font-bold text-gray-800 text-sm line-clamp-2 leading-snug group-hover:text-[#006A4E]/90 transition-colors duration-300">{video.title}</h5>
                   <p className="text-xs text-army-olive/70 mt-1">{video.date}</p>
                   
                   {isAdmin && (

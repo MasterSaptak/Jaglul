@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Colonel (Retd.) Md. Jaglul Ahsan | Official Site</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link
@@ -43,7 +43,7 @@
             },
             // Easy access naming
             army: {
-              green: '#006A4E',       // Primary green
+              green: '#006A4E',
               greenLight: '#008060',
               greenDark: '#004D38',
               olive: '#4A5D23',
@@ -54,7 +54,8 @@
               gold: '#D4AF37',
               goldDark: '#B8960B',
               cream: '#FAFAF8',
-            }
+              navy: '#1E3A5F',
+            },
           },
           backgroundImage: {
             'bd-gradient': 'linear-gradient(135deg, #006A4E 0%, #004D38 100%)',
@@ -91,9 +92,29 @@
     }
   </script>
   <style>
+    /* Mobile: safe area for notched devices */
+    :root {
+      --sat: env(safe-area-inset-top);
+      --sar: env(safe-area-inset-right);
+      --sab: env(safe-area-inset-bottom);
+      --sal: env(safe-area-inset-left);
+    }
+
     /* Smooth Scrolling */
     html {
       scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      overflow-x: hidden;
+      min-width: 0;
+    }
+
+    /* Prevent images from overflowing on mobile */
+    img {
+      max-width: 100%;
+      height: auto;
     }
 
     /* Hide Scrollbar for ticker */
@@ -569,7 +590,7 @@
   <link rel="stylesheet" href="/index.css">
 </head>
 
-<body class="bg-[#FAFAF8] text-slate-800">
+<body class="bg-[#F7FAF8] text-slate-800">
   <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>

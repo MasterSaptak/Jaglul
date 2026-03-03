@@ -60,17 +60,17 @@ export const Contact: React.FC = () => {
       
       <main className="flex-grow">
         {/* ===== HERO SECTION ===== */}
-        <section className="relative bg-gradient-to-br from-army-green via-army-olive to-army-forest py-16 md:py-24 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-army-green via-army-olive to-army-forest py-10 sm:py-16 md:py-24 overflow-hidden">
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-[0.03]" style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
           }}></div>
           
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
             <div className="grid lg:grid-cols-2 gap-10 items-center">
               {/* Text Block */}
               <div className="text-center lg:text-left space-y-4 animate-fade-up">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-2">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-2">
                   Contact
                 </h1>
                 <div className="gold-line w-24 mx-auto lg:mx-0 mb-4"></div>
@@ -96,7 +96,7 @@ export const Contact: React.FC = () => {
         {/* ===== CONTACT INFO GRID ===== */}
         <section className="py-16 bg-army-green">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
               {contactInfo.map((item, index) => (
                 <div 
                   key={index}
@@ -271,7 +271,7 @@ export const Contact: React.FC = () => {
               <div className="gold-line w-16 mx-auto"></div>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
               {INITIAL_POSTS.slice(0, 3).map((post, index) => (
                 <article 
                   key={post.id}

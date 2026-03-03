@@ -73,9 +73,9 @@ export const QuickStats: React.FC = () => {
   ];
 
   return (
-    <section className="py-16 relative overflow-hidden">
-      {/* Professional Bangladesh Green Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#006A4E] via-[#004D38] to-[#1A3A2A]"></div>
+    <section className="py-10 sm:py-16 relative overflow-hidden">
+      {/* Patriotic BD colors - hero vibe, softer opacity */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#006A4E]/90 via-[#004D38]/90 to-[#1A3A2A]/90"></div>
 
       {/* Decorative Pattern */}
       <div className="absolute inset-0 opacity-5" style={{
@@ -86,27 +86,27 @@ export const QuickStats: React.FC = () => {
       <div className="absolute top-10 left-10 w-64 h-64 bg-army-gold/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-10 right-10 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl"></div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-[#F42A41] text-white text-sm font-medium px-4 py-1.5 rounded-full mb-4 shadow-lg">
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="inline-flex items-center gap-2 bg-[#F42A41]/90 text-white text-sm font-medium px-4 py-1.5 rounded-full mb-4 shadow-lg">
             <Award className="w-4 h-4" />
             Distinguished Service Record
           </div>
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-3">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-white mb-2 sm:mb-3">
             At A Glance
           </h2>
-          <p className="text-blue-100/80 max-w-2xl mx-auto">
+          <p className="text-blue-100/80 max-w-2xl mx-auto text-sm sm:text-base px-2">
             A distinguished career marked by service, sacrifice, and unwavering commitment to ethics.
           </p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="group relative bg-white rounded-2xl p-5 text-center shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden"
+              className="group relative bg-white rounded-xl sm:rounded-2xl p-3 sm:p-5 text-center shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 sm:hover:-translate-y-2 overflow-hidden"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               {/* Colored Top Accent */}
@@ -118,19 +118,19 @@ export const QuickStats: React.FC = () => {
               {/* Content */}
               <div className="relative z-10">
                 {/* Icon */}
-                <div className={`w-14 h-14 ${stat.lightBg} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-white/20 group-hover:scale-110 transition-all duration-300`}>
+                <div className={`w-10 h-10 sm:w-14 sm:h-14 ${stat.lightBg} rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-4 group-hover:bg-white/20 group-hover:scale-110 transition-all duration-300`}>
                   <span className={`${stat.textColor} group-hover:text-white transition-colors duration-300`}>
                     {stat.icon}
                   </span>
                 </div>
 
                 {/* Value */}
-                <p className={`text-3xl font-bold ${stat.textColor} group-hover:text-white transition-colors duration-300 mb-1`}>
+                <p className={`text-xl sm:text-3xl font-bold ${stat.textColor} group-hover:text-white transition-colors duration-300 mb-0.5 sm:mb-1`}>
                   {stat.value}
                 </p>
 
                 {/* Label */}
-                <p className="text-sm font-semibold text-gray-800 group-hover:text-white/90 transition-colors duration-300">
+                <p className="text-xs sm:text-sm font-semibold text-gray-800 group-hover:text-white/90 transition-colors duration-300">
                   {stat.label}
                 </p>
 
@@ -147,10 +147,10 @@ export const QuickStats: React.FC = () => {
         </div>
 
         {/* CTA */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-8 sm:mt-12">
           <Link
             to="/about"
-            className="inline-flex items-center gap-2 bg-[#F42A41] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#D91E36] transition-all duration-300 shadow-lg hover:shadow-xl group"
+            className="inline-flex items-center gap-2 bg-[#F42A41]/90 text-white font-semibold px-6 py-3 rounded-full hover:bg-[#D91E36]/90 transition-all duration-300 shadow-lg hover:shadow-xl group"
           >
             Read Full Biography
             <span className="transform group-hover:translate-x-1 transition-transform">→</span>
