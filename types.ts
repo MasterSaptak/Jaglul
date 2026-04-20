@@ -68,6 +68,19 @@ export interface MediaItem {
   thematicArea: ThematicArea;
 }
 
+export interface VisionGalleryImage {
+  id: string;
+  url: string;
+}
+
+export interface VisionCategory {
+  id: string;
+  slug: string;
+  title: string;
+  description?: string;
+  images: VisionGalleryImage[];
+}
+
 export interface ContactFormData {
   fullName: string;
   phone: string;

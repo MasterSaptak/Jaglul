@@ -1,4 +1,4 @@
-import { Post, Video, Comment, MediaItem } from './types';
+import { Post, Video, Comment, MediaItem, VisionCategory } from './types';
 
 export const ADMIN_PASSWORD = "admin"; // Simple for demo purposes
 
@@ -534,5 +534,117 @@ export const THEMATIC_AREAS = {
     description: 'Civic awareness campaigns, ethical leadership advocacy, and public rights education.',
     icon: 'Scale',
     color: 'army-olive'
+  }
+};
+
+export const VISION_GALLERIES: Record<string, VisionCategory> = {
+  "fostering-bangladeshi-nationalism": {
+    id: "v1",
+    slug: "fostering-bangladeshi-nationalism",
+    title: "Fostering Bangladeshi Nationalism",
+    description: "Colonel Ahsan's dedication to building national strength and celebrating Bangladeshi identity.",
+    images: [
+      { id: "img-1", url: "/Fostering%20Bangladeshi%20Nationalism/1.jpg" },
+      { id: "img-2", url: "/Fostering%20Bangladeshi%20Nationalism/2.jpg" },
+      { id: "img-3", url: "/Fostering%20Bangladeshi%20Nationalism/465791953_10162150083333459_3538810215910352806_n.png" },
+      { id: "img-4", url: "/Fostering%20Bangladeshi%20Nationalism/466597514_10162171911533459_2853993337708550756_n.png" },
+      { id: "img-5", url: "/Fostering%20Bangladeshi%20Nationalism/508347498_4097295620416543_2723286459891613803_n.jpg" },
+      { id: "img-6", url: "/Fostering%20Bangladeshi%20Nationalism/515513194_10163251069743459_7681430015598696916_n.jpg" },
+      { id: "img-7", url: "/Fostering%20Bangladeshi%20Nationalism/516460815_10163251069513459_1816602609160032729_n.png" },
+      { id: "img-8", url: "/Fostering%20Bangladeshi%20Nationalism/529359309_10163441269028459_935160947875100638_n.jpg" },
+      { id: "img-9", url: "/Fostering%20Bangladeshi%20Nationalism/6.jpg" },
+      { id: "img-10", url: "/Fostering%20Bangladeshi%20Nationalism/7.jpg" },
+      { id: "img-11", url: "/Fostering%20Bangladeshi%20Nationalism/8.jpg" },
+      { id: "img-12", url: "/Fostering%20Bangladeshi%20Nationalism/Capture.jpg" },
+      { id: "img-13", url: "/Fostering%20Bangladeshi%20Nationalism/Capture2.jpg" },
+      { id: "img-14", url: "/Fostering%20Bangladeshi%20Nationalism/WhatsApp-Image-2025-09-07-at-12.59.15-PM-e1757228546712.jpeg" }
+    ]
+  },
+  "socio-economic-advancement-of-the-area": {
+    id: "v2",
+    slug: "socio-economic-advancement-of-the-area",
+    title: "Socio-economic Advancement of the Area",
+    description: "Driving growth, sustainable development, and economic empowerment in local communities.",
+    images: [
+      { id: "img-15", url: "/Socio-economic%20Advancement%20of%20the%20Area/2-1.jpg" },
+      { id: "img-16", url: "/Socio-economic%20Advancement%20of%20the%20Area/3-1.jpg" },
+      { id: "img-17", url: "/Socio-economic%20Advancement%20of%20the%20Area/4-1.jpg" },
+      { id: "img-18", url: "/Socio-economic%20Advancement%20of%20the%20Area/476049319_10162629710098459_931686657325601274_n.jpg" },
+      { id: "img-19", url: "/Socio-economic%20Advancement%20of%20the%20Area/490207983_1081969920639371_7206286735146710256_n.jpg" },
+      { id: "img-20", url: "/Socio-economic%20Advancement%20of%20the%20Area/5-1.jpg" },
+      { id: "img-21", url: "/Socio-economic%20Advancement%20of%20the%20Area/6-1.jpg" },
+      { id: "img-22", url: "/Socio-economic%20Advancement%20of%20the%20Area/dhan-vanga.png" }
+    ]
+  },
+  "empowering-retired-soldiers": {
+    id: "v3",
+    slug: "empowering-retired-soldiers",
+    title: "Empowering Retired Soldiers",
+    description: "Honoring service through welfare programs, rehabilitation, and unwavering support for veterans.",
+    images: [
+      { id: "img-23", url: "/Empowering%20Retired%20Soldiers/2-2.jpg" },
+      { id: "img-24", url: "/Empowering%20Retired%20Soldiers/3-2.jpg" },
+      { id: "img-25", url: "/Empowering%20Retired%20Soldiers/517368139_10163300104983459_7044419975793322602_n.jpg" },
+      { id: "img-26", url: "/Empowering%20Retired%20Soldiers/6-2.jpg" },
+      { id: "img-27", url: "/Empowering%20Retired%20Soldiers/7-2.jpg" }
+    ]
+  },
+  "promoting-leadership-amongst-the-next-generation": {
+    id: "v4",
+    slug: "promoting-leadership-amongst-the-next-generation",
+    title: "Promoting Leadership Amongst the Next Generation",
+    description: "Equipping young minds with ethical values, skills, and the courage to lead tomorrow.",
+    images: [
+      { id: "img-28", url: "/Promoting%20Leadership%20amongst%20the%20Next%20Generation/2-3.jpg" },
+      { id: "img-29", url: "/Promoting%20Leadership%20amongst%20the%20Next%20Generation/4-3.jpg" },
+      { id: "img-30", url: "/Promoting%20Leadership%20amongst%20the%20Next%20Generation/57c2eb7c-b97c-4cad-b447-239e84fa04c0.jpeg" },
+      { id: "img-31", url: "/Promoting%20Leadership%20amongst%20the%20Next%20Generation/6-3.jpg" },
+      { id: "img-32", url: "/Promoting%20Leadership%20amongst%20the%20Next%20Generation/WhatsApp-Image-2025-07-21-at-2.39.52-PM-2.jpeg" },
+      { id: "img-33", url: "/Promoting%20Leadership%20amongst%20the%20Next%20Generation/WhatsApp-Image-2025-07-21-at-2.39.53-PM-1.jpeg" },
+      { id: "img-34", url: "/Promoting%20Leadership%20amongst%20the%20Next%20Generation/WhatsApp-Image-2025-07-21-at-2.39.53-PM-2.jpeg" },
+      { id: "img-35", url: "/Promoting%20Leadership%20amongst%20the%20Next%20Generation/WhatsApp-Image-2025-07-21-at-2.39.54-PM-1.jpeg" },
+      { id: "img-36", url: "/Promoting%20Leadership%20amongst%20the%20Next%20Generation/WhatsApp-Image-2025-07-21-at-2.39.54-PM-3.jpeg" },
+      { id: "img-37", url: "/Promoting%20Leadership%20amongst%20the%20Next%20Generation/WhatsApp-Image-2025-07-21-at-2.39.54-PM.jpeg" },
+      { id: "img-38", url: "/Promoting%20Leadership%20amongst%20the%20Next%20Generation/WhatsApp-Image-2025-09-02-at-8.24.07-PM.jpeg" },
+      { id: "img-39", url: "/Promoting%20Leadership%20amongst%20the%20Next%20Generation/c82df912-313c-401b-82c2-d25b17980cf1.jpeg" },
+      { id: "img-40", url: "/Promoting%20Leadership%20amongst%20the%20Next%20Generation/football-2.png" }
+    ]
+  },
+  "promoting-humanitarian-works": {
+    id: "v5",
+    slug: "promoting-humanitarian-works",
+    title: "Promoting Humanitarian Works",
+    description: "Selfless service to humanity during crises, disasters, and times of need.",
+    images: [
+      { id: "img-41", url: "/Promoting%20Humanitarian%20Works/1-4.jpg" },
+      { id: "img-42", url: "/Promoting%20Humanitarian%20Works/10-1.jpg" },
+      { id: "img-43", url: "/Promoting%20Humanitarian%20Works/11-1.jpg" },
+      { id: "img-44", url: "/Promoting%20Humanitarian%20Works/12.jpg" },
+      { id: "img-45", url: "/Promoting%20Humanitarian%20Works/13.jpg" },
+      { id: "img-46", url: "/Promoting%20Humanitarian%20Works/2-4.jpg" },
+      { id: "img-47", url: "/Promoting%20Humanitarian%20Works/3-4.jpg" },
+      { id: "img-48", url: "/Promoting%20Humanitarian%20Works/4-4.jpg" },
+      { id: "img-49", url: "/Promoting%20Humanitarian%20Works/5-4.jpg" },
+      { id: "img-50", url: "/Promoting%20Humanitarian%20Works/506308429_10163129556403459_4506199923414108729_n.jpg" },
+      { id: "img-51", url: "/Promoting%20Humanitarian%20Works/506436189_10163133443153459_1897875658459740856_n.jpg" },
+      { id: "img-52", url: "/Promoting%20Humanitarian%20Works/6-4.jpg" },
+      { id: "img-53", url: "/Promoting%20Humanitarian%20Works/7-3.jpg" }
+    ]
+  },
+  "promoting-entrepreneurship-employment": {
+    id: "v6",
+    slug: "promoting-entrepreneurship-employment",
+    title: "Promoting Entrepreneurship & Employment",
+    description: "Empowering individuals to create value, generate jobs, and drive economic independence.",
+    images: [
+      { id: "img-54", url: "/Promoting%20Entrepreneurship%20&%20Employment/1-1.jpg" },
+      { id: "img-55", url: "/Promoting%20Entrepreneurship%20&%20Employment/1-5.jpg" },
+      { id: "img-56", url: "/Promoting%20Entrepreneurship%20&%20Employment/2-5.jpg" },
+      { id: "img-57", url: "/Promoting%20Entrepreneurship%20&%20Employment/3-5.jpg" },
+      { id: "img-58", url: "/Promoting%20Entrepreneurship%20&%20Employment/5-1.jpg" },
+      { id: "img-59", url: "/Promoting%20Entrepreneurship%20&%20Employment/505819887_1126957282807301_2232541966119681135_n.jpg" },
+      { id: "img-60", url: "/Promoting%20Entrepreneurship%20&%20Employment/506016799_1127828532720176_3092620948142861044_n.jpg" },
+      { id: "img-61", url: "/Promoting%20Entrepreneurship%20&%20Employment/f37bf507-a479-498b-873f-a77fcabd88da.jpeg" }
+    ]
   }
 };

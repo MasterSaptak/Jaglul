@@ -10,6 +10,7 @@ import { ImpactPage } from './pages/ImpactPage';
 import { MediaGallery } from './pages/MediaGallery';
 import { CommentPolicy } from './pages/CommentPolicy';
 import { AdminLogin } from './pages/AdminLogin';
+import { VisionGallery } from './pages/VisionGallery';
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const App: React.FC = () => {
           <Route path="/news" element={<NewsArchive />} />
           <Route path="/news/:id" element={<NewsPost />} />
           <Route path="/impact/:theme" element={<ImpactPage />} />
+          <Route path="/vision/:slug" element={<VisionGallery />} />
           <Route path="/gallery" element={<MediaGallery />} />
           <Route path="/comment-policy" element={<CommentPolicy />} />
           <Route path="/contact" element={<Contact />} />

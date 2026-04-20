@@ -60,7 +60,7 @@ export const Navbar: React.FC = () => {
       ? 'bg-[#F42A41]/95 backdrop-blur-md shadow-lg border-b border-[#D91E36]/80'
       : 'bg-[#F42A41]/95 shadow-md border-b border-[#D91E36]/80'
       }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16">
         <div className="flex justify-between items-center h-16 sm:h-20">
           {/* Logo */}
           <div className="flex items-center">
@@ -84,83 +84,85 @@ export const Navbar: React.FC = () => {
             </Link>
           </div>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-1">
-            {navLinks.map((link) => (
+          {/* Right Section: Desktop Menu + Admin */}
+          <div className="hidden md:flex flex-1 items-center justify-end pl-8">
+            <div className="flex items-center space-x-1 lg:space-x-2">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`px-3 lg:px-4 py-2 rounded-md font-medium transition-all duration-200 text-sm lg:text-base ${isActive(link.path)
+                    ? 'text-white bg-white/20'
+                    : 'text-white/90 hover:text-white hover:bg-white/15'
+                    }`}
+                >
+                  {link.name}
+                </Link>
+              ))}
+
+              {/* Impact Dropdown */}
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setImpactDropdown(!impactDropdown)}
+                  className={`px-3 lg:px-4 py-2 rounded-md font-medium transition-all duration-200 flex items-center gap-1 text-sm lg:text-base ${isImpactActive()
+                    ? 'text-white bg-white/20'
+                    : 'text-white/90 hover:text-white hover:bg-white/15'
+                    }`}
+                >
+                  Impact
+                  <ChevronDown size={14} className={`transition-transform duration-200 ${impactDropdown ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Dropdown Menu */}
+                {impactDropdown && (
+                  <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#F42A41]/30 py-2 animate-fade-in">
+                    {impactLinks.map((link) => (
+                      <Link
+                        key={link.path}
+                        to={link.path}
+                        onClick={() => setImpactDropdown(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-[#006A4E] hover:bg-[#006A4E]/10 transition-colors"
+                      >
+                        <span className="text-[#F42A41]">{link.icon}</span>
+                        {link.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Gallery Link */}
               <Link
-                key={link.name}
-                to={link.path}
-                className={`px-4 py-2 rounded-md font-medium transition-all duration-200 ${isActive(link.path)
+                to="/gallery"
+                className={`px-3 lg:px-4 py-2 rounded-md font-medium transition-all duration-200 flex items-center gap-1.5 text-sm lg:text-base ${location.pathname === '/gallery'
                   ? 'text-white bg-white/20'
                   : 'text-white/90 hover:text-white hover:bg-white/15'
                   }`}
               >
-                {link.name}
+                <Image size={14} />
+                Gallery
               </Link>
-            ))}
 
-            {/* Impact Dropdown */}
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setImpactDropdown(!impactDropdown)}
-                className={`px-4 py-2 rounded-md font-medium transition-all duration-200 flex items-center gap-1 ${isImpactActive()
+              {/* Contact Link */}
+              <Link
+                to="/contact"
+                className={`px-3 lg:px-4 py-2 rounded-md font-medium transition-all duration-200 text-sm lg:text-base ${location.pathname === '/contact'
                   ? 'text-white bg-white/20'
                   : 'text-white/90 hover:text-white hover:bg-white/15'
                   }`}
               >
-                Impact
-                <ChevronDown size={16} className={`transition-transform duration-200 ${impactDropdown ? 'rotate-180' : ''}`} />
-              </button>
+                Contact
+              </Link>
 
-              {/* Dropdown Menu */}
-              {impactDropdown && (
-                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#F42A41]/30 py-2 animate-fade-in">
-                  {impactLinks.map((link) => (
-                    <Link
-                      key={link.path}
-                      to={link.path}
-                      onClick={() => setImpactDropdown(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-[#006A4E] hover:bg-[#006A4E]/10 transition-colors"
-                    >
-                      <span className="text-[#F42A41]">{link.icon}</span>
-                      {link.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
+              {/* Join Me CTA - BD Red with Animation */}
+              <Link
+                to="/contact"
+                className="ml-2 lg:ml-4 relative bg-white text-[#F42A41] px-4 lg:px-6 py-2 lg:py-2.5 rounded-md font-bold hover:bg-[#D4AF37] hover:text-[#006A4E] hover:-translate-y-1 hover:scale-105 hover:shadow-xl transition-all duration-300 shadow-md btn-military overflow-hidden group text-sm lg:text-base"
+              >
+                <span className="relative z-10">Join Me</span>
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
+              </Link>
             </div>
-
-            {/* Gallery Link */}
-            <Link
-              to="/gallery"
-              className={`px-4 py-2 rounded-md font-medium transition-all duration-200 flex items-center gap-1.5 ${location.pathname === '/gallery'
-                ? 'text-white bg-white/20'
-                : 'text-white/90 hover:text-white hover:bg-white/15'
-                }`}
-            >
-              <Image size={16} />
-              Gallery
-            </Link>
-
-            {/* Contact Link */}
-            <Link
-              to="/contact"
-              className={`px-4 py-2 rounded-md font-medium transition-all duration-200 ${location.pathname === '/contact'
-                ? 'text-white bg-white/20'
-                : 'text-white/90 hover:text-white hover:bg-white/15'
-                }`}
-            >
-              Contact
-            </Link>
-
-            {/* Join Me CTA - BD Red with Animation */}
-            <Link
-              to="/contact"
-              className="ml-4 relative bg-white text-[#F42A41] px-6 py-2.5 rounded-md font-bold hover:bg-[#D4AF37] hover:text-[#006A4E] hover:-translate-y-1 hover:scale-105 hover:shadow-xl transition-all duration-300 shadow-md btn-military overflow-hidden group"
-            >
-              <span className="relative z-10">Join Me</span>
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
-            </Link>
 
             {isAdmin && (
               <div className="flex items-center gap-3 ml-4 pl-4 border-l border-white/30">

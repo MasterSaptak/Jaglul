@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Navbar } from '../components/Navbar';
-import { NewsTicker } from '../components/NewsTicker';
 import { Hero } from '../components/Hero';
 import { QuickStats } from '../components/QuickStats';
 import { VisionSection } from '../components/VisionSection';
@@ -16,13 +15,6 @@ export const Home: React.FC = () => {
   // Local state to simulate database updates
   const [posts, setPosts] = useState<Post[]>(INITIAL_POSTS);
   const [videos, setVideos] = useState<Video[]>(INITIAL_VIDEOS);
-  const [tickerItems, setTickerItems] = useState([
-    "Colonel (Retd.) Md. Jaglul Ahsan — 30+ years of distinguished military service",
-    "Sena Utkarsh Padak (SUP) recipient 2019 — Recognized for military excellence",
-    "UN Peacekeeping missions — Sierra Leone & Mali with 'Outstanding' evaluation",
-    "Advocate for veterans welfare, anti-corruption, and institutional reform"
-  ]);
-
   const handleAddVideo = (url: string, title: string) => {
     // Extract ID (simple regex for demo)
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -57,7 +49,7 @@ export const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <NewsTicker updates={tickerItems} />
+
       <Navbar />
       <main className="flex-grow">
         <Hero />

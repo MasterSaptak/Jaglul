@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
               </div>
             </div>
 
-            <p className="text-sm text-gray-400 leading-relaxed max-w-md">
+            <p className="text-base text-gray-100 leading-relaxed max-w-md">
               Three decades of service as a Bangladesh Army officer, UN peacekeeper and advocate
               for ethics, veteran welfare and national integrity.
             </p>
@@ -67,17 +67,17 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Links & Contact */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 text-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 text-base">
             {/* Navigation */}
             <div>
-              <h4 className="text-xs font-semibold tracking-[0.18em] uppercase text-gray-400 mb-4">
+              <h4 className="text-sm font-bold tracking-[0.18em] uppercase text-gray-200 mb-4">
                 Navigation
               </h4>
               <ul className="space-y-2.5">
                 <li>
                   <Link
                     to="/"
-                    className="text-gray-300 hover:text-army-gold transition-colors"
+                    className="text-gray-100 hover:text-army-gold transition-colors"
                   >
                     Home
                   </Link>
@@ -85,7 +85,7 @@ export const Footer: React.FC = () => {
                 <li>
                   <Link
                     to="/about"
-                    className="text-gray-300 hover:text-army-gold transition-colors"
+                    className="text-gray-100 hover:text-army-gold transition-colors"
                   >
                     About
                   </Link>
@@ -93,7 +93,7 @@ export const Footer: React.FC = () => {
                 <li>
                   <Link
                     to="/news"
-                    className="text-gray-300 hover:text-army-gold transition-colors"
+                    className="text-gray-100 hover:text-army-gold transition-colors"
                   >
                     News &amp; Events
                   </Link>
@@ -101,7 +101,7 @@ export const Footer: React.FC = () => {
                 <li>
                   <Link
                     to="/gallery"
-                    className="text-gray-300 hover:text-army-gold transition-colors"
+                    className="text-gray-100 hover:text-army-gold transition-colors"
                   >
                     Media Gallery
                   </Link>
@@ -109,7 +109,7 @@ export const Footer: React.FC = () => {
                 <li>
                   <Link
                     to="/comment-policy"
-                    className="text-gray-300 hover:text-army-gold transition-colors"
+                    className="text-gray-100 hover:text-army-gold transition-colors"
                   >
                     Comment Policy
                   </Link>
@@ -119,14 +119,14 @@ export const Footer: React.FC = () => {
 
             {/* Impact Areas */}
             <div>
-              <h4 className="text-xs font-semibold tracking-[0.18em] uppercase text-gray-400 mb-4">
+              <h4 className="text-sm font-bold tracking-[0.18em] uppercase text-gray-200 mb-4">
                 Impact Areas
               </h4>
               <ul className="space-y-2.5">
                 <li>
                   <Link
                     to="/impact/humanitarian"
-                    className="text-gray-300 hover:text-army-gold transition-colors"
+                    className="text-gray-100 hover:text-army-gold transition-colors"
                   >
                     Humanitarian Work
                   </Link>
@@ -134,7 +134,7 @@ export const Footer: React.FC = () => {
                 <li>
                   <Link
                     to="/impact/education"
-                    className="text-gray-300 hover:text-army-gold transition-colors"
+                    className="text-gray-100 hover:text-army-gold transition-colors"
                   >
                     Education &amp; Youth
                   </Link>
@@ -142,7 +142,7 @@ export const Footer: React.FC = () => {
                 <li>
                   <Link
                     to="/impact/veterans"
-                    className="text-gray-300 hover:text-army-gold transition-colors"
+                    className="text-gray-100 hover:text-army-gold transition-colors"
                   >
                     Veterans Welfare
                   </Link>
@@ -151,21 +151,21 @@ export const Footer: React.FC = () => {
 
               <Link
                 to="/admin"
-                className="mt-4 inline-flex items-center gap-1 text-[11px] text-gray-500 hover:text-gray-300 transition-colors"
+                className="mt-4 inline-flex items-center gap-1 text-sm text-gray-400 hover:text-gray-200 transition-colors"
               >
-                <Lock size={10} /> Staff Login
+                <Lock size={12} /> Staff Login
               </Link>
             </div>
 
             {/* Contact */}
             <div>
-              <h4 className="text-xs font-semibold tracking-[0.18em] uppercase text-gray-400 mb-4">
+              <h4 className="text-sm font-bold tracking-[0.18em] uppercase text-gray-200 mb-4">
                 Contact
               </h4>
               <ul className="space-y-3">
                 <li className="flex items-start gap-2">
                   <MapPin size={16} className="mt-0.5 text-army-gold flex-shrink-0" />
-                  <p className="text-gray-300">
+                  <p className="text-gray-100">
                     Holding# 557, Road# 09, Avenue# 03<br />
                     Mirpur DOHS, Dhaka-1216<br />
                     Bangladesh
@@ -175,7 +175,7 @@ export const Footer: React.FC = () => {
                   <Phone size={16} className="text-army-gold flex-shrink-0" />
                   <a
                     href="tel:+8801407071631"
-                    className="text-gray-300 hover:text-army-gold transition-colors"
+                    className="text-gray-100 hover:text-army-gold transition-colors"
                   >
                     +880 1407 071 631
                   </a>
@@ -184,7 +184,7 @@ export const Footer: React.FC = () => {
                   <Mail size={16} className="text-army-gold flex-shrink-0" />
                   <a
                     href="mailto:jaglul.official@gmail.com"
-                    className="text-gray-300 hover:text-army-gold transition-colors"
+                    className="text-gray-100 hover:text-army-gold transition-colors"
                   >
                     jaglul.official@gmail.com
                   </a>
@@ -195,10 +195,10 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-6 pt-4 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 text-[11px] sm:text-[12px] text-gray-500 text-center md:text-left">
+        <div className="mt-6 pt-4 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-gray-300 text-center md:text-left">
           <p className="break-words">© {currentYear} Colonel (Retd) Md. Jaglul Ahsan. All rights reserved.</p>
-          <p className="text-gray-600">
-            Designed with discipline &amp; dedication.
+          <p className="text-gray-400">
+            Designed by <span className="text-army-gold font-semibold">Saptech</span> with discipline &amp; dedication.
           </p>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 // Using high-quality images that match the vision pillars with authoritative context
 const VISION_ITEMS = [
@@ -8,42 +9,42 @@ const VISION_ITEMS = [
     title: "Fostering Bangladeshi Nationalism",
     // Colonel with raised fist wearing Bangladesh flag - represents national pride
     image: "/image 1.png",
-    link: "#"
+    link: "/vision/fostering-bangladeshi-nationalism"
   },
   {
     id: 2,
     title: "Socio-economic Advancement of the Area",
     // Local image for socio-economic development
     image: "/image 2.png",
-    link: "#"
+    link: "/vision/socio-economic-advancement-of-the-area"
   },
   {
     id: 3,
     title: "Empowering Retired Soldiers",
     // Local image for veterans empowerment
     image: "/image 3.png",
-    link: "#"
+    link: "/vision/empowering-retired-soldiers"
   },
   {
     id: 4,
     title: "Promoting Leadership Amongst the Next Generation",
     // Local image for youth leadership
     image: "/image 4.png",
-    link: "#"
+    link: "/vision/promoting-leadership-amongst-the-next-generation"
   },
   {
     id: 5,
     title: "Promoting Humanitarian Works",
     // Local image for humanitarian work
     image: "/image 5.png",
-    link: "#"
+    link: "/vision/promoting-humanitarian-works"
   },
   {
     id: 6,
     title: "Promoting Entrepreneurship & Employment",
     // Local image for entrepreneurship
     image: "/image 6.png",
-    link: "#"
+    link: "/vision/promoting-entrepreneurship-employment"
   }
 ];
 
@@ -72,9 +73,9 @@ export const VisionSection: React.FC = () => {
         {/* Responsive Grid: 1 col mobile, 2 col tablet, 3 col desktop */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {VISION_ITEMS.map((item) => (
-            <a
+            <Link
               key={item.id}
-              href={item.link}
+              to={item.link}
               className="group relative block h-64 sm:h-80 md:h-96 rounded-xl sm:rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-black/30 transition-all duration-500 ease-out transform hover:-translate-y-2 sm:hover:-translate-y-4 active:scale-[0.98] sm:hover:scale-105 cursor-pointer"
             >
               {/* Image - Clear and vibrant, no color overlay */}
@@ -110,7 +111,7 @@ export const VisionSection: React.FC = () => {
 
               {/* Interactive Border on Hover */}
               <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#F42A41]/60 rounded-2xl transition-all duration-500 pointer-events-none z-30"></div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

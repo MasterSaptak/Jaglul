@@ -7,7 +7,6 @@ import {
 } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
-import { NewsTicker } from '../components/NewsTicker';
 
 // Timeline Item Component
 const TimelineItem: React.FC<{
@@ -97,14 +96,8 @@ const HonorBadge: React.FC<{
 );
 
 export const About: React.FC = () => {
-  const tickerItems = [
-    "Colonel (Retd.) Md. Jaglul Ahsan — A Life of Service, Sacrifice, and Principle",
-    "Decorated Officer • Combat Veteran • UN Peacekeeper • Ethics Advocate"
-  ];
-
   return (
     <div className="min-h-screen flex flex-col bg-army-cream">
-      <NewsTicker updates={tickerItems} />
       <Navbar />
 
       <main className="flex-grow">
@@ -201,8 +194,11 @@ export const About: React.FC = () => {
                 <div className="w-14 h-14 bg-army-green/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-army-green group-hover:scale-110 transition-all duration-300">
                   <BookOpen className="w-7 h-7 text-army-green group-hover:text-white transition-colors duration-300" />
                 </div>
-                <h3 className="font-bold text-army-green mb-2 group-hover:text-army-gold transition-colors duration-300">Literary Soul</h3>
-                <p className="text-sm text-army-oliveDark/70">Influenced by Maya Angelou, Robert Frost, Khalil Gibran, and the spirit of Che Guevara.</p>
+                <h3 className="font-bold text-army-green mb-2 group-hover:text-army-gold transition-colors duration-300">Literary & Philosophical Soul</h3>
+                <p className="text-sm text-army-oliveDark/70 mb-2">Influenced by Maya Angelou, Robert Frost, Khalil Gibran, Whitman, and the revolutionary spirit of Che Guevara, Mao, and Ho Chi Minh.</p>
+                <p className="text-xs text-army-oliveDark/60 italic text-left">
+                  "Do I contradict myself, very well then I do because I am large, I contain multitudes." — Walt Whitman
+                </p>
               </div>
             </div>
           </div>
@@ -271,7 +267,12 @@ export const About: React.FC = () => {
                       was shaped by <strong>discipline, resistance to injustice, and academic excellence</strong>.
                       Raised at Mirzapur Cadet College, he demonstrated leadership, moral courage, and an
                       uncompromising stand against wrongdoing from a very young age — traits that would
-                      later define his military and public life.
+                      later define his military and public life. His revolutionary attitude was compounded 
+                      by extensive reading of Che-Guevara, Mao, Ho Chi Minh, and Nakshal-based novels 
+                      like 'Kalbela'. He famously protested the physical abuse of senior cadets and led a 40 km 
+                      walkout from Mirzapur Cadet College to Dhaka to protest discriminatory dealings, which led 
+                      to him and 20 others being withdrawn. Enrolling in Dhaka Science College thereafter, he
+                      continued his exemplary path.
                     </p>
 
                     {/* Academic Excellence Badge */}
@@ -523,6 +524,14 @@ export const About: React.FC = () => {
                 <div className="flex items-start gap-3 p-3 bg-white rounded-lg">
                   <div className="w-2 h-2 rounded-full bg-army-gold mt-2"></div>
                   <div>
+                    <p className="font-bold text-army-green text-sm">Commissioned Officer (2 Field Regiment Artillery)</p>
+                    <p className="text-xs text-army-olive/70">Commissioned in the famous regiment of Major Khondoker Rashid of 1975.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-white rounded-lg">
+                  <div className="w-2 h-2 rounded-full bg-army-gold mt-2"></div>
+                  <div>
                     <p className="font-bold text-army-green text-sm">GSO-3 (General Staff Officer)</p>
                     <p className="text-xs text-army-olive/70">Staff operations and planning</p>
                   </div>
@@ -556,7 +565,15 @@ export const About: React.FC = () => {
                   <div className="w-2 h-2 rounded-full bg-army-red mt-2"></div>
                   <div>
                     <p className="font-bold text-army-green text-sm">GSO-1, Doctrine Division (ARTDOC)</p>
-                    <p className="text-xs text-army-olive/70">Senior staff role in artillery doctrine development and institutional policy</p>
+                    <p className="text-xs text-army-olive/70">Senior staff role in artillery doctrine development and institutional policy.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 p-3 bg-white rounded-lg md:col-span-2">
+                  <div className="w-2 h-2 rounded-full bg-army-red mt-2"></div>
+                  <div>
+                    <p className="font-bold text-army-green text-sm">Chairman & Additional Director (BUP)</p>
+                    <p className="text-xs text-army-olive/70">Served in Business Studies and Research at Bangladesh University of Professionals. Posted by a sudden notice after denying unethical administrative requests.</p>
                   </div>
                 </div>
               </div>
@@ -584,7 +601,7 @@ export const About: React.FC = () => {
                   <h3 className="font-serif font-bold text-xl">Chittagong Firefight</h3>
                 </div>
                 <p className="text-green-100/80 text-sm mb-4">
-                  Sustained multiple bullet wounds during active combat operations in Chittagong.
+                  Sustained bullet wounds in the left hand and chest during active combat operations against terrorists in Chittagong. Declared almost dead, he miraculously survived after a second operation adding 31 stitches to previous childhood scars.
                   Survived against odds, earning the respect of peers and the informal recognition:
                 </p>
                 <div className="bg-white/10 p-3 rounded-lg border border-army-gold/30">
@@ -601,9 +618,7 @@ export const About: React.FC = () => {
                   <h3 className="font-serif font-bold text-xl">1996 Dhaka Standoff</h3>
                 </div>
                 <p className="text-green-100/80 text-sm mb-4">
-                  Played a critical role during the 1996 military standoff in Dhaka — a moment
-                  that tested institutional loyalty, personal courage, and the ability to
-                  navigate crisis with discipline.
+                  Played a critical role during the 1996 military standoff in Dhaka. As the first group commander under the move order of Gen Nasim, he reached Rajendrapur with armed troops and stood face to face on gunpoint with Major Zakaria's troops before negotiating to disarm. Ironically, Gen Nasim was the same authority who withdrew him from Cadet College years prior.
                 </p>
                 <div className="bg-white/10 p-3 rounded-lg">
                   <p className="text-xs text-green-100/60">
@@ -651,8 +666,7 @@ export const About: React.FC = () => {
                   </div>
                   <div className="bg-army-cream/50 p-3 rounded-lg mt-4">
                     <p className="text-xs text-army-olive/80">
-                      Managed complex logistics operations in a post-conflict environment,
-                      later transitioning to observer duties monitoring ceasefire compliance.
+                      Confronted officials regarding unaccounted "Diamonds" meant for war victims. Though principled, this led to his transfer to the remotest northern province of Sierra Leone as an observer, where his exceptional work still earned him immense respect and an "Outstanding" performance appraisal.
                     </p>
                   </div>
                 </div>
@@ -751,27 +765,20 @@ export const About: React.FC = () => {
                   <p>
                     Throughout his career, Colonel Ahsan maintained positions of principle
                     even when such positions conflicted with institutional expectations or
-                    the interests of superior officers. This included:
+                    the interests of superior officers. He fell victim to conspiracies when he stood against the politico-military nexus in Bangladesh.
                   </p>
                   <ul className="list-disc pl-5 space-y-2">
-                    <li>Refusing to participate in or endorse actions deemed unethical</li>
-                    <li>Advocating for transparency in procurement and administrative processes</li>
-                    <li>Speaking against favoritism in promotions and assignments</li>
+                    <li>Refusing postings in RAB, BDR, and DGFI to maintain pure soldierly beliefs.</li>
+                    <li>Prepared to move to Peelkhana on 26th Feb 2009 to rescue officers during the BDR mutiny, but was removed from command by superiors.</li>
+                    <li>Challenged politico-military conspiracies and faced a court-martial enquiry with a death penalty charge for an alleged coup d'état due to an engineered sting operation.</li>
+                    <li>Denied an offer to compromise his principles for a promotion despite being marked as a "Threat to PM and National Security" in his intelligence file.</li>
+                    <li>Barred from UN Missions and foreign courses for 10 years, and denied his entitled DOHS land allotment.</li>
                   </ul>
-
-                  <h4 className="text-army-green font-bold mt-6">Professional Consequences</h4>
-                  <p>
-                    Such positions, while principled, carried professional costs — including
-                    delayed promotions, challenging postings, and institutional friction.
-                    These are presented as factual career impacts, not as complaints.
-                  </p>
 
                   <h4 className="text-army-green font-bold mt-6">Career Impact</h4>
                   <p>
                     Despite these challenges, Colonel Ahsan completed a full career with
-                    honors, international service, and the respect of many peers. The
-                    conflicts experienced reflect broader institutional dynamics rather
-                    than personal failures.
+                    honors. The conflicts experienced reflect his refusal to accept the systematic damage of the military by unethical alignments, culminating in his quiet yet principled exit from active duty without compromises.
                   </p>
                 </div>
               </div>
@@ -795,8 +802,7 @@ export const About: React.FC = () => {
                   <strong>Trust Bank Ltd</strong> — Served as Head of Purchase
                 </p>
                 <p className="text-xs text-army-olive/60 bg-white p-2 rounded">
-                  Resigned on ethical grounds, maintaining the same principles
-                  that defined military service.
+                  Resigned from a lucrative 3.5 lakhs salary position on ethical grounds, refusing to bow to manipulative pressure and conspiracies to terminate him after the August events.
                 </p>
               </div>
 
@@ -804,9 +810,7 @@ export const About: React.FC = () => {
                 <Briefcase className="w-10 h-10 text-army-green mb-4 group-hover:scale-110 group-hover:text-army-gold transition-all duration-300" />
                 <h3 className="font-bold text-army-green mb-2 group-hover:text-army-gold transition-colors duration-300">Independent Business</h3>
                 <p className="text-sm text-army-oliveDark/70">
-                  Currently engaged in independent business ventures,
-                  applying leadership and management expertise from
-                  decades of service.
+                  Currently engaged in independent business ventures, applying his uncompromising work ethic, intelligence, and leadership from decades of service.
                 </p>
               </div>
 
@@ -814,8 +818,7 @@ export const About: React.FC = () => {
                 <Users className="w-10 h-10 text-army-green mb-4 group-hover:scale-110 group-hover:text-army-gold transition-all duration-300" />
                 <h3 className="font-bold text-army-green mb-2 group-hover:text-army-gold transition-colors duration-300">Veterans Advisory</h3>
                 <p className="text-sm text-army-oliveDark/70">
-                  Serves as adviser to major retired soldiers' groups,
-                  contributing to veteran welfare and institutional reform advocacy.
+                  Adviser to major retired soldiers' groups, aiming to polarize retired members under the banner of "Z Force" to collectively advocate against poverty, corruption, and unethical cultures.
                 </p>
               </div>
             </div>
