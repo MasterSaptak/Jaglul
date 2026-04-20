@@ -1,6 +1,7 @@
 import React from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { GalleryProvider } from './context/GalleryContext';
 import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { Contact } from './pages/Contact';
@@ -15,6 +16,7 @@ import { VisionGallery } from './pages/VisionGallery';
 const App: React.FC = () => {
   return (
     <AuthProvider>
+      <GalleryProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -29,6 +31,7 @@ const App: React.FC = () => {
           <Route path="/admin" element={<AdminLogin />} />
         </Routes>
       </Router>
+      </GalleryProvider>
     </AuthProvider>
   );
 };

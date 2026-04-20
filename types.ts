@@ -81,6 +81,19 @@ export interface VisionCategory {
   images: VisionGalleryImage[];
 }
 
+export type GalleryCategory = 'media' | 'vision' | 'uploaded';
+
+export interface GalleryImage {
+  id: string;
+  src: string;
+  caption: string;
+  category: GalleryCategory;
+  subCategory?: string; // thematicArea for media, vision slug for vision
+  year?: string;
+  date?: string;
+  createdAt: number;
+}
+
 export interface ContactFormData {
   fullName: string;
   phone: string;
