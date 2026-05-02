@@ -30,9 +30,9 @@ export const Hero: React.FC = () => {
         <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col min-h-0">
 
           {/* ── MOBILE layout (< md) ── */}
-          <div className="md:hidden flex flex-col items-center justify-center flex-1 gap-3 py-2 animate-fade-in overflow-y-auto">
+          <div className="md:hidden flex flex-col items-center justify-center flex-1 gap-6 py-4 animate-fade-in overflow-y-auto">
             {/* Portrait */}
-            <div className="w-44 sm:w-56 max-w-[55vw] flex-shrink-0 animate-float">
+            <div className="w-56 sm:w-64 max-w-[60vw] flex-shrink-0 animate-float">
               <img
                 src="/colonel-jaglul.png"
                 alt="Colonel (Retd.) Md. Jaglul Ahsan"
@@ -40,149 +40,62 @@ export const Hero: React.FC = () => {
               />
             </div>
 
-            {/* Text card */}
-            <div className="w-full max-w-sm sm:max-w-md bg-[#0a1f15]/80 backdrop-blur-lg rounded-2xl border border-[#D4AF37]/20 p-4 sm:p-5 space-y-3">
-              <div className="text-center">
-                <p className="text-[#D4AF37] font-bold text-[10px] sm:text-xs tracking-[0.15em] uppercase mb-1.5">
-                  A Visionary Leader
-                </p>
-                <h1 className="text-2xl sm:text-3xl font-serif font-black text-white leading-tight">
-                  Colonel (Retd.)<br />Md. Jaglul Ahsan
+            {/* Text block */}
+            <div className="w-full text-center px-4 space-y-5 pb-8">
+              <div>
+                <h1 className="text-5xl sm:text-6xl font-serif font-black text-[#D4AF37] drop-shadow-lg leading-tight">
+                  Colonel<br />Md. Jaglul Ahsan
                 </h1>
-                <div className="flex items-center justify-center gap-2 mt-1.5">
-                  <div className="h-px w-6 bg-[#D4AF37]/60" />
-                  <p className="text-[#D4AF37] text-[10px] sm:text-xs font-semibold tracking-wide">
-                    SUP, psc, G — Bangladesh Army
-                  </p>
-                  <div className="h-px w-6 bg-[#D4AF37]/60" />
-                </div>
-              </div>
-
-              <p className="text-white/90 font-medium text-xs sm:text-sm text-center leading-relaxed">
-                Leading with Integrity, Inspiring with Vision, Serving with Dedication.
-              </p>
-
-              <div className="bg-white/5 border-l-2 border-[#D4AF37]/60 rounded-r-lg px-3 py-2">
-                <p className="text-white/70 text-[11px] italic leading-relaxed">
-                  "You may write me down in history… But still, like dust, I'll rise."
+                <p className="text-[#D4AF37] text-xl font-bold drop-shadow-md mt-2">
+                  SUP, psc, G (Retd)
                 </p>
-                <p className="text-[#D4AF37]/70 text-[10px] mt-1">— Maya Angelou</p>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-1.5">
-                {[
-                  { icon: <Shield className="w-3 h-3 text-[#D4AF37]" />, label: '30+ Years' },
-                  { icon: <Globe className="w-3 h-3 text-[#D4AF37]" />, label: '2 UN Missions' },
-                  { icon: <Award className="w-3 h-3 text-[#D4AF37]" />, label: 'SUP Awardee' },
-                ].map(({ icon, label }) => (
-                  <span key={label} className="inline-flex items-center gap-1 text-white text-[11px] px-2.5 py-1 rounded-full border border-white/15 bg-white/10">
-                    {icon}{label}
-                  </span>
-                ))}
-              </div>
-
-              <div className="flex flex-col gap-2 pt-0.5">
-                <button
-                  onClick={() => (window.location.href = '/#/about')}
-                  className="w-full flex items-center justify-center gap-2 bg-[#F42A41] hover:bg-[#D91E36] text-white font-bold py-3 rounded-xl text-sm shadow-lg shadow-red-900/30 transition-colors"
-                >
-                  Read Biography <ChevronRight className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => document.getElementById('vision')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="w-full flex items-center justify-center border-2 border-[#D4AF37]/50 text-[#D4AF37] hover:bg-[#D4AF37]/10 font-bold py-2.5 rounded-xl text-sm transition-colors"
-                >
-                  View Vision & Mission
-                </button>
+              <div className="pt-3">
+                <h2 className="text-3xl sm:text-4xl font-black text-white drop-shadow-lg tracking-wide mb-3">
+                  A Visionary Leader
+                </h2>
+                <p className="text-white text-base sm:text-lg font-medium drop-shadow-md leading-relaxed">
+                  Leading with Integrity, Inspiring with Vision,<br />Serving with Dedication.
+                </p>
               </div>
             </div>
           </div>
 
           {/* ── DESKTOP layout (≥ md) ── */}
-          <div className="hidden md:flex flex-row items-center justify-between gap-6 lg:gap-10 flex-1 min-h-0">
+          <div className="hidden md:flex flex-row items-center justify-between gap-6 lg:gap-10 flex-1 min-h-0 pl-4 lg:pl-12">
 
-            {/* Left — Text card */}
-            <div className="w-full max-w-[400px] lg:max-w-[440px] xl:max-w-[480px] flex-shrink-0">
-              <div className="bg-gradient-to-br from-[#006A4E]/90 to-[#004D38]/90 backdrop-blur-md rounded-2xl p-5 lg:p-6 border border-[#D4AF37]/25 shadow-xl">
-                <p className="text-[#D4AF37] font-bold text-xs lg:text-sm tracking-wide uppercase mb-2">
-                  A Visionary Leader
-                </p>
-                <p className="text-white font-semibold text-sm lg:text-base leading-snug mb-3">
-                  Leading with Integrity, Inspiring with Vision, Serving with Dedication.
-                </p>
-                <div className="h-px w-16 bg-[#F42A41] mb-3" />
-                <div className="inline-flex items-center gap-2 bg-white/10 border border-[#D4AF37]/40 rounded-full px-4 py-1.5 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-[#F42A41] animate-pulse" />
-                  <span className="text-white font-bold text-xs tracking-wider uppercase">
-                    Service • Honor • Nation
-                  </span>
-                </div>
-
-                <h1 className="text-3xl lg:text-4xl xl:text-5xl font-serif font-black text-white leading-tight mb-1">
-                  Colonel (Retd.)
-                </h1>
-                <h1 className="text-3xl lg:text-4xl xl:text-5xl font-serif font-black text-[#D4AF37] leading-tight mb-3">
-                  Md. Jaglul Ahsan
-                </h1>
-
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="h-0.5 w-10 bg-[#D4AF37]" />
-                  <p className="text-[#D4AF37] text-xs lg:text-sm font-semibold">
-                    SUP, psc, G — Bangladesh Army
+            {/* Left — Text block */}
+            <div className="w-full max-w-[550px] lg:max-w-[650px] flex-shrink-0">
+              <div className="space-y-8">
+                <div>
+                  <h1 className="text-6xl lg:text-7xl xl:text-8xl font-serif font-black text-[#D4AF37] leading-[1.1] drop-shadow-2xl">
+                    Colonel<br />Md. Jaglul Ahsan
+                  </h1>
+                  <p className="text-[#D4AF37] text-2xl lg:text-3xl font-bold mt-4 drop-shadow-xl">
+                    SUP, psc, G (Retd)
                   </p>
                 </div>
 
-                <p className="text-white/90 text-xs lg:text-sm leading-relaxed mb-3">
-                  Three decades of distinguished military service. Combat veteran, UN peacekeeper,
-                  and advocate for ethics, veteran welfare, and national integrity.
-                </p>
-
-                <div className="bg-white/5 border-l-2 border-[#D4AF37]/60 rounded-r-lg px-3 py-2 mb-3">
-                  <p className="text-white/70 text-xs italic leading-relaxed">
-                    "You may write me down in history… But still, like dust, I'll rise."
+                <div className="pt-6">
+                  <h2 className="text-4xl lg:text-5xl font-black text-white tracking-wide drop-shadow-2xl mb-5">
+                    A Visionary Leader
+                  </h2>
+                  <p className="text-white/95 text-xl lg:text-2xl font-medium leading-relaxed drop-shadow-xl max-w-lg">
+                    Leading with Integrity, Inspiring with Vision,<br />Serving with Dedication.
                   </p>
-                  <p className="text-[#D4AF37]/70 text-[10px] mt-1">— Maya Angelou</p>
-                </div>
-
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                  {[
-                    { icon: <Shield className="w-3.5 h-3.5 text-[#D4AF37]" />, label: '30+ Years' },
-                    { icon: <Globe className="w-3.5 h-3.5 text-[#D4AF37]" />, label: '2 UN Missions' },
-                    { icon: <Award className="w-3.5 h-3.5 text-[#D4AF37]" />, label: 'SUP Awardee' },
-                  ].map(({ icon, label }) => (
-                    <span key={label} className="inline-flex items-center gap-1.5 bg-white/10 border border-white/20 px-3 py-1.5 rounded-lg text-xs lg:text-sm text-white">
-                      {icon}{label}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex gap-2 lg:gap-3">
-                  <button
-                    onClick={() => (window.location.href = '/#/about')}
-                    className="group flex items-center gap-2 bg-[#F42A41] hover:bg-[#D91E36] text-white font-bold px-4 lg:px-5 py-2.5 rounded-lg shadow-lg transition-all text-xs lg:text-sm"
-                  >
-                    Read Biography
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                  </button>
-                  <button
-                    onClick={() => document.getElementById('vision')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="flex items-center gap-2 border-2 border-[#D4AF37] hover:bg-[#D4AF37]/20 text-[#D4AF37] font-bold px-4 lg:px-5 py-2.5 rounded-lg transition-all text-xs lg:text-sm"
-                  >
-                    Vision
-                  </button>
                 </div>
               </div>
             </div>
 
-            {/* Right — Portrait, constrained by both width and viewport height */}
-            <div className="flex-1 flex items-center justify-center lg:justify-end min-w-0 overflow-hidden">
+            {/* Right — Portrait */}
+            <div className="flex-1 flex items-center justify-center lg:justify-end min-w-0 overflow-hidden pr-4 lg:pr-12">
               <img
                 src="/colonel-jaglul.png"
                 alt="Colonel (Retd.) Md. Jaglul Ahsan"
-                className="w-auto max-w-[300px] md:max-w-[360px] lg:max-w-[440px] xl:max-w-[540px] 2xl:max-w-[640px] max-h-[calc(100vh-9rem)] object-contain drop-shadow-2xl animate-float"
+                className="w-auto max-w-[320px] md:max-w-[400px] lg:max-w-[500px] xl:max-w-[600px] 2xl:max-w-[700px] max-h-[calc(100vh-8rem)] object-contain drop-shadow-2xl animate-float"
               />
             </div>
-
           </div>
         </div>
       </div>

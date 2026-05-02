@@ -28,6 +28,76 @@ export const INITIAL_VIDEOS: Video[] = [
 
 export const INITIAL_POSTS: Post[] = [
   {
+    id: 'news-1',
+    title: 'Speakers at the Roundtable',
+    excerpt: 'Speakers at the Roundtable on “Geopolitical Security of Bangladesh: Perspectives on the Humanitarian Corridor.” The roundtable was organized by the Center...',
+    content: `Speakers at the Roundtable on “Geopolitical Security of Bangladesh: Perspectives on the Humanitarian Corridor.”
+
+The roundtable was organized by the Center for Governance and Security Analysis and held at the CIRDAP Auditorium, Dhaka, on May 31, 2025.
+
+The session was chaired by Colonel (Retd.) Md. Jaglul Ahsan, Executive Director of the Center for Governance and Security Analysis, who also presented the keynote paper. Emphasizing that the corridor is intricately linked to national security, Jaglul Ahsan stated that such decisions should not be taken unilaterally by the government. Given the current absence of a functioning parliament, he stressed the importance of engaging in open dialogue with all political parties before arriving at any conclusion.`,
+    date: 'May 31, 2025',
+    category: 'Event',
+    tags: ['Security & Policy', 'Public Dialogue'],
+    thematicArea: 'security',
+    imageUrl: '/news/news1.jpeg',
+    images: ['/news/news1.jpeg'],
+    author: 'Jaglul',
+    commentsEnabled: true,
+    commentCount: 0
+  },
+  {
+    id: 'news-2',
+    title: 'The colonel organized......',
+    excerpt: 'At 03 April, 2025 the colonel organized an assembly and Human Chain to reclaim the lands...',
+    content: `At 03 April, 2025 the colonel organized an assembly and Human Chain to reclaim the lands. The local community actively participated in this peaceful demonstration to protest against unauthorized land occupations and demand the return of properties to their rightful owners.
+
+The event highlights Colonel Ahsan's commitment to justice and civic action, mobilizing citizens to stand up for their fundamental rights.`,
+    date: 'April 6, 2025',
+    category: 'Civic',
+    tags: ['Civic Action & Rights', 'Community Engagement'],
+    thematicArea: 'civic',
+    imageUrl: '/news/news2.jpg',
+    images: ['/news/news2.jpg'],
+    author: 'Jaglul',
+    commentsEnabled: true,
+    commentCount: 0
+  },
+  {
+    id: 'news-3',
+    title: "Nation's future lies on children.",
+    excerpt: 'Nation’s future lies on children. Colonel, therefore, organizes periodic art competition for them to develop their mental faculty...',
+    content: `Nation’s future lies on children. Colonel, therefore, organizes periodic art competition for them to develop their mental faculty since early childhood.
+
+These events not only encourage creativity but also foster a sense of community and positive engagement among the youth. Recognizing that education and artistic expression are vital components of character development, these initiatives aim to provide children with platforms to showcase their talents and build self-confidence.`,
+    date: 'June 18, 2024',
+    category: 'Education',
+    tags: ['Education & Youth', 'Community Engagement'],
+    thematicArea: 'education',
+    imageUrl: '/news/news3.jpg',
+    images: ['/news/news3.jpg'],
+    author: 'Jaglul',
+    commentsEnabled: true,
+    commentCount: 0
+  },
+  {
+    id: 'news-4',
+    title: 'A Heartwarming Initiative...',
+    excerpt: 'A Heartwarming Initiative in the Heart of the Jamuna Char: Even amidst the biting cold winds of winter, Colonel’s Foundation and the NGO UPSAM...',
+    content: `A Heartwarming Initiative in the Heart of the Jamuna Char: Even amidst the biting cold winds of winter, Colonel’s Foundation and the NGO UPSAM joined forces to distribute essential winter clothing to the vulnerable communities.
+
+This timely intervention provided much-needed relief to hundreds of families facing harsh weather conditions without adequate protection. The distribution drive underscores the ongoing commitment to humanitarian assistance and supporting the most marginalized segments of society during times of acute need.`,
+    date: 'January 18, 2021',
+    category: 'Humanitarian',
+    tags: ['Humanitarian', 'Community Support'],
+    thematicArea: 'humanitarian',
+    imageUrl: '/news/news4.jpg',
+    images: ['/news/news4.jpg'],
+    author: 'Jaglul',
+    commentsEnabled: true,
+    commentCount: 0
+  },
+  {
     id: '1',
     title: 'Strengthening Veterans Support Networks Across Bangladesh',
     excerpt: 'Colonel Ahsan addresses the need for comprehensive welfare programs for retired military personnel across Bangladesh.',
