@@ -1,134 +1,133 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Lock, AlertCircle, Check } from 'lucide-react';
-import { Button } from '../components/Button';
+import { Lock, Mail, AlertCircle, Loader2 } from 'lucide-react';
 
 export const AdminLogin: React.FC = () => {
+  const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState('');
-  const [strength, setStrength] = useState(0);
-  const { login } = useAuth();
+  const [error, setError]       = useState('');
+  const [loading, setLoading]   = useState(false);
+  const { login, isAdmin, isLoading } = useAuth();
   const navigate = useNavigate();
 
-  // Calculate password strength
+  // Redirect if already admin
   useEffect(() => {
-    let score = 0;
-    if (!password) {
-        setStrength(0);
-        return;
+    if (!isLoading && isAdmin) {
+      navigate('/admin/studio');
     }
-    if (password.length > 4) score++;
-    if (password.length > 8) score++;
-    if (/[A-Z]/.test(password)) score++;
-    if (/[0-9]/.test(password)) score++;
-    if (/[^A-Za-z0-9]/.test(password)) score++;
-    
-    // Cap at 4 for UI simplicity
-    setStrength(Math.min(score, 4));
-  }, [password]);
+  }, [isAdmin, isLoading, navigate]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (login(password, rememberMe)) {
-      navigate('/');
+    setError('');
+    setLoading(true);
+
+    const { error: authError } = await login(email, password);
+
+    setLoading(false);
+    if (authError) {
+      setError(authError);
     } else {
-      setError('Invalid Access Code');
+      navigate('/admin/studio');
     }
-  };
-
-  const getStrengthColor = () => {
-    if (strength === 0) return 'bg-gray-200';
-    if (strength < 2) return 'bg-red-500';
-    if (strength < 3) return 'bg-yellow-500';
-    return 'bg-green-500';
-  };
-
-  const getStrengthLabel = () => {
-    if (!password) return '';
-    if (strength < 2) return 'Weak';
-    if (strength < 3) return 'Medium';
-    return 'Strong';
   };
 
   return (
-    <div className="min-h-screen bg-army-cream flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-xl overflow-hidden border border-army-green/10">
-        <div className="bg-gradient-to-r from-army-olive to-army-green py-6 px-8 text-center">
-          <div className="mx-auto w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-3 border border-army-gold/30">
-             <Lock className="text-white w-6 h-6" />
+    <div className="min-h-screen bg-[#0f1b25] flex items-center justify-center px-4 relative overflow-hidden">
+      {/* Background texture */}
+      <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }}></div>
+      
+      <div className="relative w-full max-w-sm">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 rounded-full bg-army-gold/10 border border-army-gold/30 flex items-center justify-center mx-auto mb-4 shadow-xl shadow-army-gold/10">
+            <Lock size={24} className="text-army-gold" />
           </div>
-          <h2 className="text-2xl font-serif font-bold text-white">Restricted Access</h2>
-          <p className="text-green-200 text-sm mt-1">Authorized Staff Only</p>
+          <h1 className="text-2xl font-serif font-black text-white tracking-wide">Studio Access</h1>
+          <p className="text-white/40 text-xs font-bold uppercase tracking-widest mt-1">Authorized Personnel Only</p>
         </div>
-        
-        <div className="p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
+
+        {/* Form Card */}
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl">
+          <form onSubmit={handleSubmit} className="space-y-5">
+
+            {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-army-oliveDark">Access Password</label>
-              <input 
-                type="password" 
-                className="mt-1 block w-full px-3 py-2 border border-army-green/30 rounded-md shadow-sm focus:outline-none focus:ring-army-green focus:border-army-green transition-colors"
-                value={password}
-                onChange={(e) => {
-                    setPassword(e.target.value);
-                    setError('');
-                }}
-                autoFocus
-              />
-              
-              {/* Password Strength Indicator */}
-              <div className="mt-2">
-                <div className="flex justify-between items-center mb-1">
-                    <span className="text-xs text-army-olive/70">Password Strength</span>
-                    <span className={`text-xs font-bold ${strength < 2 ? 'text-army-red' : strength < 3 ? 'text-yellow-600' : 'text-army-green'}`}>
-                        {getStrengthLabel()}
-                    </span>
-                </div>
-                <div className="flex gap-1 h-1.5">
-                    {[1, 2, 3, 4].map((level) => (
-                        <div 
-                            key={level} 
-                            className={`flex-1 rounded-full transition-all duration-300 ${level <= strength ? getStrengthColor() : 'bg-gray-200'}`}
-                        ></div>
-                    ))}
-                </div>
+              <label className="block text-xs font-bold text-white/50 uppercase tracking-widest mb-2">
+                Admin Email
+              </label>
+              <div className="relative">
+                <Mail size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
+                <input
+                  id="admin-email"
+                  type="email"
+                  required
+                  autoFocus
+                  placeholder="admin@example.com"
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); setError(''); }}
+                  className="w-full bg-white/5 border border-white/10 text-white placeholder:text-white/20 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-army-gold/50 focus:bg-white/10 transition-all"
+                />
               </div>
             </div>
 
+            {/* Password */}
+            <div>
+              <label className="block text-xs font-bold text-white/50 uppercase tracking-widest mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <Lock size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
+                <input
+                  id="admin-password"
+                  type="password"
+                  required
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => { setPassword(e.target.value); setError(''); }}
+                  className="w-full bg-white/5 border border-white/10 text-white placeholder:text-white/20 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-army-gold/50 focus:bg-white/10 transition-all"
+                />
+              </div>
+            </div>
+
+            {/* Error */}
             {error && (
-              <div className="flex items-center gap-2 text-army-red text-sm bg-red-50 p-3 rounded border border-army-red/20 animate-pulse">
-                <AlertCircle size={16} />
+              <div className="flex items-center gap-2.5 text-red-400 text-xs bg-red-500/10 border border-red-500/20 px-4 py-3 rounded-xl">
+                <AlertCircle size={15} className="flex-shrink-0" />
                 {error}
               </div>
             )}
 
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="h-4 w-4 text-army-green focus:ring-army-green border-army-green/30 rounded cursor-pointer"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-army-oliveDark cursor-pointer select-none">
-                Remember me for 1 hour
-              </label>
-            </div>
+            {/* Submit */}
+            <button
+              id="admin-login-btn"
+              type="submit"
+              disabled={loading}
+              className="w-full bg-army-gold text-army-navy font-black text-sm uppercase tracking-widest py-3.5 rounded-xl hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-lg shadow-army-gold/20"
+            >
+              {loading ? (
+                <><Loader2 size={16} className="animate-spin" /> Authenticating…</>
+              ) : (
+                'Access Studio'
+              )}
+            </button>
 
-            <Button type="submit" className="w-full justify-center">
-              Authenticate
-            </Button>
-            
             <div className="text-center">
-                <button type="button" onClick={() => navigate('/')} className="text-sm text-army-olive/70 hover:text-army-green transition-colors">
-                    Return to Public Site
-                </button>
+              <button
+                type="button"
+                onClick={() => navigate('/')}
+                className="text-xs text-white/30 hover:text-white/60 transition-colors"
+              >
+                ← Return to Public Site
+              </button>
             </div>
           </form>
         </div>
+
+        <p className="text-center text-white/20 text-[10px] uppercase tracking-widest mt-6 font-bold">
+          Jaglul Studio · Restricted Area
+        </p>
       </div>
     </div>
   );

@@ -12,7 +12,14 @@ interface VideoGalleryProps {
 
 export const VideoGallery: React.FC<VideoGalleryProps> = ({ videos, onAddVideo, onDeleteVideo }) => {
   const { isAdmin } = useAuth();
-  const [mainVideo, setMainVideo] = useState<Video>(videos[0]);
+  const [mainVideo, setMainVideo] = useState<Video | null>(videos[0] || null);
+
+  // Sync main video if list changes
+  React.useEffect(() => {
+    if (videos.length > 0 && !mainVideo) {
+      setMainVideo(videos[0]);
+    }
+  }, [videos]);
   const [isAdding, setIsAdding] = useState(false);
   const [newUrl, setNewUrl] = useState('');
   const [newTitle, setNewTitle] = useState('');
@@ -77,21 +84,30 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({ videos, onAddVideo, 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Main Video Player - first on desktop, second on mobile */}
           <div className="lg:col-span-2 order-2 lg:order-1">
-            <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-xl">
-              <iframe 
-                width="100%" 
-                height="100%" 
-                src={`https://www.youtube.com/embed/${mainVideo.youtubeId}?rel=0`}
-                title={mainVideo.title}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
-            <div className="mt-4">
-              <h3 className="text-lg sm:text-2xl font-bold text-gray-900 line-clamp-2">{mainVideo.title}</h3>
-              <p className="text-gray-500 font-medium">{mainVideo.date}</p>
-            </div>
+            {mainVideo ? (
+              <>
+                <div className="relative aspect-video bg-black rounded-lg overflow-hidden shadow-xl">
+                  <iframe 
+                    width="100%" 
+                    height="100%" 
+                    src={`https://www.youtube.com/embed/${mainVideo.youtubeId}?rel=0`}
+                    title={mainVideo.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+                <div className="mt-4">
+                  <h3 className="text-lg sm:text-2xl font-bold text-gray-900 line-clamp-2">{mainVideo.title}</h3>
+                  <p className="text-gray-500 font-medium">{mainVideo.date}</p>
+                </div>
+              </>
+            ) : (
+              <div className="aspect-video bg-army-cream flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-army-green/20">
+                <Play size={48} className="text-army-green/20 mb-4" />
+                <p className="text-army-olive/50 font-serif">No video messages available.</p>
+              </div>
+            )}
           </div>
 
           {/* Side List - first on mobile (compact), sidebar on desktop */}
@@ -103,7 +119,7 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({ videos, onAddVideo, 
               <div 
                 key={video.id}
                 onClick={() => setMainVideo(video)}
-                className={`group flex gap-4 p-3 rounded-lg cursor-pointer transition-all duration-300 ${mainVideo.id === video.id ? 'bg-[#006A4E]/10 border-l-4 border-[#006A4E]/80' : 'hover:bg-army-cream hover:translate-x-1'}`}
+                className={`group flex gap-4 p-3 rounded-lg cursor-pointer transition-all duration-300 ${mainVideo?.id === video.id ? 'bg-[#006A4E]/10 border-l-4 border-[#006A4E]/80' : 'hover:bg-army-cream hover:translate-x-1'}`}
               >
                 <div className="relative w-24 sm:w-32 flex-shrink-0 aspect-video bg-army-olive/20 rounded overflow-hidden">
                   <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />

@@ -1,261 +1,173 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, ChevronDown, Heart, GraduationCap, Shield, Medal, Scale, Image } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Link, useLocation } from 'react-router-dom';
-
-const impactLinks = [
-  { name: 'Humanitarian Work', path: '/impact/humanitarian', icon: <Heart size={16} /> },
-  { name: 'Education & Youth', path: '/impact/education', icon: <GraduationCap size={16} /> },
-  { name: 'National Security', path: '/impact/security', icon: <Shield size={16} /> },
-  { name: 'Veterans Welfare', path: '/impact/veterans', icon: <Medal size={16} /> },
-  { name: 'Civic Action', path: '/impact/civic', icon: <Scale size={16} /> },
-];
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [impactDropdown, setImpactDropdown] = useState(false);
-  const [mobileImpactOpen, setMobileImpactOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const { isAdmin, logout } = useAuth();
   const location = useLocation();
 
-  // Handle scroll for sticky header effect
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 10);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setImpactDropdown(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
-    { name: 'News & Events', path: '/news' },
+    { name: 'Feed', path: '/feed' },
+    { name: 'Contact', path: '/contact' },
   ];
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
-    return location.pathname.startsWith(path.replace('/#', '/'));
-  };
-
-  const isImpactActive = () => {
-    return location.pathname.startsWith('/impact');
+    return location.pathname.startsWith(path);
   };
 
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
-      ? 'bg-[#F42A41]/95 backdrop-blur-md shadow-lg border-b border-[#D91E36]/80'
-      : 'bg-[#F42A41]/95 shadow-md border-b border-[#D91E36]/80'
+      ? 'bg-[#004B35]/98 backdrop-blur-md shadow-xl border-b-2 border-[#DA291C] py-0.5'
+      : 'bg-[#006A4E] shadow-lg border-b-2 border-[#DA291C] py-1'
       }`}>
-      <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16">
-        <div className="flex justify-between items-center h-16 sm:h-20">
-          {/* Logo */}
-          <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center gap-2 sm:gap-3 group min-w-0">
-              {/* Portrait with BD Flag colors */}
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-white/80 shadow-md group-hover:border-[#D4AF37] group-hover:scale-110 transition-all duration-300 relative bg-white flex-shrink-0">
+      {/* Full width container to eliminate side blanks */}
+      <div className="w-full px-4 sm:px-8 lg:px-10">
+        <div className="flex justify-between items-center h-18 sm:h-20" style={{ height: '72px' }}>
+          
+          {/* Logo & Identity (Left) */}
+          <div className="flex-shrink-0">
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="w-13 h-13 rounded-full overflow-hidden border-2 border-army-gold/30 shadow-inner group-hover:border-army-gold transition-all duration-300 bg-white" style={{ width: '52px', height: '52px', flexShrink: 0 }}>
                 <img
                   src="/colonel-jaglul.png"
                   alt="Col. Jaglul Ahsan"
-                  className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-full object-cover object-top"
                 />
               </div>
-              <div className="flex flex-col min-w-0">
-                <span className="font-serif font-black text-base sm:text-xl text-white leading-none tracking-wide truncate" style={{ fontFamily: 'Playfair Display, Georgia, serif', letterSpacing: '0.05em' }}>
+              <div className="flex flex-col">
+                <span className="font-serif font-black text-2xl text-white leading-none tracking-wider">
                   JAGLUL AHSAN
                 </span>
-                <span className="text-[10px] sm:text-xs font-medium text-white/80 tracking-wide mt-0.5 hidden sm:block">
-                  Colonel (Retd.) • SUP, psc, G
+                <span className="text-xs font-bold text-army-gold/80 uppercase tracking-widest mt-1 hidden sm:block">
+                  Colonel (Retd.) • Official
                 </span>
               </div>
             </Link>
           </div>
 
-          {/* Right Section: Desktop Menu + Admin */}
-          <div className="hidden md:flex flex-1 items-center justify-end pl-8">
-            <div className="flex items-center space-x-1 lg:space-x-2">
+          {/* Navigation Items (Pushed to the Right) */}
+          <div className="hidden md:flex items-center justify-end flex-grow">
+            <div className="flex items-center gap-1 lg:gap-2 mr-6 lg:mr-8">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.path}
-                  className={`px-3 lg:px-4 py-2 rounded-md font-medium transition-all duration-200 text-sm lg:text-base ${isActive(link.path)
-                    ? 'text-white bg-white/20'
-                    : 'text-white/90 hover:text-white hover:bg-white/15'
+                  className={`relative px-6 py-3 text-sm font-black uppercase tracking-widest transition-all duration-200 rounded-md
+                    ${isActive(link.path)
+                      ? 'text-army-gold'
+                      : 'text-white hover:bg-[#DA291C] hover:text-white'
                     }`}
                 >
                   {link.name}
+                  {isActive(link.path) && (
+                    <span className="absolute bottom-1 left-6 right-6 h-0.5 bg-army-gold rounded-full" />
+                  )}
                 </Link>
               ))}
-
-              {/* Impact Dropdown */}
-              <div className="relative" ref={dropdownRef}>
-                <button
-                  onClick={() => setImpactDropdown(!impactDropdown)}
-                  className={`px-3 lg:px-4 py-2 rounded-md font-medium transition-all duration-200 flex items-center gap-1 text-sm lg:text-base ${isImpactActive()
-                    ? 'text-white bg-white/20'
-                    : 'text-white/90 hover:text-white hover:bg-white/15'
-                    }`}
-                >
-                  Impact
-                  <ChevronDown size={14} className={`transition-transform duration-200 ${impactDropdown ? 'rotate-180' : ''}`} />
-                </button>
-
-                {/* Dropdown Menu */}
-                {impactDropdown && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#F42A41]/30 py-2 animate-fade-in">
-                    {impactLinks.map((link) => (
-                      <Link
-                        key={link.path}
-                        to={link.path}
-                        onClick={() => setImpactDropdown(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-[#006A4E] hover:bg-[#006A4E]/10 transition-colors"
-                      >
-                        <span className="text-[#F42A41]">{link.icon}</span>
-                        {link.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Gallery Link */}
-              <Link
-                to="/gallery"
-                className={`px-3 lg:px-4 py-2 rounded-md font-medium transition-all duration-200 flex items-center gap-1.5 text-sm lg:text-base ${location.pathname === '/gallery'
-                  ? 'text-white bg-white/20'
-                  : 'text-white/90 hover:text-white hover:bg-white/15'
-                  }`}
-              >
-                <Image size={14} />
-                Gallery
-              </Link>
-
-              {/* Contact Link */}
-              <Link
-                to="/contact"
-                className={`px-3 lg:px-4 py-2 rounded-md font-medium transition-all duration-200 text-sm lg:text-base ${location.pathname === '/contact'
-                  ? 'text-white bg-white/20'
-                  : 'text-white/90 hover:text-white hover:bg-white/15'
-                  }`}
-              >
-                Contact
-              </Link>
-
-              {/* Join Me CTA - BD Red with Animation */}
-              <Link
-                to="/contact"
-                className="ml-2 lg:ml-4 relative bg-white text-[#F42A41] px-4 lg:px-6 py-2 lg:py-2.5 rounded-md font-bold hover:bg-[#D4AF37] hover:text-[#006A4E] hover:-translate-y-1 hover:scale-105 hover:shadow-xl transition-all duration-300 shadow-md btn-military overflow-hidden group text-sm lg:text-base"
-              >
-                <span className="relative z-10">Join Me</span>
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
-              </Link>
             </div>
 
-            {isAdmin && (
-              <div className="flex items-center gap-3 ml-4 pl-4 border-l border-white/30">
-                <span className="text-xs font-bold text-white bg-white/20 px-2 py-1 rounded">ADMIN</span>
-                <button onClick={logout} className="text-sm text-white/80 hover:text-white transition-colors">Logout</button>
-              </div>
-            )}
+            {/* Action Buttons (Far Right) */}
+            <div className="flex items-center gap-3">
+              {isAdmin ? (
+                <div className="flex items-center gap-2 pl-4 border-l border-white/10 ml-2">
+                  <Link
+                    to="/admin/studio"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-army-gold text-army-navy text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all shadow-sm"
+                  >
+                    <span className="animate-pulse">✦</span> Studio
+                  </Link>
+                  <button 
+                    onClick={logout} 
+                    className="text-[10px] font-bold text-white/50 hover:text-army-red transition-colors uppercase tracking-widest px-2"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <a
+                  href="/#contact"
+                  onClick={(e) => {
+                    if (window.location.pathname === '/') {
+                      e.preventDefault();
+                      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="bg-army-gold text-army-navy px-7 py-3 rounded-md font-black text-sm uppercase tracking-widest hover:bg-[#DA291C] hover:text-white hover:border-[#DA291C] transition-all active:scale-95 border border-army-gold/50"
+                >
+                  Join Me
+                </a>
+              )}
+            </div>
           </div>
 
           {/* Mobile menu button */}
-          <div className="flex items-center md:hidden">
+          <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-white/20 focus:outline-none transition-colors"
+              className="p-2 rounded-lg text-white hover:bg-white/10 transition-colors"
             >
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      <div className={`md:hidden transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-[80vh] opacity-100 overflow-y-auto' : 'max-h-0 opacity-0'
-        }`}>
-        <div className="bg-[#D91E36] border-t border-white/20 px-4 pt-2 pb-4 space-y-1">
+      <div className={`md:hidden transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div className="bg-army-green border-t border-white/10 px-4 py-6 space-y-2 shadow-xl">
           {navLinks.map((link) => (
             <Link
               key={link.name}
               to={link.path}
               onClick={() => setIsOpen(false)}
-              className={`block px-4 py-3 rounded-md font-medium transition-colors ${isActive(link.path)
-                ? 'text-white bg-white/20'
-                : 'text-white/90 hover:text-white hover:bg-white/15'
+              className={`block px-4 py-3 rounded-xl text-base font-bold transition-all ${isActive(link.path)
+                ? 'text-army-gold bg-white/10 shadow-inner'
+                : 'text-white/80 hover:text-white hover:bg-white/5'
                 }`}
             >
               {link.name}
             </Link>
           ))}
-
-          {/* Mobile Impact Dropdown */}
-          <div className="border-t border-white/20 pt-2 mt-2">
-            <button
-              onClick={() => setMobileImpactOpen(!mobileImpactOpen)}
-              className="w-full flex items-center justify-between px-4 py-3 rounded-md font-medium text-white/90"
-            >
-              <span>Impact Focus Areas</span>
-              <ChevronDown size={16} className={`transition-transform duration-200 ${mobileImpactOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            {mobileImpactOpen && (
-              <div className="pl-4 space-y-1 mt-1">
-                {impactLinks.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    onClick={() => { setIsOpen(false); setMobileImpactOpen(false); }}
-                    className="flex items-center gap-3 px-4 py-2.5 text-white/90 hover:text-white hover:bg-white/15 rounded-md transition-colors"
-                  >
-                    <span className="text-white/70">{link.icon}</span>
-                    {link.name}
-                  </Link>
-                ))}
-              </div>
+          
+          <div className="pt-4 mt-4 border-t border-white/10">
+            {isAdmin ? (
+              <Link
+                to="/admin/studio"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-army-gold text-army-navy font-black uppercase tracking-widest shadow-lg"
+              >
+                ✦ Go to Studio
+              </Link>
+            ) : (
+                <a
+                  href="/#contact"
+                  onClick={(e) => {
+                    setIsOpen(false);
+                    if (window.location.pathname === '/') {
+                      e.preventDefault();
+                      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className="flex items-center justify-center w-full py-4 rounded-xl bg-army-gold text-army-navy font-black uppercase tracking-widest shadow-lg"
+                >
+                  Join Me
+                </a>
             )}
           </div>
-
-          {/* Gallery Link */}
-          <Link
-            to="/gallery"
-            onClick={() => setIsOpen(false)}
-            className="flex items-center gap-2 px-4 py-3 rounded-md font-medium text-white/90 hover:text-white hover:bg-white/15 transition-colors"
-          >
-            <Image size={16} />
-            Media Gallery
-          </Link>
-
-          {/* Contact Link */}
-          <Link
-            to="/contact"
-            onClick={() => setIsOpen(false)}
-            className="block px-4 py-3 rounded-md font-medium text-white/90 hover:text-white hover:bg-white/15 transition-colors"
-          >
-            Contact
-          </Link>
-
-          <Link
-            to="/contact"
-            onClick={() => setIsOpen(false)}
-            className="block w-full text-center mt-4 relative bg-white text-[#F42A41] px-5 py-3 rounded-md font-bold hover:bg-[#D4AF37] hover:text-[#006A4E] hover:scale-[1.02] hover:shadow-lg transition-all duration-300 overflow-hidden group"
-          >
-            <span className="relative z-10">Join Me</span>
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
-          </Link>
         </div>
       </div>
     </nav>

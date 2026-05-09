@@ -5,25 +5,29 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { CommentSection } from '../components/CommentSection';
 import { EventSummaryCard } from '../components/EventSummaryCard';
-import { INITIAL_POSTS, INITIAL_COMMENTS } from '../constants';
+import { usePosts } from '../src/features/posts/context/PostsContext';
+import { INITIAL_COMMENTS } from '../constants';
 
 export const NewsPost: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id, slug } = useParams<{ id?: string; slug?: string }>();
   const navigate = useNavigate();
+  const { getPostBySlug, posts } = usePosts();
   
-  const post = INITIAL_POSTS.find(p => p.id === id);
-  const postComments = INITIAL_COMMENTS.filter(c => c.postId === id && c.approved);
+  // Try to find by slug first (new system), then by id (compatibility)
+  const post = slug ? getPostBySlug(slug) : posts.find(p => p.id === id);
+  const postId = post?.id || id;
+  const postComments = INITIAL_COMMENTS.filter(c => c.postId === postId && c.approved);
 
   if (!post) {
     return (
-      <div className="min-h-screen flex flex-col bg-army-cream">
+      <div className="min-h-screen flex flex-col bg-[#f5f5f0]">
         <Navbar />
         <main className="flex-grow flex items-center justify-center">
           <div className="text-center">
-            <h1 className="text-4xl font-serif font-bold text-army-green mb-4">Post Not Found</h1>
-            <p className="text-army-olive/70 mb-6">The article you're looking for doesn't exist.</p>
-            <Link to="/news" className="bg-army-green text-white px-6 py-3 rounded-lg font-semibold hover:bg-army-olive transition-colors">
-              Browse All News
+            <h1 className="text-4xl font-serif font-bold text-army-navy mb-4 tracking-wide">Article Not Found</h1>
+            <p className="text-army-olive/70 mb-6">The update you're looking for doesn't exist or has been moved.</p>
+            <Link to="/feed" className="bg-army-green text-white px-6 py-3 rounded-lg font-bold hover:bg-army-olive transition-all shadow-md">
+              Return to Feed
             </Link>
           </div>
         </main>
@@ -32,46 +36,41 @@ export const NewsPost: React.FC = () => {
     );
   }
 
-  // Parse content to handle markdown-like formatting
   const formatContent = (content: string) => {
     return content.split('\n\n').map((paragraph, index) => {
-      // Handle bold headers with **text**
       if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
         return (
-          <h3 key={index} className="text-xl font-serif font-bold text-army-green mt-8 mb-4">
+          <h3 key={index} className="text-xl font-serif font-bold text-army-navy mt-10 mb-5 tracking-wide">
             {paragraph.replace(/\*\*/g, '')}
           </h3>
         );
       }
-      // Handle lists
       if (paragraph.startsWith('- ')) {
         const items = paragraph.split('\n').filter(line => line.startsWith('- '));
         return (
-          <ul key={index} className="list-disc list-inside space-y-2 my-4 text-army-navy/80">
+          <ul key={index} className="list-disc list-inside space-y-3 my-6 text-army-navy/80">
             {items.map((item, i) => (
               <li key={i}>{item.replace('- ', '')}</li>
             ))}
           </ul>
         );
       }
-      // Handle quotes
       if (paragraph.startsWith('"') && paragraph.endsWith('"')) {
         return (
-          <blockquote key={index} className="border-l-4 border-army-gold pl-4 italic text-army-navy/70 my-6">
+          <blockquote key={index} className="border-l-4 border-army-gold pl-6 italic text-army-navy/70 my-10 font-serif text-xl">
             {paragraph}
           </blockquote>
         );
       }
-      // Regular paragraph
       return (
-        <p key={index} className="text-army-navy/80 leading-relaxed mb-4">
+        <p key={index} className="text-army-navy/80 leading-relaxed mb-6 text-lg">
           {paragraph}
         </p>
       );
     });
   };
 
-  const getCategoryColor = (category: string) => {
+  const getCategoryColor = (category?: string) => {
     switch (category) {
       case 'Event': return 'bg-army-gold text-army-navy';
       case 'Humanitarian': return 'bg-army-red text-white';
@@ -81,167 +80,112 @@ export const NewsPost: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-army-cream">
+    <div className="min-h-screen flex flex-col bg-[#f5f5f0]">
       <Navbar />
       
       <main className="flex-grow">
-        {/* Hero Header */}
+        {/* Header Hero */}
         <section className="relative">
-          {/* Featured Image */}
-          <div className="h-[35vh] sm:h-[40vh] md:h-[50vh] relative overflow-hidden">
+          <div className="h-[40vh] md:h-[60vh] relative overflow-hidden">
             <img 
-              src={post.imageUrl} 
+              src={post.media[0]?.url || '/placeholder.jpg'} 
               alt={post.title}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-army-forest via-army-forest/60 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1a2b3c] via-[#1a2b3c]/60 to-transparent"></div>
           </div>
           
-          {/* Header Content */}
           <div className="absolute bottom-0 left-0 right-0">
-            <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8 pb-6 sm:pb-8">
-              {/* Back Button */}
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
               <button 
                 onClick={() => navigate(-1)}
-                className="mb-4 text-white/80 hover:text-white flex items-center gap-2 transition-colors"
+                className="mb-6 text-white/70 hover:text-white flex items-center gap-2 transition-all font-bold text-sm uppercase tracking-widest"
               >
-                <ArrowLeft size={18} />
-                Back
+                <ArrowLeft size={16} /> Back
               </button>
               
-              {/* Category & Tags */}
-              <div className="flex flex-wrap items-center gap-2 mb-4">
-                <span className={`${getCategoryColor(post.category)} text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider`}>
-                  {post.category}
+              <div className="flex flex-wrap items-center gap-2 mb-6">
+                <span className={`${getCategoryColor(post.category)} text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest shadow-sm`}>
+                  {post.category || post.type}
                 </span>
-                {post.tags.map(tag => (
-                  <span key={tag} className="bg-white/10 text-white/90 text-xs px-3 py-1 rounded-full">
+                {post.tags?.map(tag => (
+                  <span key={tag} className="bg-white/10 backdrop-blur-md text-white/90 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-white/10">
                     {tag}
                   </span>
                 ))}
               </div>
               
-              {/* Title */}
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white leading-tight mb-4">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white leading-tight mb-6 tracking-wide shadow-text">
                 {post.title}
               </h1>
               
-              {/* Meta */}
-              <div className="flex flex-wrap items-center gap-4 text-white/80 text-sm">
+              <div className="flex flex-wrap items-center gap-6 text-white/70 text-xs font-bold uppercase tracking-widest">
                 <div className="flex items-center gap-2">
-                  <Calendar size={16} />
-                  {post.date}
+                  <Calendar size={14} className="text-army-gold" />
+                  {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                 </div>
                 <div className="flex items-center gap-2">
-                  <User size={16} />
+                  <User size={14} className="text-army-gold" />
                   {post.author}
                 </div>
-                {post.commentsEnabled && (
-                  <div className="flex items-center gap-2">
-                    <span className="w-1 h-1 bg-white/50 rounded-full"></span>
-                    {post.commentCount} Comments
-                  </div>
-                )}
               </div>
             </div>
           </div>
         </section>
 
         {/* Content Section */}
-        <section className="py-8 sm:py-12">
-          <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
-              {/* Main Content */}
+        <section className="py-12 sm:py-20">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
               <div className="lg:col-span-2">
-                {/* Event Summary Card - Standardized for all posts */}
-                <EventSummaryCard post={post} />
-
-                {/* Divider */}
-                <div className="gold-line mb-8"></div>
-
-                {/* Article Content */}
-                <article className="prose prose-lg max-w-none">
-                  {formatContent(post.content)}
+                <article className="prose prose-xl prose-army max-w-none">
+                  {post.description && formatContent(post.description)}
                 </article>
 
-                {/* Author Card */}
-                <div className="mt-12 bg-white rounded-xl border border-army-green/10 p-6 flex items-center gap-4 group card-lift cursor-pointer">
-                  <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-army-gold/30 flex-shrink-0 group-hover:border-army-gold group-hover:scale-110 transition-all duration-300">
+                <div className="mt-16 bg-white rounded-2xl border border-army-green/10 p-8 flex items-center gap-6 shadow-sm">
+                  <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-army-gold/30 flex-shrink-0">
                     <img 
-                      src="https://picsum.photos/100/100?grayscale" 
-                      alt={post.author}
-                      className="w-full h-full object-cover"
+                      src="/colonel-jaglul.png" 
+                      alt="Colonel Ahsan"
+                      className="w-full h-full object-cover object-top"
                     />
                   </div>
                   <div>
-                    <p className="text-xs text-army-olive/60 uppercase tracking-wider">Written by</p>
-                    <p className="font-serif font-bold text-army-green text-lg group-hover:text-army-gold transition-colors duration-300">Colonel (Retd.) Md. Jaglul Ahsan</p>
-                    <p className="text-sm text-army-olive/70">SUP, psc, G • Bangladesh Army</p>
+                    <p className="text-[10px] font-bold text-army-olive/50 uppercase tracking-widest mb-1">Authentic Statement</p>
+                    <p className="font-serif font-bold text-army-navy text-xl">Colonel (Retd.) Md. Jaglul Ahsan</p>
+                    <p className="text-sm text-army-olive/70 font-medium">SUP, psc, G • Bangladesh Army (Retired)</p>
                   </div>
                 </div>
               </div>
 
-              {/* Sidebar */}
               <div className="lg:col-span-1">
-                {/* Share Card */}
-                <div className="bg-white rounded-xl border border-army-green/10 p-4 sm:p-5 mb-6 lg:sticky lg:top-24">
-                  <h4 className="font-semibold text-army-navy mb-4 flex items-center gap-2">
-                    <Share2 size={18} />
-                    Share This Article
+                <div className="bg-white rounded-2xl border border-army-green/10 p-6 mb-8 lg:sticky lg:top-24 shadow-sm">
+                  <h4 className="text-xs font-bold text-army-navy uppercase tracking-widest mb-6 flex items-center gap-2">
+                    <Share2 size={16} className="text-army-gold" /> Share Update
                   </h4>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col gap-3">
                     <a 
                       href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 bg-[#1877F2] text-white py-2.5 rounded-lg flex items-center justify-center gap-2 hover:bg-[#166FE5] hover:scale-105 transition-all duration-300"
+                      className="w-full bg-[#1877F2] text-white py-3 rounded-xl flex items-center justify-center gap-3 font-bold text-sm hover:brightness-110 transition-all shadow-md"
                     >
-                      <Facebook size={18} />
+                      <Facebook size={18} /> Facebook
                     </a>
                     <a 
-                      href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(post.title)}`}
+                      href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 bg-[#1DA1F2] text-white py-2.5 rounded-lg flex items-center justify-center gap-2 hover:bg-[#1A91DA] hover:scale-105 transition-all duration-300"
+                      className="w-full bg-[#1DA1F2] text-white py-3 rounded-xl flex items-center justify-center gap-3 font-bold text-sm hover:brightness-110 transition-all shadow-md"
                     >
-                      <Twitter size={18} />
+                      <Twitter size={18} /> Twitter
                     </a>
-                  </div>
-                </div>
-
-                {/* Related Posts */}
-                <div className="bg-white rounded-xl border border-army-green/10 p-5">
-                  <h4 className="font-semibold text-army-navy mb-4">Related Articles</h4>
-                  <div className="space-y-4">
-                    {INITIAL_POSTS.filter(p => p.id !== post.id && p.tags.some(t => post.tags.includes(t)))
-                      .slice(0, 3)
-                      .map(relatedPost => (
-                        <Link 
-                          key={relatedPost.id}
-                          to={`/news/${relatedPost.id}`}
-                          className="block group p-2 -mx-2 rounded-lg hover:bg-army-cream/50 transition-colors duration-300"
-                        >
-                          <p className="text-xs text-army-olive/60 mb-1">{relatedPost.date}</p>
-                          <p className="text-sm font-medium text-army-navy group-hover:text-army-green transition-colors line-clamp-2 group-hover:translate-x-1 transform duration-300">
-                            {relatedPost.title}
-                          </p>
-                        </Link>
-                      ))}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
-
-        {/* Comment Section */}
-        {post.commentsEnabled && (
-          <CommentSection 
-            postId={post.id} 
-            comments={postComments} 
-            totalCount={post.commentCount} 
-          />
-        )}
       </main>
       
       <Footer />

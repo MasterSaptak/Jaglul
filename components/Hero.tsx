@@ -43,19 +43,19 @@ export const Hero: React.FC = () => {
             {/* Text block */}
             <div className="w-full text-center px-4 space-y-5 pb-8">
               <div>
-                <h1 className="text-5xl sm:text-6xl font-serif font-black text-[#D4AF37] drop-shadow-lg leading-tight">
+                <h1 className="text-5xl sm:text-6xl font-serif font-black text-[#D4AF37] drop-shadow-[0_4px_4px_rgba(0,0,0,1)] leading-tight">
                   Colonel<br />Md. Jaglul Ahsan
                 </h1>
-                <p className="text-[#D4AF37] text-xl font-bold drop-shadow-md mt-2">
+                <p className="text-[#D4AF37] text-xl font-bold drop-shadow-[0_2px_2px_rgba(0,0,0,1)] mt-2">
                   SUP, psc, G (Retd)
                 </p>
               </div>
 
               <div className="pt-3">
-                <h2 className="text-3xl sm:text-4xl font-black text-white drop-shadow-lg tracking-wide mb-3">
+                <h2 className="text-3xl sm:text-4xl font-black text-white drop-shadow-[0_4px_4px_rgba(0,0,0,1)] tracking-wide mb-3">
                   A Visionary Leader
                 </h2>
-                <p className="text-white text-base sm:text-lg font-medium drop-shadow-md leading-relaxed">
+                <p className="text-white text-base sm:text-lg font-bold drop-shadow-[0_2px_2px_rgba(0,0,0,1)] leading-relaxed">
                   Leading with Integrity, Inspiring with Vision,<br />Serving with Dedication.
                 </p>
               </div>
@@ -69,19 +69,19 @@ export const Hero: React.FC = () => {
             <div className="w-full max-w-[550px] lg:max-w-[650px] flex-shrink-0">
               <div className="space-y-8">
                 <div>
-                  <h1 className="text-6xl lg:text-7xl xl:text-8xl font-serif font-black text-[#D4AF37] leading-[1.1] drop-shadow-2xl">
+                  <h1 className="text-6xl lg:text-7xl xl:text-8xl font-serif font-black text-[#D4AF37] leading-[1.1] drop-shadow-[0_8px_8px_rgba(0,0,0,1)]">
                     Colonel<br />Md. Jaglul Ahsan
                   </h1>
-                  <p className="text-[#D4AF37] text-2xl lg:text-3xl font-bold mt-4 drop-shadow-xl">
+                  <p className="text-[#D4AF37] text-2xl lg:text-3xl font-bold mt-4 drop-shadow-[0_4px_4px_rgba(0,0,0,1)]">
                     SUP, psc, G (Retd)
                   </p>
                 </div>
 
                 <div className="pt-6">
-                  <h2 className="text-4xl lg:text-5xl font-black text-white tracking-wide drop-shadow-2xl mb-5">
+                  <h2 className="text-4xl lg:text-5xl font-black text-white tracking-wide drop-shadow-[0_6px_6px_rgba(0,0,0,1)] mb-5">
                     A Visionary Leader
                   </h2>
-                  <p className="text-white/95 text-xl lg:text-2xl font-medium leading-relaxed drop-shadow-xl max-w-lg">
+                  <p className="text-white text-xl lg:text-2xl font-bold leading-relaxed drop-shadow-[0_4px_4px_rgba(0,0,0,1)] max-w-lg">
                     Leading with Integrity, Inspiring with Vision,<br />Serving with Dedication.
                   </p>
                 </div>

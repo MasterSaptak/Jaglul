@@ -1,60 +1,77 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { ADMIN_PASSWORD } from '../constants';
+import { Session, User } from '@supabase/supabase-js';
+import { supabase } from '../services/supabase';
 
 interface AuthContextType {
   isAdmin: boolean;
-  login: (password: string, remember?: boolean) => boolean;
-  logout: () => void;
+  isLoading: boolean;
+  user: User | null;
+  session: Session | null;
+  login: (email: string, password: string) => Promise<{ error: string | null }>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const SESSION_KEY = 'sterling_admin_session';
-const SESSION_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
-
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [user, setUser]       = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Check for persisted session on mount
-  useEffect(() => {
-    const storedSession = localStorage.getItem(SESSION_KEY);
-    if (storedSession) {
-      try {
-        const { expiry } = JSON.parse(storedSession);
-        if (Date.now() < expiry) {
-          setIsAdmin(true);
-        } else {
-          localStorage.removeItem(SESSION_KEY); // Expired
-        }
-      } catch (e) {
-        localStorage.removeItem(SESSION_KEY); // Corrupt data
-      }
+  /** Fetch the user's profile and check for admin role */
+  const syncAdminStatus = async (currentUser: User | null) => {
+    if (!currentUser) {
+      setIsAdmin(false);
+      return;
     }
-  }, []);
+    try {
+      const { data } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', currentUser.id)
+        .single();
 
-  const login = (password: string, remember: boolean = false) => {
-    if (password === ADMIN_PASSWORD) {
-      setIsAdmin(true);
-      
-      if (remember) {
-        const sessionData = {
-          expiry: Date.now() + SESSION_DURATION
-        };
-        localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
-      }
-      
-      return true;
+      setIsAdmin(data?.role === 'admin' || data?.role === 'super_admin');
+    } catch {
+      setIsAdmin(false);
     }
-    return false;
   };
 
-  const logout = () => {
+  // Hydrate session on mount and subscribe to auth changes
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      syncAdminStatus(session?.user ?? null).finally(() => setIsLoading(false));
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+      await syncAdminStatus(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const login = async (email: string, password: string): Promise<{ error: string | null }> => {
+    setIsLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setIsLoading(false);
+    if (error) return { error: error.message };
+    return { error: null };
+  };
+
+  const logout = async () => {
+    await supabase.auth.signOut();
     setIsAdmin(false);
-    localStorage.removeItem(SESSION_KEY);
+    setUser(null);
+    setSession(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isAdmin, login, logout }}>
+    <AuthContext.Provider value={{ isAdmin, isLoading, user, session, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
