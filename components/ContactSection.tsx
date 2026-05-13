@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Phone, Mail, MapPin, MessageCircle, Send, CheckCircle, ArrowRight, Sparkles } from 'lucide-react';
 import { CONTACT_REASONS } from '../constants';
 import { ContactFormData } from '../types';
+import { supabase } from '../services/supabase';
 
 export const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState<ContactFormData>({
@@ -15,13 +16,29 @@ export const ContactSection: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    
+    try {
+      const { error } = await supabase
+        .from('contact_submissions')
+        .insert([{
+          full_name: formData.fullName,
+          phone: formData.phone,
+          email: formData.email || null,
+          reason: formData.reason,
+          message: formData.message
+        }]);
+
+      if (error) throw error;
       setSubmitted(true);
-    }, 1500);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Failed to send message. Please try again or contact us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -43,7 +60,7 @@ export const ContactSection: React.FC = () => {
       title: "Email",
       primary: "jaglul.official@gmail.com",
       secondary: "Response within 24 hours",
-      action: "mailto:jaglul.official@gmail.com",
+      action: "https://mail.google.com/mail/?view=cm&fs=1&to=jaglul.official@gmail.com",
       color: "from-army-red to-red-700",
       hoverColor: "group-hover:text-army-red"
     },
@@ -61,7 +78,7 @@ export const ContactSection: React.FC = () => {
       title: "Visit",
       primary: "Mirpur DOHS, Dhaka",
       secondary: "By appointment only",
-      action: "https://maps.google.com",
+      action: "#contact-form",
       color: "from-army-gold to-amber-600",
       hoverColor: "group-hover:text-army-gold"
     }
@@ -203,7 +220,7 @@ export const ContactSection: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="relative z-10 space-y-6">
+                <form id="contact-form" onSubmit={handleSubmit} className="relative z-10 space-y-6">
                   {/* Form Header */}
                   <div className="flex items-center gap-3 mb-8">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-army-red to-red-700 flex items-center justify-center">

@@ -26,14 +26,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       return;
     }
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', currentUser.id)
         .single();
 
+      if (error) {
+        console.error('Error syncing admin status:', error);
+        setIsAdmin(false);
+        return;
+      }
+
       setIsAdmin(data?.role === 'admin' || data?.role === 'super_admin');
-    } catch {
+    } catch (err) {
+      console.error('Exception in syncAdminStatus:', err);
       setIsAdmin(false);
     }
   };
@@ -57,10 +64,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const login = async (email: string, password: string): Promise<{ error: string | null }> => {
     setIsLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setIsLoading(false);
-    if (error) return { error: error.message };
-    return { error: null };
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) return { error: error.message };
+      return { error: null };
+    } catch (err: any) {
+      console.error('Login exception:', err);
+      return { error: err.message || 'An unexpected error occurred' };
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const logout = async () => {

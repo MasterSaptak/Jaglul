@@ -79,6 +79,19 @@ export type Database = {
         Insert: Omit<Database['public']['Tables']['comments']['Row'], 'id' | 'created_at'>;
         Update: Partial<Database['public']['Tables']['comments']['Insert']>;
       };
+      contact_submissions: {
+        Row: {
+          id: string;
+          full_name: string;
+          phone: string;
+          email: string | null;
+          reason: string;
+          message: string;
+          created_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['contact_submissions']['Row'], 'id' | 'created_at'>;
+        Update: Partial<Database['public']['Tables']['contact_submissions']['Insert']>;
+      };
     };
     Functions: {
       is_admin: {

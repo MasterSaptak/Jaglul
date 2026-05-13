@@ -23,13 +23,17 @@ export const AdminLogin: React.FC = () => {
     setError('');
     setLoading(true);
 
-    const { error: authError } = await login(email, password);
-
-    setLoading(false);
-    if (authError) {
-      setError(authError);
-    } else {
-      navigate('/admin/studio');
+    try {
+      const { error: authError } = await login(email, password);
+      if (authError) {
+        setError(authError);
+      } else {
+        navigate('/admin/studio');
+      }
+    } catch (err: any) {
+      setError(err.message || 'An unexpected error occurred during authentication.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -113,13 +117,25 @@ export const AdminLogin: React.FC = () => {
               )}
             </button>
 
-            <div className="text-center">
+            <div className="text-center space-y-3">
               <button
                 type="button"
                 onClick={() => navigate('/')}
-                className="text-xs text-white/30 hover:text-white/60 transition-colors"
+                className="block w-full text-xs text-white/30 hover:text-white/60 transition-colors"
               >
                 ← Return to Public Site
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => {
+                  localStorage.clear();
+                  sessionStorage.clear();
+                  window.location.reload();
+                }}
+                className="text-[10px] text-white/10 hover:text-white/40 transition-colors uppercase tracking-[0.2em]"
+              >
+                Trouble signing in? Clear Session
               </button>
             </div>
           </form>
