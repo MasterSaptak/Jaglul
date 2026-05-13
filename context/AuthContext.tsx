@@ -1,93 +1,205 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  ReactNode,
+} from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '../services/supabase';
+
+type AuthResult = {
+  error: string | null;
+  isAdmin: boolean;
+};
+
+type LogoutResult = {
+  error: string | null;
+};
 
 interface AuthContextType {
   isAdmin: boolean;
   isLoading: boolean;
   user: User | null;
   session: Session | null;
-  login: (email: string, password: string) => Promise<{ error: string | null }>;
-  logout: () => Promise<void>;
+  login: (email: string, password: string) => Promise<AuthResult>;
+  logout: () => Promise<LogoutResult>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const getErrorMessage = (error: unknown, fallback: string) => {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string') return error;
+  return fallback;
+};
+
+const signOutLocal = async () => {
+  try {
+    const { error } = await supabase.auth.signOut({ scope: 'local' });
+    if (error) console.error('Local sign-out failed:', error);
+  } catch (error) {
+    console.error('Local sign-out failed:', error);
+  }
+};
+
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser]       = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const hydrateRunRef = useRef(0);
 
-  /** Fetch the user's profile and check for admin role */
-  const syncAdminStatus = async (currentUser: User | null) => {
-    if (!currentUser) {
-      setIsAdmin(false);
-      return;
-    }
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', currentUser.id)
-        .single();
+  const clearAuthState = useCallback(() => {
+    hydrateRunRef.current += 1;
+    setUser(null);
+    setSession(null);
+    setIsAdmin(false);
+    setIsLoading(false);
+  }, []);
+
+  const hydrateAuth = useCallback(
+    async (nextSession: Session | null): Promise<AuthResult> => {
+      const runId = ++hydrateRunRef.current;
+      setIsLoading(true);
+
+      if (!nextSession?.user) {
+        if (runId === hydrateRunRef.current) {
+          setUser(null);
+          setSession(null);
+          setIsAdmin(false);
+          setIsLoading(false);
+        }
+
+        return { error: null, isAdmin: false };
+      }
+
+      try {
+        const { data: admin, error: rpcError } = await supabase.rpc('is_admin');
+        
+        if (runId !== hydrateRunRef.current) {
+          return { error: null, isAdmin: false };
+        }
+        
+        if (rpcError) {
+          console.error('Admin check failed:', rpcError);
+        }
+
+        if (!admin) {
+          clearAuthState();
+          await signOutLocal();
+          return { error: 'Unauthorized: admin access is required.', isAdmin: false };
+        }
+
+        setSession(nextSession);
+        setUser(nextSession.user);
+        setIsAdmin(true);
+        setIsLoading(false);
+
+        return { error: null, isAdmin: true };
+      } catch (error) {
+        if (runId === hydrateRunRef.current) {
+          clearAuthState();
+        }
+
+        await signOutLocal();
+
+        return {
+          error: getErrorMessage(error, 'Unable to verify admin access.'),
+          isAdmin: false,
+        };
+      }
+    },
+    [clearAuthState]
+  );
+
+  useEffect(() => {
+    let mounted = true;
+
+    const recoverSession = async () => {
+      const {
+        data: { session: currentSession },
+        error,
+      } = await supabase.auth.getSession();
+
+      if (!mounted) return;
 
       if (error) {
-        console.error('Error syncing admin status:', error);
-        setIsAdmin(false);
+        console.error('Session recovery failed:', error);
+        clearAuthState();
         return;
       }
 
-      setIsAdmin(data?.role === 'admin' || data?.role === 'super_admin');
-    } catch (err) {
-      console.error('Exception in syncAdminStatus:', err);
-      setIsAdmin(false);
-    }
-  };
+      void hydrateAuth(currentSession);
+    };
 
-  // Hydrate session on mount and subscribe to auth changes
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      syncAdminStatus(session?.user ?? null).finally(() => setIsLoading(false));
+    void recoverSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, nextSession) => {
+      if (event === 'INITIAL_SESSION') return;
+      void hydrateAuth(nextSession);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      await syncAdminStatus(session?.user ?? null);
-    });
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [clearAuthState, hydrateAuth]);
 
-    return () => subscription.unsubscribe();
-  }, []);
+  const login = useCallback(
+    async (email: string, password: string): Promise<AuthResult> => {
+      setIsLoading(true);
 
-  const login = async (email: string, password: string): Promise<{ error: string | null }> => {
-    setIsLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) return { error: error.message };
-      return { error: null };
-    } catch (err: any) {
-      console.error('Login exception:', err);
-      return { error: err.message || 'An unexpected error occurred' };
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-  const logout = async () => {
-    await supabase.auth.signOut();
-    setIsAdmin(false);
-    setUser(null);
-    setSession(null);
-  };
+        if (error || !data.session) {
+          setIsLoading(false);
+          return {
+            error: error?.message ?? 'Login failed.',
+            isAdmin: false,
+          };
+        }
 
-  return (
-    <AuthContext.Provider value={{ isAdmin, isLoading, user, session, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+        return await hydrateAuth(data.session);
+      } catch (error) {
+        clearAuthState();
+        return {
+          error: getErrorMessage(error, 'An unexpected error occurred during authentication.'),
+          isAdmin: false,
+        };
+      }
+    },
+    [clearAuthState, hydrateAuth]
   );
+
+  const logout = useCallback(async (): Promise<LogoutResult> => {
+    clearAuthState();
+
+    try {
+      const { error } = await supabase.auth.signOut({ scope: 'local' });
+      return { error: error?.message ?? null };
+    } catch (error) {
+      return {
+        error: getErrorMessage(error, 'Unable to fully sign out.'),
+      };
+    }
+  }, [clearAuthState]);
+
+  const value = useMemo(
+    () => ({ isAdmin, isLoading, user, session, login, logout }),
+    [isAdmin, isLoading, login, logout, session, user]
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

@@ -26,8 +26,16 @@ export interface CommentReply {
   isAuthor?: boolean;
 }
 
-export type PostCategory = 'News' | 'Event' | 'Humanitarian' | 'Op-Ed' | 'Policy';
-export type PostTag = 'Humanitarian' | 'Public Dialogue' | 'Security & Policy' | 'Community Engagement' | 'Veterans Welfare';
+export type PostCategory = 'News' | 'Event' | 'Humanitarian' | 'Op-Ed' | 'Policy' | 'Civic' | 'Education';
+export type PostTag =
+  | 'Humanitarian'
+  | 'Public Dialogue'
+  | 'Security & Policy'
+  | 'Community Engagement'
+  | 'Veterans Welfare'
+  | 'Civic Action & Rights'
+  | 'Education & Youth'
+  | 'Community Support';
 
 // Thematic Focus Areas
 export type ThematicArea = 'humanitarian' | 'education' | 'security' | 'veterans' | 'civic';

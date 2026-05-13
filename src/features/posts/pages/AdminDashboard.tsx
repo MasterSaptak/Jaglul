@@ -5,7 +5,7 @@ import { PostComposer } from '../components/PostComposer';
 import { PostCard } from '../components/PostCard';
 import { usePosts } from '../context/PostsContext';
 import { useAuth } from '../../../../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, Navigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   PenSquare,
@@ -30,31 +30,42 @@ type StudioTab = 'dashboard' | 'compose' | 'published' | 'drafts' | 'archived' |
 
 export const AdminDashboard: React.FC = () => {
   const { posts, deletePost, archivePost, pinPost, featurePost, updatePost } = usePosts();
-  const { isAdmin, logout } = useAuth();
+  const { isAdmin, isLoading, logout, user } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<StudioTab>('dashboard');
   const [editingPost, setEditingPost] = useState<Post | undefined>(undefined);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  // Redirect if not admin
-  if (!isAdmin) {
+  const handleLogout = () => {
+    if (isLoggingOut) return;
+
+    setIsLoggingOut(true);
+    navigate('/admin/login', { replace: true });
+    void logout().then(({ error }) => {
+      if (error) console.error('Logout error:', error);
+    });
+  };
+
+  if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col bg-army-cream">
         <Navbar />
         <main className="flex-grow flex items-center justify-center">
           <div className="text-center bg-white rounded-xl border border-army-green/10 p-12 max-w-md mx-auto shadow-sm">
-            <div className="w-16 h-16 rounded-full bg-army-red/10 flex items-center justify-center mx-auto mb-4">
-              <EyeOff size={28} className="text-army-red" />
+            <div className="w-16 h-16 rounded-full bg-army-green/10 flex items-center justify-center mx-auto mb-4">
+              <LayoutDashboard size={28} className="text-army-green animate-pulse" />
             </div>
-            <h2 className="font-serif font-bold text-2xl text-army-navy mb-2">Restricted Access</h2>
-            <p className="text-army-olive/70 mb-6 text-sm">You must be an administrator to access Jaglul Studio.</p>
-            <Link to="/admin" className="inline-block bg-army-green text-white font-bold px-6 py-2.5 rounded-lg hover:bg-army-olive transition-colors">
-              Log In
-            </Link>
+            <h2 className="font-serif font-bold text-2xl text-army-navy mb-2">Opening Studio</h2>
+            <p className="text-army-olive/70 text-sm">Verifying your admin session...</p>
           </div>
         </main>
         <Footer />
       </div>
     );
+  }
+
+  if (!user || !isAdmin) {
+    return <Navigate to="/admin/login" replace />;
   }
 
   const publishedPosts = posts.filter(p => p.visibility === 'published').sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -235,11 +246,12 @@ export const AdminDashboard: React.FC = () => {
               View Live Feed
             </Link>
             <button
-              onClick={() => { logout(); navigate('/'); }}
+              onClick={handleLogout}
+              disabled={isLoggingOut}
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-army-red/70 hover:bg-army-red/5 hover:text-army-red transition-all mt-1"
             >
               <LogOut size={18} />
-              Log Out
+              {isLoggingOut ? 'Logging Out...' : 'Log Out'}
             </button>
           </div>
         </aside>

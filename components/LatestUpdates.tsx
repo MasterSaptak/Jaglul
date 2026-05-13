@@ -2,12 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Calendar, Clock, Image as ImageIcon, Play, Rss } from 'lucide-react';
 import { Post } from '../src/features/posts/types';
+import { getPostUrl, getPostImage, getPostExcerpt, formatPostDate, getPostCategory, sortNewestFirst } from '../src/features/posts/postUtils';
 
 interface LatestUpdatesProps {
   posts: Post[];
 }
 
 export const LatestUpdates: React.FC<LatestUpdatesProps> = ({ posts }) => {
+  const latestPosts = sortNewestFirst(posts).slice(0, 3);
+
   const getIcon = (type: string) => {
     switch (type) {
       case 'video': return <Play size={14} className="text-army-gold" fill="currentColor" />;
@@ -44,10 +47,10 @@ export const LatestUpdates: React.FC<LatestUpdatesProps> = ({ posts }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {posts.slice(0, 3).map((post) => (
+          {latestPosts.map((post) => (
             <Link 
               key={post.id} 
-              to="/feed" 
+              to={getPostUrl(post)} 
               className="group relative flex flex-col bg-white rounded-2xl overflow-hidden border border-army-green/10 hover:border-army-gold/30 hover:shadow-2xl hover:shadow-army-green/5 transition-all duration-500 h-full"
             >
               {/* Media Preview */}
@@ -55,7 +58,7 @@ export const LatestUpdates: React.FC<LatestUpdatesProps> = ({ posts }) => {
                 {post.type === 'video' ? (
                   <div className="relative h-full">
                     <img 
-                      src={post.media[0]?.thumbnail || post.media[0]?.url} 
+                      src={getPostImage(post)} 
                       alt={post.title} 
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
@@ -67,7 +70,7 @@ export const LatestUpdates: React.FC<LatestUpdatesProps> = ({ posts }) => {
                   </div>
                 ) : (
                   <img 
-                    src={post.media[0]?.url} 
+                    src={getPostImage(post)} 
                     alt={post.title} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
@@ -77,7 +80,7 @@ export const LatestUpdates: React.FC<LatestUpdatesProps> = ({ posts }) => {
                 <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-full shadow-sm">
                   {getIcon(post.type)}
                   <span className="text-[10px] font-black uppercase tracking-widest text-army-navy">
-                    {post.type}
+                    {getPostCategory(post)}
                   </span>
                 </div>
               </div>
@@ -85,7 +88,7 @@ export const LatestUpdates: React.FC<LatestUpdatesProps> = ({ posts }) => {
               {/* Content */}
               <div className="p-6 flex flex-col flex-1">
                 <div className="flex items-center gap-2 text-army-olive/50 text-[10px] font-bold uppercase tracking-widest mb-3">
-                  {new Date(post.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                  {formatPostDate(post)}
                 </div>
                 
                 <h3 className="text-xl font-serif font-bold text-army-navy group-hover:text-army-green transition-colors mb-3 line-clamp-2 leading-tight">
@@ -93,7 +96,7 @@ export const LatestUpdates: React.FC<LatestUpdatesProps> = ({ posts }) => {
                 </h3>
                 
                 <p className="text-army-olive/60 text-sm leading-relaxed line-clamp-3 mb-6">
-                  {post.caption || post.description}
+                  {getPostExcerpt(post)}
                 </p>
                 
                 <div className="mt-auto flex items-center gap-2 text-army-green text-xs font-black uppercase tracking-widest group-hover:gap-3 transition-all">

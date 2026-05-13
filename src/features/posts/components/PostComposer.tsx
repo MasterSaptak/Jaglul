@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Post, PostType, PostVisibility, MediaItem } from '../types';
 import { usePosts } from '../context/PostsContext';
 import { PostCard } from './PostCard';
-import { Image as ImageIcon, X, Plus, Save, Send, Archive, Layout, Link as LinkIcon, ChevronDown } from 'lucide-react';
+import { Image as ImageIcon, X, Plus, Save, Send, Archive, Layout, ChevronDown, AlertCircle } from 'lucide-react';
 
 interface PostComposerProps {
   initialPost?: Post;
@@ -21,6 +21,12 @@ const POST_TYPES: { value: PostType; label: string; emoji: string }[] = [
 const THEMES = ['humanitarian', 'education', 'security', 'veterans', 'civic'];
 const CATEGORIES = ['News', 'Event', 'Op-Ed', 'Humanitarian', 'Policy', 'Achievement', 'Gallery'];
 
+const getErrorMessage = (error: unknown) => {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string') return error;
+  return 'Unable to save this post. Please try again.';
+};
+
 export const PostComposer: React.FC<PostComposerProps> = ({ initialPost, onSuccess }) => {
   const { createPost, updatePost } = usePosts();
 
@@ -37,6 +43,7 @@ export const PostComposer: React.FC<PostComposerProps> = ({ initialPost, onSucce
   const [showMeta, setShowMeta] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState('');
+  const [composerError, setComposerError] = useState('');
 
   // Auto-generate slug from title
   const autoSlug = title
@@ -96,17 +103,29 @@ export const PostComposer: React.FC<PostComposerProps> = ({ initialPost, onSucce
     slug: slug || autoSlug || `post-${Date.now()}`,
   });
 
-  const handleSubmit = (status: PostVisibility) => {
+  const handleSubmit = async (status: PostVisibility) => {
+    if (isSaving) return;
+
     setIsSaving(true);
-    const postData = buildPostData(status);
-    if (initialPost) {
-      updatePost(initialPost.id, postData);
-    } else {
-      createPost(postData);
+    setComposerError('');
+
+    try {
+      const postData = buildPostData(status);
+      const result = initialPost
+        ? await updatePost(initialPost.id, postData)
+        : await createPost(postData);
+
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
+      setLastSaved(new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }));
+      if (onSuccess && status !== 'draft') onSuccess();
+    } catch (error) {
+      setComposerError(getErrorMessage(error));
+    } finally {
+      setIsSaving(false);
     }
-    setLastSaved(new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }));
-    setIsSaving(false);
-    if (onSuccess && status !== 'draft') onSuccess();
   };
 
   return (
@@ -303,6 +322,13 @@ export const PostComposer: React.FC<PostComposerProps> = ({ initialPost, onSucce
         </div>
 
         {/* Action Bar */}
+        {composerError && (
+          <div className="mx-6 mb-4 flex items-start gap-2.5 rounded-lg border border-army-red/20 bg-army-red/10 px-4 py-3 text-sm text-army-red">
+            <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
+            <span>{composerError}</span>
+          </div>
+        )}
+
         <div className="px-6 py-4 bg-army-cream/20 border-t border-army-green/10 flex items-center justify-between">
           <div className="flex gap-1">
             <button
@@ -314,6 +340,7 @@ export const PostComposer: React.FC<PostComposerProps> = ({ initialPost, onSucce
             </button>
             <button
               onClick={() => handleSubmit('archived')}
+              disabled={isSaving}
               className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-army-olive/70 hover:text-army-red hover:bg-army-red/5 rounded-lg transition-all"
             >
               <Archive size={15} /> Archive

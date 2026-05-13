@@ -3,8 +3,17 @@ import { useParams, Link } from 'react-router-dom';
 import { Heart, GraduationCap, Shield, Medal, Scale, Calendar, MapPin, Users, ArrowRight, MessageSquare } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
-import { INITIAL_POSTS, THEMATIC_AREAS } from '../constants';
+import { THEMATIC_AREAS } from '../constants';
 import { ThematicArea } from '../types';
+import { usePosts } from '../src/features/posts/context/PostsContext';
+import {
+  isArticlePost,
+  getPostUrl,
+  getPostImage,
+  getPostCategory,
+  formatPostDate,
+  getPostExcerpt,
+} from '../src/features/posts/postUtils';
 
 const iconMap: { [key: string]: React.ReactNode } = {
   humanitarian: <Heart className="w-8 h-8" />,
@@ -24,9 +33,10 @@ const colorMap: { [key: string]: string } = {
 
 export const ImpactPage: React.FC = () => {
   const { theme } = useParams<{ theme: string }>();
+  const { posts } = usePosts();
   
   const thematicConfig = THEMATIC_AREAS[theme as ThematicArea];
-  const filteredPosts = INITIAL_POSTS.filter(post => post.thematicArea === theme);
+  const filteredPosts = posts.filter(post => post.theme === theme && isArticlePost(post));
   const color = colorMap[theme || 'humanitarian'] || 'army-green';
 
   if (!thematicConfig) {
@@ -47,10 +57,9 @@ export const ImpactPage: React.FC = () => {
     );
   }
 
-  // Calculate stats
-  const totalEvents = filteredPosts.filter(p => p.eventDetails).length;
-  const totalAttendees = filteredPosts.reduce((sum, p) => sum + (p.eventDetails?.attendees || 0), 0);
-  const totalComments = filteredPosts.reduce((sum, p) => sum + p.commentCount, 0);
+  // Calculate stats - in the new model, we use reactions and presence of media as indicators
+  const totalComments = filteredPosts.reduce((sum, p) => sum + Object.values(p.reactions).reduce((a, b) => a + b, 0), 0);
+  const totalMedia = filteredPosts.reduce((sum, p) => sum + p.media.length, 0);
 
   return (
     <div className="min-h-screen flex flex-col bg-army-cream">
@@ -95,16 +104,16 @@ export const ImpactPage: React.FC = () => {
                 <p className="text-sm text-army-olive/70 font-medium">Documented Activities</p>
               </div>
               <div className="p-3 sm:p-4 border-l border-army-green/10">
-                <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-army-green">{totalEvents}</p>
+                <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-army-green">{filteredPosts.filter(p => p.type === 'event').length}</p>
                 <p className="text-sm text-army-olive/70 font-medium">Events Organized</p>
               </div>
               <div className="p-3 sm:p-4 border-l border-army-green/10">
-                <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-army-green">{totalAttendees}+</p>
-                <p className="text-sm text-army-olive/70 font-medium">People Reached</p>
+                <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-army-green">{totalMedia}</p>
+                <p className="text-sm text-army-olive/70 font-medium">Media Files</p>
               </div>
               <div className="p-3 sm:p-4 border-l border-army-green/10">
                 <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-army-green">{totalComments}</p>
-                <p className="text-sm text-army-olive/70 font-medium">Public Responses</p>
+                <p className="text-sm text-army-olive/70 font-medium">Public Reactions</p>
               </div>
             </div>
           </div>
@@ -132,16 +141,16 @@ export const ImpactPage: React.FC = () => {
 
             {filteredPosts.length > 0 ? (
               <div className="space-y-8">
-                {filteredPosts.map((post, index) => (
+                {filteredPosts.map((post) => (
                   <article 
                     key={post.id}
                     className="bg-white rounded-xl border border-army-green/10 overflow-hidden shadow-sm card-lift group"
                   >
                     <div className="flex flex-col lg:flex-row">
                       {/* Image */}
-                      <Link to={`/news/${post.id}`} className="lg:w-80 h-56 lg:h-auto flex-shrink-0 overflow-hidden img-zoom">
+                      <Link to={getPostUrl(post)} className="lg:w-80 h-56 lg:h-auto flex-shrink-0 overflow-hidden img-zoom bg-army-cream">
                         <img 
-                          src={post.imageUrl} 
+                          src={getPostImage(post)} 
                           alt={post.title}
                           className="w-full h-full object-cover"
                         />
@@ -152,26 +161,26 @@ export const ImpactPage: React.FC = () => {
                         {/* Meta */}
                         <div className="flex flex-wrap items-center gap-3 mb-4">
                           <span className={`bg-${color}/10 text-${color} text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-${color}/20`}>
-                            {post.category}
+                            {getPostCategory(post)}
                           </span>
                           <span className="text-sm text-army-olive/60 flex items-center gap-1.5">
                             <Calendar size={14} />
-                            {post.date}
+                            {formatPostDate(post)}
                           </span>
                         </div>
                         
                         {/* Title */}
-                        <Link to={`/news/${post.id}`}>
+                        <Link to={getPostUrl(post)}>
                           <h3 className="font-serif font-bold text-army-navy text-xl lg:text-2xl mb-3 group-hover:text-army-green transition-colors">
-                            {post.title}
+                            {post.title || post.caption || 'Untitled update'}
                           </h3>
                         </Link>
                         
                         {/* Excerpt */}
                         <p className="text-army-olive/80 mb-4 line-clamp-2">
-                          {post.excerpt}
+                          {getPostExcerpt(post)}
                         </p>
-
+                        
                         {/* Event Details */}
                         {post.eventDetails && (
                           <div className="flex flex-wrap gap-4 mb-4 text-sm text-army-olive/70">
@@ -206,18 +215,11 @@ export const ImpactPage: React.FC = () => {
                         {/* Footer */}
                         <div className="flex items-center justify-between pt-4 border-t border-army-green/10">
                           <Link 
-                            to={`/news/${post.id}`}
+                            to={getPostUrl(post)}
                             className="inline-flex items-center gap-1.5 text-army-red font-semibold hover:text-army-green transition-colors"
                           >
                             Read Full Story <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                           </Link>
-                          
-                          {post.commentCount > 0 && (
-                            <div className="flex items-center gap-1.5 text-sm text-army-olive/60">
-                              <MessageSquare size={14} />
-                              {post.commentCount} responses
-                            </div>
-                          )}
                         </div>
                       </div>
                     </div>
@@ -275,7 +277,7 @@ export const ImpactPage: React.FC = () => {
                       {config.title}
                     </h3>
                     <p className="text-xs text-army-olive/60 mt-1">
-                      {INITIAL_POSTS.filter(p => p.thematicArea === key).length} activities
+                      {posts.filter(p => p.theme === key && isArticlePost(p)).length} activities
                     </p>
                   </Link>
                 ))}

@@ -7,42 +7,36 @@ const VISION_ITEMS = [
   {
     id: 1,
     title: "Fostering Bangladeshi Nationalism",
-    // Colonel with raised fist wearing Bangladesh flag - represents national pride
     image: "/image 1.png",
     link: "/vision/fostering-bangladeshi-nationalism"
   },
   {
     id: 2,
     title: "Socio-economic Advancement of the Area",
-    // Local image for socio-economic development
     image: "/image 2.png",
     link: "/vision/socio-economic-advancement-of-the-area"
   },
   {
     id: 3,
     title: "Empowering Retired Soldiers",
-    // Local image for veterans empowerment
     image: "/image 3.png",
     link: "/vision/empowering-retired-soldiers"
   },
   {
     id: 4,
     title: "Promoting Leadership Amongst the Next Generation",
-    // Local image for youth leadership
     image: "/image 4.png",
     link: "/vision/promoting-leadership-amongst-the-next-generation"
   },
   {
     id: 5,
     title: "Promoting Humanitarian Works",
-    // Local image for humanitarian work
     image: "/image 5.png",
     link: "/vision/promoting-humanitarian-works"
   },
   {
     id: 6,
     title: "Promoting Entrepreneurship & Employment",
-    // Local image for entrepreneurship
     image: "/image 6.png",
     link: "/vision/promoting-entrepreneurship-employment"
   }

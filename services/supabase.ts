@@ -1,126 +1,42 @@
 import { createClient } from '@supabase/supabase-js';
+import type { Database } from './database.types';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const resolvedSupabaseUrl = supabaseUrl || 'https://placeholder.supabase.co';
+const resolvedSupabaseAnonKey = supabaseAnonKey || 'placeholder-key';
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.warn(
     'Supabase credentials missing. ' +
-    'Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local'
+      'Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local'
   );
 }
 
-// Typed database schema
-export type Database = {
-  public: {
-    Tables: {
-      profiles: {
-        Row: {
-          id: string;
-          username: string | null;
-          full_name: string | null;
-          avatar_url: string | null;
-          role: 'viewer' | 'editor' | 'admin' | 'super_admin';
-          created_at: string;
-        };
-        Insert: Partial<Database['public']['Tables']['profiles']['Row']> & { id: string };
-        Update: Partial<Database['public']['Tables']['profiles']['Row']>;
-      };
-      posts: {
-        Row: {
-          id: string;
-          type: string;
-          title: string | null;
-          caption: string | null;
-          description: string | null;
-          theme: string | null;
-          category: string | null;
-          tags: string[] | null;
-          author: string | null;
-          slug: string;
-          is_pinned: boolean;
-          is_featured: boolean;
-          visibility: 'draft' | 'published' | 'archived';
-          reactions: { like: number; inspire: number; support: number };
-          created_by: string | null;
-          created_at: string;
-          updated_at: string;
-          media?: Database['public']['Tables']['media']['Row'][];
-        };
-        Insert: Omit<Database['public']['Tables']['posts']['Row'], 'id' | 'created_at' | 'updated_at' | 'search_vector' | 'media'>;
-        Update: Partial<Database['public']['Tables']['posts']['Insert']>;
-      };
-      media: {
-        Row: {
-          id: string;
-          post_id: string | null;
-          type: 'image' | 'video';
-          url: string;
-          bucket: string;
-          storage_path: string | null;
-          thumbnail: string | null;
-          alt: string | null;
-          uploaded_at: string;
-        };
-        Insert: Omit<Database['public']['Tables']['media']['Row'], 'id' | 'uploaded_at'>;
-        Update: Partial<Database['public']['Tables']['media']['Insert']>;
-      };
-      comments: {
-        Row: {
-          id: string;
-          post_id: string | null;
-          name: string;
-          email: string | null;
-          content: string;
-          is_approved: boolean;
-          is_author: boolean;
-          created_at: string;
-        };
-        Insert: Omit<Database['public']['Tables']['comments']['Row'], 'id' | 'created_at'>;
-        Update: Partial<Database['public']['Tables']['comments']['Insert']>;
-      };
-      contact_submissions: {
-        Row: {
-          id: string;
-          full_name: string;
-          phone: string;
-          email: string | null;
-          reason: string;
-          message: string;
-          created_at: string;
-        };
-        Insert: Omit<Database['public']['Tables']['contact_submissions']['Row'], 'id' | 'created_at'>;
-        Update: Partial<Database['public']['Tables']['contact_submissions']['Insert']>;
-      };
-    };
-    Functions: {
-      is_admin: {
-        Args: Record<string, never>;
-        Returns: boolean;
-      };
-    };
-  };
-};
-
 export const supabase = createClient<Database>(
-  supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseAnonKey || 'placeholder-key'
+  resolvedSupabaseUrl,
+  resolvedSupabaseAnonKey,
+  {
+    auth: {
+      autoRefreshToken: true,
+      detectSessionInUrl: false,
+      persistSession: true,
+    },
+  }
 );
 
-// ─── Helpers ──────────────────────────────────────────────────────
-
-/** Check if the current session user has admin role */
+/** Check if the current session user has admin role. */
 export async function checkIsAdmin(): Promise<boolean> {
   const { data } = await supabase.rpc('is_admin');
   return data === true;
 }
 
-/** Generate a Supabase Storage public URL */
+/** Generate a Supabase Storage public URL. */
 export function getStorageUrl(bucket: string, path: string): string {
-  return `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
+  return `${resolvedSupabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
 }
 
-/** Upload a file to Supabase Storage, return public URL */
+/** Upload a file to Supabase Storage, return public URL. */
 export async function uploadMedia(
   file: File,
   folder: string = 'posts'

@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { Link, useLocation } from 'react-router-dom';
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { isAdmin, logout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -29,16 +31,30 @@ export const Navbar: React.FC = () => {
     return location.pathname.startsWith(path);
   };
 
+  const handleLogout = () => {
+    setIsOpen(false);
+    navigate('/admin/login', { replace: true });
+    void logout().then(({ error }) => {
+      if (error) console.error('Logout error:', error);
+    });
+  };
+
+  const handleContactClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    setIsOpen(false);
+
+    if (window.location.pathname === '/') {
+      event.preventDefault();
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
       ? 'bg-[#004B35]/98 backdrop-blur-md shadow-xl border-b-2 border-[#DA291C] py-0.5'
       : 'bg-[#006A4E] shadow-lg border-b-2 border-[#DA291C] py-1'
-      }`}>
-      {/* Full width container to eliminate side blanks */}
+    }`}>
       <div className="w-full px-4 sm:px-8 lg:px-10">
         <div className="flex justify-between items-center h-18 sm:h-20" style={{ height: '72px' }}>
-          
-          {/* Logo & Identity (Left) */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center gap-3 group">
               <div className="w-13 h-13 rounded-full overflow-hidden border-2 border-army-gold/30 shadow-inner group-hover:border-army-gold transition-all duration-300 bg-white" style={{ width: '52px', height: '52px', flexShrink: 0 }}>
@@ -53,13 +69,12 @@ export const Navbar: React.FC = () => {
                   JAGLUL AHSAN
                 </span>
                 <span className="text-xs font-bold text-army-gold/80 uppercase tracking-widest mt-1 hidden sm:block">
-                  Colonel (Retd.) • Official
+                  Colonel (Retd.) - Official
                 </span>
               </div>
             </Link>
           </div>
 
-          {/* Navigation Items (Pushed to the Right) */}
           <div className="hidden md:flex items-center justify-end flex-grow">
             <div className="flex items-center gap-1 lg:gap-2 mr-6 lg:mr-8">
               {navLinks.map((link) => (
@@ -80,7 +95,6 @@ export const Navbar: React.FC = () => {
               ))}
             </div>
 
-            {/* Action Buttons (Far Right) */}
             <div className="flex items-center gap-3">
               {isAdmin ? (
                 <div className="flex items-center gap-2 pl-4 border-l border-white/10 ml-2">
@@ -88,10 +102,10 @@ export const Navbar: React.FC = () => {
                     to="/admin/studio"
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-army-gold text-army-navy text-[10px] font-black uppercase tracking-widest hover:brightness-110 transition-all shadow-sm"
                   >
-                    <span className="animate-pulse">✦</span> Studio
+                    Studio
                   </Link>
-                  <button 
-                    onClick={logout} 
+                  <button
+                    onClick={handleLogout}
                     className="text-[10px] font-bold text-white/50 hover:text-army-red transition-colors uppercase tracking-widest px-2"
                   >
                     Logout
@@ -100,12 +114,7 @@ export const Navbar: React.FC = () => {
               ) : (
                 <a
                   href="/#contact"
-                  onClick={(e) => {
-                    if (window.location.pathname === '/') {
-                      e.preventDefault();
-                      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
+                  onClick={handleContactClick}
                   className="bg-army-gold text-army-navy px-7 py-3 rounded-md font-black text-sm uppercase tracking-widest hover:bg-[#DA291C] hover:text-white hover:border-[#DA291C] transition-all active:scale-95 border border-army-gold/50"
                 >
                   Join Me
@@ -114,10 +123,10 @@ export const Navbar: React.FC = () => {
             </div>
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              type="button"
+              onClick={() => setIsOpen((open) => !open)}
               className="p-2 rounded-lg text-white hover:bg-white/10 transition-colors"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -126,7 +135,6 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div className={`md:hidden transition-all duration-300 overflow-hidden ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}>
         <div className="bg-army-green border-t border-white/10 px-4 py-6 space-y-2 shadow-xl">
           {navLinks.map((link) => (
@@ -137,35 +145,38 @@ export const Navbar: React.FC = () => {
               className={`block px-4 py-3 rounded-xl text-base font-bold transition-all ${isActive(link.path)
                 ? 'text-army-gold bg-white/10 shadow-inner'
                 : 'text-white/80 hover:text-white hover:bg-white/5'
-                }`}
+              }`}
             >
               {link.name}
             </Link>
           ))}
-          
+
           <div className="pt-4 mt-4 border-t border-white/10">
             {isAdmin ? (
-              <Link
-                to="/admin/studio"
-                onClick={() => setIsOpen(false)}
-                className="flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-army-gold text-army-navy font-black uppercase tracking-widest shadow-lg"
-              >
-                ✦ Go to Studio
-              </Link>
-            ) : (
-                <a
-                  href="/#contact"
-                  onClick={(e) => {
-                    setIsOpen(false);
-                    if (window.location.pathname === '/') {
-                      e.preventDefault();
-                      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                    }
-                  }}
-                  className="flex items-center justify-center w-full py-4 rounded-xl bg-army-gold text-army-navy font-black uppercase tracking-widest shadow-lg"
+              <div className="space-y-3">
+                <Link
+                  to="/admin/studio"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full py-4 rounded-xl bg-army-gold text-army-navy font-black uppercase tracking-widest shadow-lg"
                 >
-                  Join Me
-                </a>
+                  Go to Studio
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="w-full py-3 rounded-xl border border-white/15 text-white/70 font-bold uppercase tracking-widest"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <a
+                href="/#contact"
+                onClick={handleContactClick}
+                className="flex items-center justify-center w-full py-4 rounded-xl bg-army-gold text-army-navy font-black uppercase tracking-widest shadow-lg"
+              >
+                Join Me
+              </a>
             )}
           </div>
         </div>

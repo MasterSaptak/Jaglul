@@ -1,55 +1,92 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useState, ReactNode } from 'react';
 import { Post, PostType, PostVisibility, MediaItem } from '../types';
-import { supabase, uploadMedia } from '../../../../services/supabase';
+import { supabase } from '../../../../services/supabase';
+import type { Database } from '../../../../services/database.types';
+
+export type ApiResult<T> = {
+  data?: T;
+  error: string | null;
+};
 
 interface PostsContextType {
   posts: Post[];
   isLoading: boolean;
-  createPost: (post: Omit<Post, 'id' | 'createdAt' | 'reactions'>) => Promise<void>;
-  updatePost: (id: string, updates: Partial<Post>) => Promise<void>;
-  deletePost: (id: string) => Promise<void>;
-  archivePost: (id: string) => Promise<void>;
-  toggleReaction: (id: string, type: 'like' | 'inspire' | 'support') => Promise<void>;
-  pinPost: (id: string) => Promise<void>;
-  featurePost: (id: string) => Promise<void>;
+  createPost: (post: Omit<Post, 'id' | 'createdAt' | 'reactions'>) => Promise<ApiResult<Post>>;
+  updatePost: (id: string, updates: Partial<Post>) => Promise<ApiResult<Post>>;
+  deletePost: (id: string) => Promise<ApiResult<null>>;
+  archivePost: (id: string) => Promise<ApiResult<Post>>;
+  toggleReaction: (id: string, type: 'like' | 'inspire' | 'support') => Promise<ApiResult<Post>>;
+  pinPost: (id: string) => Promise<ApiResult<Post>>;
+  featurePost: (id: string) => Promise<ApiResult<Post>>;
   getPostBySlug: (slug: string) => Post | undefined;
 }
 
+type PostRow = Database['public']['Tables']['posts']['Row'] & {
+  media?: Database['public']['Tables']['media']['Row'][] | null;
+};
+
+type PostInsert = Database['public']['Tables']['posts']['Insert'];
+type PostUpdate = Database['public']['Tables']['posts']['Update'];
+type MediaInsert = Database['public']['Tables']['media']['Insert'];
+
 const PostsContext = createContext<PostsContextType | undefined>(undefined);
 
-// Mapping Helpers
-const mapFromSupabase = (p: any): Post => ({
-  id: p.id,
-  type: p.type as PostType,
-  title: p.title,
-  caption: p.caption,
-  description: p.description,
-  media: p.media?.map((m: any) => ({
-    id: m.id,
-    type: m.type,
-    url: m.url,
-    thumbnail: m.thumbnail,
-    uploadedAt: m.uploaded_at
-  })) || [],
-  category: p.category,
-  theme: p.theme,
-  tags: p.tags || [],
-  author: p.author,
-  createdAt: p.created_at,
-  updatedAt: p.updated_at,
-  visibility: p.visibility as PostVisibility,
-  isPinned: p.is_pinned,
-  isFeatured: p.is_featured,
-  reactions: p.reactions || { like: 0, inspire: 0, support: 0 },
-  slug: p.slug
+const defaultReactions = { like: 0, inspire: 0, support: 0 };
+
+const getErrorMessage = (error: unknown, fallback: string) => {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string') return error;
+  return fallback;
+};
+
+const toNullable = <T,>(value: T | null | undefined): T | null => value ?? null;
+
+const mapMediaForInsert = (postId: string, media: MediaItem[]): MediaInsert[] =>
+  media.map((item) => ({
+    post_id: postId,
+    type: item.type,
+    url: item.url,
+    thumbnail: item.thumbnail ?? null,
+    alt: item.alt ?? null,
+    bucket: 'external',
+    storage_path: null,
+  }));
+
+const mapFromSupabase = (post: PostRow): Post => ({
+  id: post.id,
+  type: post.type as PostType,
+  title: post.title ?? undefined,
+  caption: post.caption ?? undefined,
+  description: post.description ?? undefined,
+  media:
+    post.media?.map((item) => ({
+      id: item.id,
+      type: item.type,
+      url: item.url,
+      thumbnail: item.thumbnail ?? undefined,
+      alt: item.alt ?? undefined,
+      uploadedAt: item.uploaded_at,
+    })) ?? [],
+  category: post.category ?? undefined,
+  theme: post.theme ?? undefined,
+  tags: post.tags ?? undefined,
+  author: post.author ?? 'Colonel (Retd.) Md. Jaglul Ahsan',
+  createdAt: post.created_at,
+  updatedAt: post.updated_at,
+  visibility: post.visibility as PostVisibility,
+  isPinned: post.is_pinned,
+  isFeatured: post.is_featured,
+  reactions: post.reactions ?? defaultReactions,
+  slug: post.slug,
 });
 
 export const PostsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchPosts = useCallback(async () => {
+  const fetchPosts = useCallback(async (): Promise<ApiResult<Post[]>> => {
     setIsLoading(true);
+
     try {
       const { data, error } = await supabase
         .from('posts')
@@ -58,164 +95,253 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      if (data) {
-        setPosts(data.map(mapFromSupabase));
-      }
-    } catch (err) {
-      console.error('Error fetching posts:', err);
+
+      const mappedPosts = (data ?? []).map((post) => mapFromSupabase(post as PostRow));
+      setPosts(mappedPosts);
+
+      return { data: mappedPosts, error: null };
+    } catch (error) {
+      const message = getErrorMessage(error, 'Error fetching posts.');
+      console.error('Error fetching posts:', error);
+      return { error: message };
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  // Initial Hydration & Real-time Subscription
   useEffect(() => {
-    fetchPosts();
+    void fetchPosts();
 
-    // Subscribe to changes
     const channel = supabase
       .channel('public:posts')
-      .on('postgres_changes', { event: '*', table: 'posts' }, () => {
-        fetchPosts();
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, () => {
+        void fetchPosts();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'media' }, () => {
+        void fetchPosts();
       })
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      void supabase.removeChannel(channel);
     };
   }, [fetchPosts]);
 
-  const createPost = useCallback(async (newPost: Omit<Post, 'id' | 'createdAt' | 'reactions'>) => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
+  const createPost = useCallback(
+    async (newPost: Omit<Post, 'id' | 'createdAt' | 'reactions'>): Promise<ApiResult<Post>> => {
+      try {
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
 
-      const { data: postData, error: postError } = await supabase
-        .from('posts')
-        .insert([{
+        if (userError) throw userError;
+        if (!user) return { error: 'You must be signed in as an admin to publish posts.' };
+
+        const payload: PostInsert = {
           type: newPost.type,
-          title: newPost.title,
-          caption: newPost.caption,
-          description: newPost.description,
-          theme: newPost.theme,
-          category: newPost.category,
-          tags: newPost.tags,
-          author: newPost.author,
+          title: toNullable(newPost.title),
+          caption: toNullable(newPost.caption),
+          description: toNullable(newPost.description),
+          theme: toNullable(newPost.theme),
+          category: toNullable(newPost.category),
+          tags: newPost.tags ?? null,
+          author: toNullable(newPost.author),
           slug: newPost.slug,
           visibility: newPost.visibility,
           is_pinned: newPost.isPinned ?? false,
           is_featured: newPost.isFeatured ?? false,
-          created_by: user?.id ?? null
-        }])
-        .select()
-        .single();
+          created_by: user.id,
+        };
 
-      if (postError) throw postError;
+        const { data: postData, error: postError } = await supabase
+          .from('posts')
+          .insert(payload)
+          .select('*')
+          .single();
 
-      // Insert media if present
-      if (newPost.media && newPost.media.length > 0 && postData) {
-        const mediaToInsert = newPost.media.map(m => ({
-          post_id: postData.id,
-          type: m.type,
-          url: m.url,
-          thumbnail: m.thumbnail
-        }));
-        const { error: mediaError } = await supabase.from('media').insert(mediaToInsert);
-        if (mediaError) throw mediaError;
+        if (postError) throw postError;
+        if (!postData) return { error: 'Post was not created.' };
+
+        let insertedMedia: Database['public']['Tables']['media']['Row'][] = [];
+
+        if (newPost.media.length > 0) {
+          const { data: mediaData, error: mediaError } = await supabase
+            .from('media')
+            .insert(mapMediaForInsert(postData.id, newPost.media))
+            .select('*');
+
+          if (mediaError) {
+            await supabase.from('posts').delete().eq('id', postData.id);
+            throw mediaError;
+          }
+
+          insertedMedia = mediaData ?? [];
+        }
+
+        const createdPost = mapFromSupabase({ ...(postData as PostRow), media: insertedMedia });
+        await fetchPosts();
+
+        return { data: createdPost, error: null };
+      } catch (error) {
+        const message = getErrorMessage(error, 'Error creating post.');
+        console.error('Error creating post:', error);
+        return { error: message };
       }
-      
-      await fetchPosts();
-    } catch (err) {
-      console.error('Error creating post:', err);
-      throw err;
-    }
-  }, [fetchPosts]);
+    },
+    [fetchPosts]
+  );
 
-  const updatePost = useCallback(async (id: string, updates: Partial<Post>) => {
-    try {
-      const dbUpdates: any = {};
-      if (updates.title !== undefined) dbUpdates.title = updates.title;
-      if (updates.caption !== undefined) dbUpdates.caption = updates.caption;
-      if (updates.description !== undefined) dbUpdates.description = updates.description;
-      if (updates.visibility !== undefined) dbUpdates.visibility = updates.visibility;
-      if (updates.isPinned !== undefined) dbUpdates.is_pinned = updates.isPinned;
-      if (updates.isFeatured !== undefined) dbUpdates.is_featured = updates.isFeatured;
-      if (updates.reactions !== undefined) dbUpdates.reactions = updates.reactions;
-      
-      dbUpdates.updated_at = new Date().toISOString();
+  const updatePost = useCallback(
+    async (id: string, updates: Partial<Post>): Promise<ApiResult<Post>> => {
+      try {
+        const dbUpdates: PostUpdate = {};
 
-      const { error } = await supabase
-        .from('posts')
-        .update(dbUpdates)
-        .eq('id', id);
+        if (updates.type !== undefined) dbUpdates.type = updates.type;
+        if (updates.title !== undefined) dbUpdates.title = toNullable(updates.title);
+        if (updates.caption !== undefined) dbUpdates.caption = toNullable(updates.caption);
+        if (updates.description !== undefined) dbUpdates.description = toNullable(updates.description);
+        if (updates.theme !== undefined) dbUpdates.theme = toNullable(updates.theme);
+        if (updates.category !== undefined) dbUpdates.category = toNullable(updates.category);
+        if (updates.tags !== undefined) dbUpdates.tags = updates.tags ?? null;
+        if (updates.author !== undefined) dbUpdates.author = toNullable(updates.author);
+        if (updates.slug !== undefined) dbUpdates.slug = updates.slug;
+        if (updates.visibility !== undefined) dbUpdates.visibility = updates.visibility;
+        if (updates.isPinned !== undefined) dbUpdates.is_pinned = updates.isPinned;
+        if (updates.isFeatured !== undefined) dbUpdates.is_featured = updates.isFeatured;
+        if (updates.reactions !== undefined) dbUpdates.reactions = updates.reactions;
 
-      if (error) throw error;
-      await fetchPosts();
-    } catch (err) {
-      console.error('Error updating post:', err);
-    }
-  }, [fetchPosts]);
+        dbUpdates.updated_at = new Date().toISOString();
 
-  const deletePost = useCallback(async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this post permanently?")) return;
-    
-    try {
-      const { error } = await supabase
-        .from('posts')
-        .delete()
-        .eq('id', id);
+        const { data: postData, error: postError } = await supabase
+          .from('posts')
+          .update(dbUpdates)
+          .eq('id', id)
+          .select('*')
+          .single();
 
-      if (error) throw error;
-      await fetchPosts();
-    } catch (err) {
-      console.error('Error deleting post:', err);
-    }
-  }, [fetchPosts]);
+        if (postError) throw postError;
+        if (!postData) return { error: 'Post was not updated.' };
 
-  const archivePost = useCallback(async (id: string) => {
-    await updatePost(id, { visibility: 'archived' });
-  }, [updatePost]);
+        let mediaRows: Database['public']['Tables']['media']['Row'][] = [];
 
-  const toggleReaction = useCallback(async (id: string, type: 'like' | 'inspire' | 'support') => {
-    const post = posts.find(p => p.id === id);
-    if (!post) return;
+        if (updates.media !== undefined) {
+          const { error: deleteMediaError } = await supabase.from('media').delete().eq('post_id', id);
+          if (deleteMediaError) throw deleteMediaError;
 
-    const newReactions = {
-      ...post.reactions,
-      [type]: post.reactions[type] + 1
-    };
+          if (updates.media.length > 0) {
+            const { data: mediaData, error: insertMediaError } = await supabase
+              .from('media')
+              .insert(mapMediaForInsert(id, updates.media))
+              .select('*');
 
-    await updatePost(id, { reactions: newReactions });
-  }, [posts, updatePost]);
+            if (insertMediaError) throw insertMediaError;
+            mediaRows = mediaData ?? [];
+          }
+        } else {
+          const { data: mediaData, error: mediaError } = await supabase
+            .from('media')
+            .select('*')
+            .eq('post_id', id);
 
-  const pinPost = useCallback(async (id: string) => {
-    const post = posts.find(p => p.id === id);
-    if (!post) return;
-    await updatePost(id, { isPinned: !post.isPinned });
-  }, [posts, updatePost]);
+          if (mediaError) throw mediaError;
+          mediaRows = mediaData ?? [];
+        }
 
-  const featurePost = useCallback(async (id: string) => {
-    const post = posts.find(p => p.id === id);
-    if (!post) return;
-    await updatePost(id, { isFeatured: !post.isFeatured });
-  }, [posts, updatePost]);
+        const updatedPost = mapFromSupabase({ ...(postData as PostRow), media: mediaRows });
+        await fetchPosts();
 
-  const getPostBySlug = useCallback((slug: string) => {
-    return posts.find(p => p.slug === slug);
-  }, [posts]);
+        return { data: updatedPost, error: null };
+      } catch (error) {
+        const message = getErrorMessage(error, 'Error updating post.');
+        console.error('Error updating post:', error);
+        return { error: message };
+      }
+    },
+    [fetchPosts]
+  );
+
+  const deletePost = useCallback(
+    async (id: string): Promise<ApiResult<null>> => {
+      if (!window.confirm('Are you sure you want to delete this post permanently?')) {
+        return { data: null, error: null };
+      }
+
+      try {
+        const { error } = await supabase.from('posts').delete().eq('id', id);
+        if (error) throw error;
+
+        await fetchPosts();
+        return { data: null, error: null };
+      } catch (error) {
+        const message = getErrorMessage(error, 'Error deleting post.');
+        console.error('Error deleting post:', error);
+        return { error: message };
+      }
+    },
+    [fetchPosts]
+  );
+
+  const archivePost = useCallback(
+    (id: string) => updatePost(id, { visibility: 'archived' }),
+    [updatePost]
+  );
+
+  const toggleReaction = useCallback(
+    (id: string, type: 'like' | 'inspire' | 'support') => {
+      const post = posts.find((item) => item.id === id);
+      if (!post) return Promise.resolve({ error: 'Post not found.' });
+
+      return updatePost(id, {
+        reactions: {
+          ...post.reactions,
+          [type]: post.reactions[type] + 1,
+        },
+      });
+    },
+    [posts, updatePost]
+  );
+
+  const pinPost = useCallback(
+    (id: string) => {
+      const post = posts.find((item) => item.id === id);
+      if (!post) return Promise.resolve({ error: 'Post not found.' });
+
+      return updatePost(id, { isPinned: !post.isPinned });
+    },
+    [posts, updatePost]
+  );
+
+  const featurePost = useCallback(
+    (id: string) => {
+      const post = posts.find((item) => item.id === id);
+      if (!post) return Promise.resolve({ error: 'Post not found.' });
+
+      return updatePost(id, { isFeatured: !post.isFeatured });
+    },
+    [posts, updatePost]
+  );
+
+  const getPostBySlug = useCallback(
+    (slug: string) => posts.find((post) => post.slug === slug),
+    [posts]
+  );
 
   return (
-    <PostsContext.Provider value={{
-      posts,
-      isLoading,
-      createPost,
-      updatePost,
-      deletePost,
-      archivePost,
-      toggleReaction,
-      pinPost,
-      featurePost,
-      getPostBySlug
-    }}>
+    <PostsContext.Provider
+      value={{
+        posts,
+        isLoading,
+        createPost,
+        updatePost,
+        deletePost,
+        archivePost,
+        toggleReaction,
+        pinPost,
+        featurePost,
+        getPostBySlug,
+      }}
+    >
       {children}
     </PostsContext.Provider>
   );
@@ -223,7 +349,6 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
 export const usePosts = () => {
   const context = useContext(PostsContext);
-  if (!context) throw new Error('usePosts must be used within a PostsProvider');
+  if (!context) throw new Error('usePosts must be used within PostsProvider');
   return context;
 };
-

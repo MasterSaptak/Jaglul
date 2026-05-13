@@ -6,15 +6,13 @@ import { VisionSection } from '../components/VisionSection';
 import { ImpactAreas } from '../components/ImpactAreas';
 import { LifeSketch } from '../components/LifeSketch';
 import { LatestUpdates } from '../components/LatestUpdates';
+import { GalleryPreview } from '../components/GalleryPreview';
 import { ContactSection } from '../components/ContactSection';
 import { Footer } from '../components/Footer';
 import { usePosts } from '../src/features/posts/context/PostsContext';
 
 export const Home: React.FC = () => {
-  const { posts, deletePost } = usePosts();
-
-  // Filter for published posts to display on home
-  const recentPosts = posts.filter(p => p.visibility === 'published').slice(0, 3);
+  const { posts } = usePosts();
 
   return (
     <div className="min-h-screen flex flex-col bg-army-cream/10">
@@ -25,7 +23,8 @@ export const Home: React.FC = () => {
         <VisionSection />
         <ImpactAreas />
         <LifeSketch />
-        <LatestUpdates posts={recentPosts} />
+        <LatestUpdates posts={posts} />
+        <GalleryPreview />
         <ContactSection />
       </main>
       <Footer />

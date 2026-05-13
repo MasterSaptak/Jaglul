@@ -1,89 +1,91 @@
 import React from 'react';
-import { Clock, Heart, MessageCircle, FileText } from 'lucide-react';
+import { Calendar, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Post } from '../types';
+import { Post } from '../src/features/posts/types';
+import {
+  formatPostDate,
+  getPostCategory,
+  getPostExcerpt,
+  getPostImage,
+  getPostUrl,
+  isArticlePost,
+  sortNewestFirst,
+} from '../src/features/posts/postUtils';
 
 interface NewsSectionProps {
   posts: Post[];
-  onDeletePost?: (id: string) => void;
 }
 
 export const NewsSection: React.FC<NewsSectionProps> = ({ posts }) => {
-  // Map specific like counts for the 4 imported posts to match the original design exactly
-  const getLikesCount = (id: string) => {
-    const likesMap: Record<string, number> = {
-      'news-1': 76,
-      'news-2': 61,
-      'news-3': 81,
-      'news-4': 36
-    };
-    return likesMap[id] || 42;
-  };
+  const latestPosts = sortNewestFirst(posts.filter(isArticlePost)).slice(0, 3);
+
+  if (latestPosts.length === 0) return null;
 
   return (
-    <section id="news" className="py-16 bg-white">
+    <section id="news" className="py-16 sm:py-20 bg-white border-t border-army-green/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-serif text-[#c23333] font-normal tracking-wide">
-            Latest news
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-army-green mb-2">
+            Latest News
           </h2>
+          <div className="gold-line w-16 mx-auto"></div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          {posts.slice(0, 4).map((post) => (
-            <div key={post.id} className="flex flex-col group">
-              <Link to={`/news/${post.id}`} className="block overflow-hidden mb-3">
-                <img 
-                  src={post.imageUrl} 
-                  alt={post.title} 
-                  className="w-full h-44 sm:h-48 object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          {latestPosts.map((post) => (
+            <article
+              key={post.id}
+              className="bg-white rounded-lg overflow-hidden border border-army-green/10 shadow-sm group hover:shadow-xl hover:shadow-army-green/5 transition-all duration-300"
+            >
+              <Link to={getPostUrl(post)} className="block relative h-56 overflow-hidden bg-army-cream">
+                <img
+                  src={getPostImage(post)}
+                  alt={post.title || 'News update'}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
                 />
+                <span className="absolute top-4 left-4 bg-army-green text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                  {getPostCategory(post)}
+                </span>
               </Link>
-              
-              <div className="flex-1 flex flex-col">
-                <div className="flex items-center gap-1.5 text-[11px] text-[#8992A5] mb-2">
-                  <Clock size={12} strokeWidth={1.5} />
-                  <span>{post.date}</span>
+
+              <div className="p-6">
+                <div className="flex items-center gap-2 text-sm text-army-olive/70 mb-3">
+                  <Calendar size={14} />
+                  {formatPostDate(post)}
                 </div>
-                
-                <Link to={`/news/${post.id}`} className="mb-6">
-                  <h3 className="text-xl sm:text-[22px] font-serif text-[#2a3c5a] hover:text-[#c23333] transition-colors leading-[1.3]">
-                    {post.title}
+
+                <Link to={getPostUrl(post)}>
+                  <h3 className="font-serif font-bold text-army-navy text-lg mb-3 line-clamp-2 group-hover:text-army-green transition-colors">
+                    {post.title || post.caption || 'Untitled update'}
                   </h3>
                 </Link>
-                
-                <div className="mt-auto flex items-center gap-3 sm:gap-4 text-xs text-[#c23333] font-medium">
-                  <div className="flex items-center gap-1">
-                    <Heart size={14} strokeWidth={1.5} />
-                    <span>{getLikesCount(post.id)}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <MessageCircle size={14} strokeWidth={1.5} />
-                    <span>{post.commentCount || 0}</span>
-                  </div>
-                  <Link 
-                    to={`/news/${post.id}`}
-                    className="flex items-center gap-1.5 ml-auto hover:text-[#902020] transition-colors"
-                  >
-                    <FileText size={14} strokeWidth={1.5} />
-                    <span>Read more</span>
-                  </Link>
-                </div>
+
+                <p className="text-army-olive/80 text-sm mb-5 line-clamp-2">
+                  {getPostExcerpt(post)}
+                </p>
+
+                <Link
+                  to={getPostUrl(post)}
+                  className="inline-flex items-center gap-1.5 text-army-red font-semibold text-sm hover:text-army-green transition-colors"
+                >
+                  Read More <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                </Link>
               </div>
-            </div>
+            </article>
           ))}
         </div>
-        
-        <div className="text-center mt-16">
-          <Link 
+
+        <div className="text-center mt-12">
+          <Link
             to="/news"
-            className="inline-block px-8 py-3 bg-[#c23333] text-white text-xs sm:text-sm font-semibold tracking-wider uppercase hover:bg-[#a02020] transition-colors"
+            className="inline-flex items-center gap-2 bg-army-green text-white px-8 py-3 rounded-lg font-semibold hover:bg-army-olive transition-colors"
           >
-            SEE ALL NEWS
+            See All News
+            <ArrowRight size={18} />
           </Link>
         </div>
       </div>
     </section>
   );
 };
-

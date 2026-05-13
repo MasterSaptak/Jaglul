@@ -3,19 +3,30 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import { ArrowLeft, X, ZoomIn } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
-import { VISION_GALLERIES } from '../constants';
-import { VisionGalleryImage } from '../types';
+import { usePosts } from '../src/features/posts/context/PostsContext';
+import { useMemo } from 'react';
 
 export const VisionGallery: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [selectedImage, setSelectedImage] = useState<VisionGalleryImage | null>(null);
+  const { posts } = usePosts();
+  const [selectedImage, setSelectedImage] = useState<{ id: string; url: string } | null>(null);
 
-  // Validate the slug and get data
-  const visionData = slug ? VISION_GALLERIES[slug] : null;
+  // Validate the slug and get data from Supabase posts
+  const visionPost = useMemo(() => 
+    posts.find(p => p.slug === slug && p.type === 'gallery'),
+    [posts, slug]
+  );
 
-  if (!visionData) {
-    return <Navigate to="/#vision" replace />;
+  if (!visionPost) {
+    // If posts are loaded and we still don't find it, redirect
+    if (posts.length > 0) return <Navigate to="/#vision" replace />;
+    return null; // Still loading or empty
   }
+
+  const galleryImages = visionPost.media.map((m, i) => ({
+    id: m.id || `${visionPost.id}-${i}`,
+    url: m.url
+  }));
 
   // Close lightbox on escape key
   React.useEffect(() => {
@@ -47,20 +58,20 @@ export const VisionGallery: React.FC = () => {
             </Link>
             
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-black text-white mb-6 drop-shadow-lg leading-tight">
-              {visionData.title}
+              {visionPost.title}
             </h1>
             
             <p className="max-w-3xl mx-auto text-gray-300 text-lg sm:text-xl font-medium leading-relaxed">
-              {visionData.description}
+              {visionPost.description}
             </p>
           </div>
         </div>
 
         {/* Gallery Grid */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          {visionData.images && visionData.images.length > 0 ? (
+          {galleryImages.length > 0 ? (
             <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
-              {visionData.images.map((img) => (
+              {galleryImages.map((img) => (
                 <div 
                   key={img.id}
                   className="relative group cursor-pointer overflow-hidden rounded-xl bg-gray-200 break-inside-avoid shadow-sm hover:shadow-xl transition-all duration-300"
@@ -68,8 +79,8 @@ export const VisionGallery: React.FC = () => {
                 >
                   <img 
                     src={img.url} 
-                    alt={visionData.title}
-                    className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                    alt={visionPost.title}
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-in-out"
                     loading="lazy"
                   />
                   {/* Hover Overlay */}

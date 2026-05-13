@@ -35,12 +35,13 @@ const App: React.FC = () => {
               <Route path="/vision/:slug" element={<VisionGallery />} />
               
               {/* Legacy / Catch-all filtered routes redirected to Feed */}
-              <Route path="/news" element={<Navigate to="/feed?type=news" replace />} />
-              <Route path="/gallery" element={<Navigate to="/feed?type=gallery" replace />} />
+              <Route path="/news" element={<NewsArchive />} />
+              <Route path="/gallery" element={<MediaGallery />} />
               
               <Route path="/comment-policy" element={<CommentPolicy />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/admin" element={<AdminLogin />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
               
               {/* Jaglul Studio Admin */}
               <Route path="/admin/studio" element={<AdminDashboard />} />

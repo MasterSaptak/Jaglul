@@ -263,64 +263,7 @@ export const Contact: React.FC = () => {
           </div>
         </section>
 
-        {/* ===== NEWS PREVIEW ===== */}
-        <section className="py-16 bg-white border-t border-army-green/10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-serif font-bold text-army-green mb-2">Latest News</h2>
-              <div className="gold-line w-16 mx-auto"></div>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
-              {INITIAL_POSTS.slice(0, 3).map((post, index) => (
-                <article 
-                  key={post.id}
-                  className="bg-army-cream rounded-xl overflow-hidden border border-army-green/10 card-lift group hover-shine"
-                >
-                  <div className="relative h-48 overflow-hidden img-zoom">
-                    <img 
-                      src={post.imageUrl} 
-                      alt={post.title}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute top-4 left-4 bg-army-green text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                      {post.category}
-                    </div>
-                  </div>
-                  
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 text-sm text-army-olive/70 mb-3">
-                      <Calendar size={14} />
-                      {post.date}
-                    </div>
-                    
-                    <h3 className="font-serif font-bold text-army-navy text-lg mb-3 line-clamp-2 group-hover:text-army-green transition-colors duration-300">
-                      {post.title}
-                    </h3>
-                    
-                    <p className="text-army-olive/80 text-sm mb-4 line-clamp-2">
-                      {post.excerpt}
-                    </p>
-                    
-                    <Link to={`/news/${post.id}`} className="inline-flex items-center gap-1.5 text-army-red font-semibold text-sm hover:text-army-green transition-colors">
-                      Read More <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            <div className="text-center mt-12">
-              <Link 
-                to="/#news"
-                className="inline-flex items-center gap-2 bg-army-green text-white px-8 py-3 rounded-lg font-semibold hover:bg-army-olive transition-colors btn-military"
-              >
-                See All News
-                <ArrowRight size={18} />
-              </Link>
-            </div>
-          </div>
-        </section>
       </main>
       
       <Footer />

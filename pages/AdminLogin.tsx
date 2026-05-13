@@ -8,27 +8,31 @@ export const AdminLogin: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError]       = useState('');
   const [loading, setLoading]   = useState(false);
-  const { login, isAdmin, isLoading } = useAuth();
+  const { login, logout, isAdmin, isLoading } = useAuth();
   const navigate = useNavigate();
 
   // Redirect if already admin
   useEffect(() => {
     if (!isLoading && isAdmin) {
-      navigate('/admin/studio');
+      navigate('/admin/studio', { replace: true });
     }
   }, [isAdmin, isLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading || isLoading) return;
+
     setError('');
     setLoading(true);
 
     try {
-      const { error: authError } = await login(email, password);
+      const { error: authError, isAdmin: loggedInAsAdmin } = await login(email, password);
       if (authError) {
         setError(authError);
+      } else if (loggedInAsAdmin) {
+        navigate('/admin/studio', { replace: true });
       } else {
-        navigate('/admin/studio');
+        setError('Unauthorized: admin access is required.');
       }
     } catch (err: any) {
       setError(err.message || 'An unexpected error occurred during authentication.');
@@ -107,7 +111,7 @@ export const AdminLogin: React.FC = () => {
             <button
               id="admin-login-btn"
               type="submit"
-              disabled={loading}
+              disabled={loading || isLoading}
               className="w-full bg-army-gold text-army-navy font-black text-sm uppercase tracking-widest py-3.5 rounded-xl hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-lg shadow-army-gold/20"
             >
               {loading ? (
@@ -128,10 +132,18 @@ export const AdminLogin: React.FC = () => {
               
               <button
                 type="button"
-                onClick={() => {
-                  localStorage.clear();
-                  sessionStorage.clear();
-                  window.location.reload();
+                onClick={async () => {
+                  setError('');
+                  setLoading(true);
+                  const { error: logoutError } = await logout();
+                  setLoading(false);
+
+                  if (logoutError) {
+                    setError(logoutError);
+                    return;
+                  }
+
+                  navigate('/admin/login', { replace: true });
                 }}
                 className="text-[10px] text-white/10 hover:text-white/40 transition-colors uppercase tracking-[0.2em]"
               >
