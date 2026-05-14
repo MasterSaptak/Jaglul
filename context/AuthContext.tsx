@@ -52,6 +52,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const hydrateRunRef = useRef(0);
+  const authStateRef = useRef({ user, session, isAdmin });
+
+  // Update ref whenever state changes to keep hydrateAuth informed without re-rendering
+  useEffect(() => {
+    authStateRef.current = { user, session, isAdmin };
+  }, [user, session, isAdmin]);
 
   const clearAuthState = useCallback(() => {
     hydrateRunRef.current += 1;
@@ -64,7 +70,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const hydrateAuth = useCallback(
     async (nextSession: Session | null): Promise<AuthResult> => {
       const runId = ++hydrateRunRef.current;
-      setIsLoading(true);
+      
+      // Only set loading if we don't already have an active user/session
+      // This prevents the entire UI from unmounting during background token refreshes
+      if (!authStateRef.current.user) {
+        setIsLoading(true);
+      }
 
       if (!nextSession?.user) {
         if (runId === hydrateRunRef.current) {
@@ -102,14 +113,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         return { error: null, isAdmin: true };
       } catch (error) {
         if (runId === hydrateRunRef.current) {
-          clearAuthState();
+          // If this was a background check and it failed (e.g. network error), 
+          // don't immediately boot the user if they were already logged in
+          if (!authStateRef.current.user) {
+            clearAuthState();
+            await signOutLocal();
+          } else {
+            setIsLoading(false);
+          }
         }
-
-        await signOutLocal();
 
         return {
           error: getErrorMessage(error, 'Unable to verify admin access.'),
-          isAdmin: false,
+          isAdmin: authStateRef.current.isAdmin,
         };
       }
     },

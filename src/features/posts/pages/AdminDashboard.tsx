@@ -46,7 +46,7 @@ export const AdminDashboard: React.FC = () => {
     });
   };
 
-  if (isLoading) {
+  if (isLoading && !user) {
     return (
       <div className="min-h-screen flex flex-col bg-army-cream">
         <Navbar />
@@ -220,7 +220,7 @@ export const AdminDashboard: React.FC = () => {
             {sidebarItems.map(item => (
               <button
                 key={item.id}
-                onClick={() => { setActiveTab(item.id); setEditingPost(undefined); }}
+                onClick={() => setActiveTab(item.id)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-left
                   ${activeTab === item.id
                     ? 'bg-army-green text-white shadow-sm'
@@ -291,7 +291,7 @@ export const AdminDashboard: React.FC = () => {
 
                 {/* Quick Action */}
                 <button
-                  onClick={() => setActiveTab('compose')}
+                  onClick={() => { setEditingPost(undefined); setActiveTab('compose'); }}
                   className="w-full flex items-center justify-center gap-3 p-6 bg-gradient-to-r from-army-green to-army-olive text-white rounded-xl font-bold text-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all"
                 >
                   <Plus size={22} />
@@ -300,20 +300,22 @@ export const AdminDashboard: React.FC = () => {
               </div>
             )}
 
-            {/* COMPOSE TAB */}
-            {activeTab === 'compose' && (
-              <div>
-                <div className="mb-8">
-                  <h1 className="font-serif font-bold text-3xl text-army-navy">
-                    {editingPost ? 'Edit Post' : 'Create New Post'}
-                  </h1>
-                  <p className="text-army-olive/60 mt-1 text-sm">
-                    {editingPost ? `Editing: "${editingPost.title || editingPost.caption}"` : 'Compose and publish your update to the live feed.'}
-                  </p>
-                </div>
-                <PostComposer initialPost={editingPost} onSuccess={handleComposerSuccess} />
+            {/* COMPOSE TAB (Always mounted to persist state) */}
+            <div className={activeTab === 'compose' ? 'block' : 'hidden'}>
+              <div className="mb-8">
+                <h1 className="font-serif font-bold text-3xl text-army-navy">
+                  {editingPost ? 'Edit Post' : 'Create New Post'}
+                </h1>
+                <p className="text-army-olive/60 mt-1 text-sm">
+                  {editingPost ? `Editing: "${editingPost.title || editingPost.caption}"` : 'Compose and publish your update to the live feed.'}
+                </p>
               </div>
-            )}
+              <PostComposer 
+                key={editingPost?.id || 'new-post'} 
+                initialPost={editingPost} 
+                onSuccess={handleComposerSuccess} 
+              />
+            </div>
 
             {/* PUBLISHED TAB */}
             {activeTab === 'published' && (
@@ -324,7 +326,7 @@ export const AdminDashboard: React.FC = () => {
                     <p className="text-army-olive/60 mt-1 text-sm">{publishedPosts.length} posts live on the feed.</p>
                   </div>
                   <button
-                    onClick={() => setActiveTab('compose')}
+                    onClick={() => { setEditingPost(undefined); setActiveTab('compose'); }}
                     className="flex items-center gap-2 bg-army-green text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-army-olive transition-all"
                   >
                     <Plus size={16} /> New Post
