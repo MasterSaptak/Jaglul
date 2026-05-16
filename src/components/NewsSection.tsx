@@ -1,7 +1,7 @@
 import React from 'react';
 import { Calendar, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Post } from '../src/features/posts/types';
+import { Post } from '../features/posts/types';
 import {
   formatPostDate,
   getPostCategory,
@@ -10,7 +10,7 @@ import {
   getPostUrl,
   isArticlePost,
   sortNewestFirst,
-} from '../src/features/posts/postUtils';
+} from '../features/posts/postUtils';
 
 interface NewsSectionProps {
   posts: Post[];

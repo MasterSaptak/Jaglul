@@ -5,7 +5,7 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { THEMATIC_AREAS } from '../constants';
 import { ThematicArea } from '../types';
-import { usePosts } from '../src/features/posts/context/PostsContext';
+import { usePosts } from '../features/posts/context/PostsContext';
 import {
   formatPostDate,
   getPostCategory,
@@ -15,7 +15,7 @@ import {
   getPostYear,
   isArticlePost,
   sortNewestFirst,
-} from '../src/features/posts/postUtils';
+} from '../features/posts/postUtils';
 
 export const NewsArchive: React.FC = () => {
   const { posts } = usePosts();

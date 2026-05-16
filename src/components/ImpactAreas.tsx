@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { Heart, GraduationCap, Shield, Medal, Scale, ArrowRight } from 'lucide-react';
 import { THEMATIC_AREAS } from '../constants';
 import { ThematicArea } from '../types';
-import { usePosts } from '../src/features/posts/context/PostsContext';
-import { isArticlePost } from '../src/features/posts/postUtils';
+import { usePosts } from '../features/posts/context/PostsContext';
+import { isArticlePost } from '../features/posts/postUtils';
 
 const iconMap: Record<string, React.ReactNode> = {
   humanitarian: <Heart className="w-7 h-7" />,

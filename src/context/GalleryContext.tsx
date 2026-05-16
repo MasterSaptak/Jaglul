@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useMemo, useCallback, ReactNode } from 'react';
 import { GalleryImage, GalleryCategory } from '../types';
-import { usePosts } from '../src/features/posts/context/PostsContext';
-import { Post } from '../src/features/posts/types';
+import { usePosts } from '../features/posts/context/PostsContext';
+import { Post } from '../features/posts/types';
 
 const STORAGE_KEY = 'gallery_uploaded_images';
 const MAX_WIDTH = 800;

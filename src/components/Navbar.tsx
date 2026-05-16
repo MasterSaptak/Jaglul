@@ -52,7 +52,7 @@ export const Navbar: React.FC = () => {
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled
       ? 'bg-[#004B35]/98 backdrop-blur-md shadow-xl border-b-2 border-[#DA291C] py-0.5'
       : 'bg-[#006A4E] shadow-lg border-b-2 border-[#DA291C] py-1'
-    }`}>
+      }`}>
       <div className="w-full px-4 sm:px-8 lg:px-10">
         <div className="flex justify-between items-center h-18 sm:h-20" style={{ height: '72px' }}>
           <div className="flex-shrink-0">
@@ -145,7 +145,7 @@ export const Navbar: React.FC = () => {
               className={`block px-4 py-3 rounded-xl text-base font-bold transition-all ${isActive(link.path)
                 ? 'text-army-gold bg-white/10 shadow-inner'
                 : 'text-white/80 hover:text-white hover:bg-white/5'
-              }`}
+                }`}
             >
               {link.name}
             </Link>

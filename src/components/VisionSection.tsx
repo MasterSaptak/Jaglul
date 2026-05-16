@@ -78,6 +78,8 @@ export const VisionSection: React.FC = () => {
                   src={item.image}
                   alt={item.title}
                   className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-110"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
 

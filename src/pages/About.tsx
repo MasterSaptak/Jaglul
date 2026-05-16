@@ -267,10 +267,10 @@ export const About: React.FC = () => {
                       was shaped by <strong>discipline, resistance to injustice, and academic excellence</strong>.
                       Raised at Mirzapur Cadet College, he demonstrated leadership, moral courage, and an
                       uncompromising stand against wrongdoing from a very young age — traits that would
-                      later define his military and public life. His revolutionary attitude was compounded 
-                      by extensive reading of Che-Guevara, Mao, Ho Chi Minh, and Nakshal-based novels 
-                      like 'Kalbela'. He famously protested the physical abuse of senior cadets and led a 40 km 
-                      walkout from Mirzapur Cadet College to Dhaka to protest discriminatory dealings, which led 
+                      later define his military and public life. His revolutionary attitude was compounded
+                      by extensive reading of Che-Guevara, Mao, Ho Chi Minh, and Nakshal-based novels
+                      like 'Kalbela'. He famously protested the physical abuse of senior cadets and led a 40 km
+                      walkout from Mirzapur Cadet College to Dhaka to protest discriminatory dealings, which led
                       to him and 20 others being withdrawn. Enrolling in Dhaka Science College thereafter, he
                       continued his exemplary path.
                     </p>

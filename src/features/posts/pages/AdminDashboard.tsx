@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Navbar } from '../../../../components/Navbar';
-import { Footer } from '../../../../components/Footer';
+import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
 import { PostComposer } from '../components/PostComposer';
 import { PostCard } from '../components/PostCard';
 import { usePosts } from '../context/PostsContext';
-import { useAuth } from '../../../../context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { useNavigate, Link, Navigate } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -126,7 +126,7 @@ export const AdminDashboard: React.FC = () => {
               <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full
                 ${post.type === 'event' ? 'bg-army-gold/20 text-army-gold' :
                   post.type === 'gallery' ? 'bg-army-navy/10 text-army-navy' :
-                  'bg-army-green/10 text-army-green'}`}>
+                    'bg-army-green/10 text-army-green'}`}>
                 {post.type}
               </span>
               {post.isPinned && <Pin size={12} className="text-army-gold fill-army-gold" />}
@@ -310,10 +310,10 @@ export const AdminDashboard: React.FC = () => {
                   {editingPost ? `Editing: "${editingPost.title || editingPost.caption}"` : 'Compose and publish your update to the live feed.'}
                 </p>
               </div>
-              <PostComposer 
-                key={editingPost?.id || 'new-post'} 
-                initialPost={editingPost} 
-                onSuccess={handleComposerSuccess} 
+              <PostComposer
+                key={editingPost?.id || 'new-post'}
+                initialPost={editingPost}
+                onSuccess={handleComposerSuccess}
               />
             </div>
 

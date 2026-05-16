@@ -59,7 +59,7 @@ export const GalleryPreview: React.FC = () => {
 
   // Layout logic for Bento-style grid
   const getGridClass = (index: number) => {
-    switch(index) {
+    switch (index) {
       case 0: return "md:col-span-2 md:row-span-2"; // Big feature
       case 1: return "md:col-span-1 md:row-span-1";
       case 2: return "md:col-span-1 md:row-span-1";
@@ -74,7 +74,7 @@ export const GalleryPreview: React.FC = () => {
     <section className="py-16 sm:py-24 bg-[#F8FAF9] relative overflow-hidden">
       {/* Decorative background element */}
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-army-green/5 rounded-full blur-3xl pointer-events-none"></div>
-      
+
       <div
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
         onMouseEnter={() => setIsPaused(true)}
@@ -109,8 +109,9 @@ export const GalleryPreview: React.FC = () => {
                 alt={image.caption}
                 className="w-full h-full object-cover transition-all duration-700 ease-in-out group-hover:scale-110 group-hover:rotate-1"
                 loading="lazy"
+                decoding="async"
               />
-              
+
               {/* Premium Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 backdrop-blur-[2px]">
                 <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
@@ -122,7 +123,7 @@ export const GalleryPreview: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
+
               {/* Photo-style Border/Ring */}
               <div className="absolute inset-0 border border-black/5 rounded-2xl pointer-events-none"></div>
             </Link>

@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState, ReactNode } from 'react';
 import { Post, PostType, PostVisibility, MediaItem } from '../types';
-import { supabase } from '../../../../services/supabase';
-import type { Database } from '../../../../services/database.types';
+import { supabase } from '@/services/supabase';
+import type { Database } from '@/services/database.types';
 
 export type ApiResult<T> = {
   data?: T;

@@ -15,6 +15,9 @@ export const Hero: React.FC = () => {
           alt=""
           className="w-full h-full object-cover object-center"
           aria-hidden
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
         />
         {/* Mobile gradient: heavy bottom fade */}
         <div className="absolute inset-0 md:hidden bg-gradient-to-b from-[#006A4E]/55 via-[#1A3A2A]/65 to-[#0a1f15]/95" />
@@ -37,6 +40,8 @@ export const Hero: React.FC = () => {
                 src="/colonel-jaglul.png"
                 alt="Colonel (Retd.) Md. Jaglul Ahsan"
                 className="w-full h-auto object-contain drop-shadow-2xl"
+                loading="eager"
+                decoding="async"
               />
             </div>
 
@@ -94,6 +99,8 @@ export const Hero: React.FC = () => {
                 src="/colonel-jaglul.png"
                 alt="Colonel (Retd.) Md. Jaglul Ahsan"
                 className="w-auto max-w-[320px] md:max-w-[400px] lg:max-w-[500px] xl:max-w-[600px] 2xl:max-w-[700px] max-h-[calc(100vh-8rem)] object-contain drop-shadow-2xl animate-float"
+                loading="eager"
+                decoding="async"
               />
             </div>
           </div>

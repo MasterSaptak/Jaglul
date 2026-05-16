@@ -5,14 +5,14 @@ import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
 import { CommentSection } from '../components/CommentSection';
 import { EventSummaryCard } from '../components/EventSummaryCard';
-import { usePosts } from '../src/features/posts/context/PostsContext';
+import { usePosts } from '../features/posts/context/PostsContext';
 import { INITIAL_COMMENTS } from '../constants';
 
 export const NewsPost: React.FC = () => {
   const { id, slug } = useParams<{ id?: string; slug?: string }>();
   const navigate = useNavigate();
   const { getPostBySlug, posts } = usePosts();
-  
+
   // Try to find by slug first (new system), then by id (compatibility)
   const post = slug ? getPostBySlug(slug) : posts.find(p => p.id === id);
   const postId = post?.id || id;
@@ -82,28 +82,28 @@ export const NewsPost: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-[#f5f5f0]">
       <Navbar />
-      
+
       <main className="flex-grow">
         {/* Header Hero */}
         <section className="relative">
           <div className="h-[40vh] md:h-[60vh] relative overflow-hidden">
-            <img 
-              src={post.media[0]?.url || '/placeholder.jpg'} 
+            <img
+              src={post.media[0]?.url || '/placeholder.jpg'}
               alt={post.title}
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#1a2b3c] via-[#1a2b3c]/60 to-transparent"></div>
           </div>
-          
+
           <div className="absolute bottom-0 left-0 right-0">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
-              <button 
+              <button
                 onClick={() => navigate(-1)}
                 className="mb-6 text-white/70 hover:text-white flex items-center gap-2 transition-all font-bold text-sm uppercase tracking-widest"
               >
                 <ArrowLeft size={16} /> Back
               </button>
-              
+
               <div className="flex flex-wrap items-center gap-2 mb-6">
                 <span className={`${getCategoryColor(post.category)} text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest shadow-sm`}>
                   {post.category || post.type}
@@ -114,11 +114,11 @@ export const NewsPost: React.FC = () => {
                   </span>
                 ))}
               </div>
-              
+
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white leading-tight mb-6 tracking-wide shadow-text">
                 {post.title}
               </h1>
-              
+
               <div className="flex flex-wrap items-center gap-6 text-white/70 text-xs font-bold uppercase tracking-widest">
                 <div className="flex items-center gap-2">
                   <Calendar size={14} className="text-army-gold" />
@@ -144,8 +144,8 @@ export const NewsPost: React.FC = () => {
 
                 <div className="mt-16 bg-white rounded-2xl border border-army-green/10 p-8 flex items-center gap-6 shadow-sm">
                   <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-army-gold/30 flex-shrink-0">
-                    <img 
-                      src="/colonel-jaglul.png" 
+                    <img
+                      src="/colonel-jaglul.png"
                       alt="Colonel Ahsan"
                       className="w-full h-full object-cover object-top"
                     />
@@ -164,7 +164,7 @@ export const NewsPost: React.FC = () => {
                     <Share2 size={16} className="text-army-gold" /> Share Update
                   </h4>
                   <div className="flex flex-col gap-3">
-                    <a 
+                    <a
                       href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -172,7 +172,7 @@ export const NewsPost: React.FC = () => {
                     >
                       <Facebook size={18} /> Facebook
                     </a>
-                    <a 
+                    <a
                       href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -187,7 +187,7 @@ export const NewsPost: React.FC = () => {
           </div>
         </section>
       </main>
-      
+
       <Footer />
     </div>
   );

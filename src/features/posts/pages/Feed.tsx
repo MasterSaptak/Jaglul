@@ -1,32 +1,32 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Navbar } from '../../../../components/Navbar';
-import { Footer } from '../../../../components/Footer';
+import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
 import { PostCard } from '../components/PostCard';
 import { usePosts } from '../context/PostsContext';
-import { THEMATIC_AREAS } from '../../../../constants';
+import { THEMATIC_AREAS } from '@/constants';
 import { Calendar, TrendingUp, Award, Image as ImageIcon, Rss, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../../../context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { PostType } from '../types';
 
 // ── Type filter config ──────────────────────────────────────
 const TYPE_FILTERS: { value: PostType | 'all'; label: string; emoji: string; color: string }[] = [
-  { value: 'all',          label: 'All Updates',   emoji: '🗂️',  color: 'bg-army-green text-white' },
-  { value: 'news',         label: 'News',          emoji: '📰',  color: 'bg-army-navy text-white' },
-  { value: 'event',        label: 'Events',        emoji: '📍',  color: 'bg-army-gold text-army-navy' },
-  { value: 'gallery',      label: 'Gallery',       emoji: '🖼️',  color: 'bg-army-olive text-white' },
-  { value: 'achievement',  label: 'Achievements',  emoji: '🏆',  color: 'bg-amber-600 text-white' },
-  { value: 'announcement', label: 'Announcements', emoji: '📢',  color: 'bg-army-red text-white' },
-  { value: 'video',        label: 'Videos',        emoji: '🎥',  color: 'bg-army-navy/80 text-white' },
+  { value: 'all', label: 'All Updates', emoji: '🗂️', color: 'bg-army-green text-white' },
+  { value: 'news', label: 'News', emoji: '📰', color: 'bg-army-navy text-white' },
+  { value: 'event', label: 'Events', emoji: '📍', color: 'bg-army-gold text-army-navy' },
+  { value: 'gallery', label: 'Gallery', emoji: '🖼️', color: 'bg-army-olive text-white' },
+  { value: 'achievement', label: 'Achievements', emoji: '🏆', color: 'bg-amber-600 text-white' },
+  { value: 'announcement', label: 'Announcements', emoji: '📢', color: 'bg-army-red text-white' },
+  { value: 'video', label: 'Videos', emoji: '🎥', color: 'bg-army-navy/80 text-white' },
 ];
 
 const THEME_LABELS: Record<string, string> = {
   humanitarian: 'Humanitarian',
-  education:    'Education & Youth',
-  security:     'National Security',
-  veterans:     'Veterans Welfare',
-  civic:        'Civic Action',
+  education: 'Education & Youth',
+  security: 'National Security',
+  veterans: 'Veterans Welfare',
+  civic: 'Civic Action',
 };
 
 export const Feed: React.FC = () => {
@@ -34,7 +34,7 @@ export const Feed: React.FC = () => {
   const { isAdmin } = useAuth();
 
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
   // ── Active filters state (initialized from URL) ──────────
   const [activeType, setActiveType] = useState<PostType | 'all'>((searchParams.get('type') as PostType) || 'all');
   const [activeTheme, setActiveTheme] = useState<string>(searchParams.get('theme') || '');
@@ -71,8 +71,8 @@ export const Feed: React.FC = () => {
   // ── Filtered feed (type + theme combined) ────────────────
   const filteredPosts = useMemo(() => {
     return publicPosts.filter(p => {
-      const typeMatch  = activeType  === 'all' || p.type  === activeType;
-      const themeMatch = activeTheme === ''    || p.theme === activeTheme;
+      const typeMatch = activeType === 'all' || p.type === activeType;
+      const themeMatch = activeTheme === '' || p.theme === activeTheme;
       return typeMatch && themeMatch;
     });
   }, [publicPosts, activeType, activeTheme]);
@@ -87,8 +87,8 @@ export const Feed: React.FC = () => {
   }, [publicPosts]);
 
   // ── Right sidebar widgets ────────────────────────────────
-  const upcomingEvents   = publicPosts.filter(p => p.type === 'event').slice(0, 3);
-  const featuredGallery  = publicPosts.filter(p => p.media.length > 0).slice(0, 4);
+  const upcomingEvents = publicPosts.filter(p => p.type === 'event').slice(0, 3);
+  const featuredGallery = publicPosts.filter(p => p.media.length > 0).slice(0, 4);
 
   const hasActiveFilter = activeType !== 'all' || activeTheme !== '';
 

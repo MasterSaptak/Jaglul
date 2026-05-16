@@ -6,7 +6,7 @@ export const LifeSketch: React.FC = () => {
     <section className="py-24 bg-army-cream/30 overflow-hidden relative">
       {/* Decorative background elements */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-white/50 to-transparent pointer-events-none"></div>
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
@@ -60,7 +60,7 @@ export const LifeSketch: React.FC = () => {
             {/* Background Decorative Diamonds */}
             <div className="absolute w-[400px] h-[400px] bg-orange-500/20 rotate-45 rounded-3xl -translate-x-10 translate-y-10"></div>
             <div className="absolute w-[400px] h-[400px] bg-army-red/10 rotate-45 rounded-3xl translate-x-10 -translate-y-10 border-4 border-army-red/20"></div>
-            
+
             {/* Main Image Diamond */}
             <div className="relative w-[350px] h-[350px] md:w-[450px] md:h-[450px] rotate-45 overflow-hidden rounded-[60px] border-[12px] border-white shadow-2xl z-10">
               <div className="-rotate-45 w-[142%] h-[142%] absolute top-[-21%] left-[-21%]">
@@ -68,6 +68,8 @@ export const LifeSketch: React.FC = () => {
                   src="/colonel-jaglul.png"
                   alt="Colonel Md Jaglul Ahsan"
                   className="w-full h-full object-cover object-top scale-110"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
             </div>

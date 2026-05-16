@@ -122,7 +122,7 @@ export const VideoGallery: React.FC<VideoGalleryProps> = ({ videos, onAddVideo, 
                 className={`group flex gap-4 p-3 rounded-lg cursor-pointer transition-all duration-300 ${mainVideo?.id === video.id ? 'bg-[#006A4E]/10 border-l-4 border-[#006A4E]/80' : 'hover:bg-army-cream hover:translate-x-1'}`}
               >
                 <div className="relative w-24 sm:w-32 flex-shrink-0 aspect-video bg-army-olive/20 rounded overflow-hidden">
-                  <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" decoding="async" />
                   <div className="absolute inset-0 bg-army-green/30 group-hover:bg-army-green/10 transition-colors flex items-center justify-center">
                      <Play size={16} className="text-white fill-current group-hover:scale-125 transition-transform duration-300" />
                   </div>
