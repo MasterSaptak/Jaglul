@@ -26,7 +26,10 @@ export const NewsArchive: React.FC = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'timeline'>('grid');
 
-  const publicPosts = useMemo(() => sortNewestFirst(posts.filter(isArticlePost)), [posts]);
+  const publicPosts = useMemo(
+    () => sortNewestFirst(posts.filter((p) => p.visibility === 'published' && p.type === 'news')),
+    [posts]
+  );
 
   const categories = useMemo(() => {
     const values = publicPosts.map(getPostCategory).filter(Boolean);
@@ -106,30 +109,30 @@ export const NewsArchive: React.FC = () => {
 
           <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white mb-4">News & Events</h1>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white mb-4">News</h1>
               <div className="gold-line w-24 mx-auto mb-6"></div>
               <p className="text-green-100/80 max-w-2xl mx-auto mb-8">
-                A documented record of initiatives, events, and commentary from Colonel (Retd.) Md. Jaglul Ahsan.
+                The latest news and updates from Colonel (Retd.) Md. Jaglul Ahsan — published directly from the Studio.
               </p>
 
               <div className="flex flex-wrap justify-center gap-6 text-white/80">
                 <div className="text-center">
                   <p className="text-3xl font-bold text-white">{publicPosts.length}</p>
-                  <p className="text-sm">Total Posts</p>
+                  <p className="text-sm">News Articles</p>
                 </div>
                 <div className="w-px bg-white/20 hidden sm:block"></div>
                 <div className="text-center">
                   <p className="text-3xl font-bold text-white">
-                    {publicPosts.filter((post) => getPostCategory(post) === 'Event').length}
+                    {publicPosts.filter((post) => post.isPinned).length}
                   </p>
-                  <p className="text-sm">Events</p>
+                  <p className="text-sm">Pinned</p>
                 </div>
                 <div className="w-px bg-white/20 hidden sm:block"></div>
                 <div className="text-center">
                   <p className="text-3xl font-bold text-white">
-                    {publicPosts.filter((post) => post.theme === 'humanitarian').length}
+                    {publicPosts.filter((post) => post.isFeatured).length}
                   </p>
-                  <p className="text-sm">Humanitarian</p>
+                  <p className="text-sm">Featured</p>
                 </div>
               </div>
             </div>
