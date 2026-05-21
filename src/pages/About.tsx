@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
+import { LifeSketchFull } from '../components/LifeSketchFull';
 
 // Timeline Item Component
 const TimelineItem: React.FC<{
@@ -204,107 +205,21 @@ export const About: React.FC = () => {
           </div>
         </section>
 
-        {/* ===== EARLY LIFE & EDUCATION ===== */}
-        <section className="py-16 bg-army-cream">
+        {/* ===== LIFE SKETCH ===== */}
+        <LifeSketchFull />
+
+        {/* ===== EDUCATION ===== */}
+        <section className="py-16 bg-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Section Header */}
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-serif font-bold text-army-green mb-2">Origin & Formation</h2>
+              <h2 className="text-3xl font-serif font-bold text-army-green mb-2">Education</h2>
               <div className="h-1 w-24 bg-army-red mx-auto mb-4"></div>
               <p className="text-army-oliveDark/70 max-w-2xl mx-auto">
-                How this man was intellectually and morally forged — values, origin, and academic depth.
+                Complete academic timeline from primary school to ongoing PhD.
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-8">
-              {/* Early Life */}
-              <div className="bg-white rounded-2xl border border-army-green/10 overflow-hidden shadow-sm">
-                {/* Header */}
-                <div className="bg-gradient-to-r from-army-green to-army-olive p-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                      <MapPin className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h2 className="text-xl font-serif font-bold text-white">Early Life</h2>
-                      <p className="text-green-100/70 text-sm">Values & Formative Years</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  {/* Birth Info */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                    <div className="bg-army-cream rounded-xl p-4 border border-army-green/10">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Calendar className="w-4 h-4 text-army-gold" />
-                        <span className="text-xs text-army-olive/70 uppercase tracking-wider font-medium">Birth Year</span>
-                      </div>
-                      <p className="text-2xl font-bold text-army-green">1969</p>
-                    </div>
-                    <div className="bg-army-cream rounded-xl p-4 border border-army-green/10">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Flag className="w-4 h-4 text-army-gold" />
-                        <span className="text-xs text-army-olive/70 uppercase tracking-wider font-medium">District</span>
-                      </div>
-                      <p className="text-lg font-bold text-army-green">Bogura</p>
-                      <p className="text-xs text-army-olive/60">Bangladesh</p>
-                    </div>
-                  </div>
-
-                  {/* Full Birthplace */}
-                  <div className="bg-gradient-to-r from-army-gold/10 to-army-gold/5 rounded-xl p-4 border-l-4 border-army-gold mb-6">
-                    <p className="text-xs text-army-olive/70 uppercase tracking-wider mb-1">Full Birthplace</p>
-                    <p className="font-semibold text-army-green">
-                      Village Bansgari, Sariakandi, Bogura District, Bangladesh
-                    </p>
-                  </div>
-
-                  {/* Formation Text */}
-                  <div className="space-y-4">
-                    <p className="text-sm text-army-oliveDark/80 leading-relaxed">
-                      Born during a period of national upheaval, Colonel (Retd.) Md. Jaglul Ahsan's early life
-                      was shaped by <strong>discipline, resistance to injustice, and academic excellence</strong>.
-                      Raised at Mirzapur Cadet College, he demonstrated leadership, moral courage, and an
-                      uncompromising stand against wrongdoing from a very young age — traits that would
-                      later define his military and public life. His revolutionary attitude was compounded
-                      by extensive reading of Che-Guevara, Mao, Ho Chi Minh, and Nakshal-based novels
-                      like 'Kalbela'. He famously protested the physical abuse of senior cadets and led a 40 km
-                      walkout from Mirzapur Cadet College to Dhaka to protest discriminatory dealings, which led
-                      to him and 20 others being withdrawn. Enrolling in Dhaka Science College thereafter, he
-                      continued his exemplary path.
-                    </p>
-
-                    {/* Academic Excellence Badge */}
-                    <div className="flex items-center gap-3 bg-emerald-50 rounded-lg p-3 border border-emerald-200">
-                      <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <Star className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="font-bold text-emerald-700 text-sm">Primary Education Excellence</p>
-                        <p className="text-xs text-emerald-600">PTI School — 1st Position from Class 1 to 5</p>
-                      </div>
-                    </div>
-
-                    {/* Key Traits */}
-                    <div className="grid grid-cols-3 gap-2 pt-2">
-                      <div className="text-center p-2 bg-army-green/5 rounded-lg">
-                        <Shield className="w-5 h-5 text-army-green mx-auto mb-1" />
-                        <p className="text-xs font-medium text-army-green">Discipline</p>
-                      </div>
-                      <div className="text-center p-2 bg-army-green/5 rounded-lg">
-                        <Target className="w-5 h-5 text-army-green mx-auto mb-1" />
-                        <p className="text-xs font-medium text-army-green">Leadership</p>
-                      </div>
-                      <div className="text-center p-2 bg-army-green/5 rounded-lg">
-                        <Scale className="w-5 h-5 text-army-green mx-auto mb-1" />
-                        <p className="text-xs font-medium text-army-green">Moral Courage</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+            <div className="max-w-2xl mx-auto">
               {/* Education Timeline */}
               <div className="bg-white rounded-2xl border border-army-green/10 overflow-hidden shadow-sm">
                 {/* Header */}
@@ -320,7 +235,7 @@ export const About: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="p-6 max-h-[600px] overflow-y-auto">
+                <div className="p-6">
                   {/* Timeline */}
                   <div className="space-y-0">
                     {/* Primary */}
