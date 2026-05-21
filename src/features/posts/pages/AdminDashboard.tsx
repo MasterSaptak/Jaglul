@@ -22,11 +22,13 @@ import {
   EyeOff,
   Plus,
   ChevronRight,
-  LogOut
+  LogOut,
+  Video as VideoIcon
 } from 'lucide-react';
 import { Post } from '../types';
+import { VideosAdminTab } from '../components/VideosAdminTab';
 
-type StudioTab = 'dashboard' | 'compose' | 'published' | 'drafts' | 'archived' | 'media';
+type StudioTab = 'dashboard' | 'compose' | 'published' | 'drafts' | 'archived' | 'media' | 'videos';
 
 export const AdminDashboard: React.FC = () => {
   const { posts, deletePost, archivePost, pinPost, featurePost, updatePost } = usePosts();
@@ -86,6 +88,7 @@ export const AdminDashboard: React.FC = () => {
     { id: 'published', label: 'Published', icon: <Eye size={18} />, count: publishedPosts.length },
     { id: 'drafts', label: 'Drafts', icon: <FileText size={18} />, count: draftPosts.length },
     { id: 'archived', label: 'Archived', icon: <Archive size={18} />, count: archivedPosts.length },
+    { id: 'videos', label: 'Videos', icon: <VideoIcon size={18} /> },
     { id: 'media', label: 'Media Library', icon: <ImageIcon size={18} />, count: allMedia.length },
   ];
 
@@ -380,6 +383,11 @@ export const AdminDashboard: React.FC = () => {
                   )}
                 </div>
               </div>
+            )}
+
+            {/* VIDEOS TAB */}
+            {activeTab === 'videos' && (
+              <VideosAdminTab />
             )}
 
           </div>

@@ -10,6 +10,7 @@ const VisionSection = lazy(() => import('../components/VisionSection').then(m =>
 const ImpactAreas = lazy(() => import('../components/ImpactAreas').then(m => ({ default: m.ImpactAreas })));
 const LifeSketch = lazy(() => import('../components/LifeSketch').then(m => ({ default: m.LifeSketch })));
 const LatestUpdates = lazy(() => import('../components/LatestUpdates').then(m => ({ default: m.LatestUpdates })));
+const YoutubeGrid = lazy(() => import('../components/YoutubeGrid').then(m => ({ default: m.YoutubeGrid })));
 const GalleryPreview = lazy(() => import('../components/GalleryPreview').then(m => ({ default: m.GalleryPreview })));
 const ContactSection = lazy(() => import('../components/ContactSection').then(m => ({ default: m.ContactSection })));
 
@@ -43,6 +44,9 @@ export const Home: React.FC = () => {
         </Suspense>
         <Suspense fallback={<SectionLoader />}>
           <LatestUpdates posts={posts} />
+        </Suspense>
+        <Suspense fallback={<SectionLoader />}>
+          <YoutubeGrid />
         </Suspense>
         <Suspense fallback={<SectionLoader />}>
           <GalleryPreview />

@@ -7,22 +7,28 @@ export const INITIAL_VIDEOS: Video[] = [
     id: '1',
     title: 'Veterans Welfare: A Call for Unity',
     thumbnail: 'https://img.youtube.com/vi/wCzM4lGzVWU/hqdefault.jpg',
-    date: 'Jan 15, 2026',
-    youtubeId: 'wCzM4lGzVWU'
+    created_at: '2026-01-15T00:00:00Z',
+    youtube_id: 'wCzM4lGzVWU',
+    is_featured: true,
+    order_index: 0
   },
   {
     id: '2',
     title: 'Reflections on 30 Years of Service',
     thumbnail: 'https://img.youtube.com/vi/wCzM4lGzVWU/hqdefault.jpg',
-    date: 'Dec 16, 2025',
-    youtubeId: 'wCzM4lGzVWU'
+    created_at: '2025-12-16T00:00:00Z',
+    youtube_id: 'wCzM4lGzVWU',
+    is_featured: false,
+    order_index: 1
   },
   {
     id: '3',
     title: 'Independence Day Message 2025',
     thumbnail: 'https://img.youtube.com/vi/wCzM4lGzVWU/hqdefault.jpg',
-    date: 'Mar 26, 2025',
-    youtubeId: 'wCzM4lGzVWU'
+    created_at: '2025-03-26T00:00:00Z',
+    youtube_id: 'wCzM4lGzVWU',
+    is_featured: false,
+    order_index: 2
   }
 ];
 

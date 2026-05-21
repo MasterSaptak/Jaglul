@@ -2,8 +2,10 @@ export interface Video {
   id: string;
   title: string;
   thumbnail: string;
-  date: string;
-  youtubeId: string;
+  youtube_id: string;
+  is_featured: boolean;
+  order_index: number;
+  created_at: string;
 }
 
 export interface Comment {
