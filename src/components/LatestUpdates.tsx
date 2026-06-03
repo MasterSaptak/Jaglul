@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Calendar, Clock, Image as ImageIcon, Play, Rss } from 'lucide-react';
+import { ArrowRight, Calendar, Play, Rss } from 'lucide-react';
 import { Post } from '../features/posts/types';
-import { getPostUrl, getPostImage, getPostExcerpt, formatPostDate, getPostCategory, sortNewestFirst } from '../features/posts/postUtils';
+import { getPostUrl, getPostImage, getPostExcerpt, formatPostDate, sortNewestFirst } from '../features/posts/postUtils';
 
 interface LatestUpdatesProps {
   posts: Post[];
@@ -11,14 +11,7 @@ interface LatestUpdatesProps {
 export const LatestUpdates: React.FC<LatestUpdatesProps> = ({ posts }) => {
   const latestPosts = sortNewestFirst(posts).slice(0, 3);
 
-  const getIcon = (type: string) => {
-    switch (type) {
-      case 'video': return <Play size={14} className="text-army-gold" fill="currentColor" />;
-      case 'event': return <Calendar size={14} className="text-army-gold" />;
-      case 'gallery': return <ImageIcon size={14} className="text-army-gold" />;
-      default: return <Clock size={14} className="text-army-gold" />;
-    }
-  };
+
 
   return (
     <section className="py-20 bg-[#fbfbfb] border-t border-army-green/5">
@@ -30,7 +23,7 @@ export const LatestUpdates: React.FC<LatestUpdatesProps> = ({ posts }) => {
               Live Feed
             </div>
             <h2 className="text-3xl sm:text-4xl font-serif font-black text-army-navy leading-tight">
-              Latest from the Studio
+              Latest Article and Blogs
             </h2>
             <p className="text-army-olive/70 mt-3 text-base sm:text-lg leading-relaxed">
               Real-time updates on news, events, and community initiatives led by Colonel Jaglul Ahsan.
@@ -80,11 +73,11 @@ export const LatestUpdates: React.FC<LatestUpdatesProps> = ({ posts }) => {
                   />
                 )}
 
-                {/* Category Badge */}
+                {/* Date & Time Badge */}
                 <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-full shadow-sm">
-                  {getIcon(post.type)}
+                  <Calendar size={14} className="text-army-gold" />
                   <span className="text-[10px] font-black uppercase tracking-widest text-army-navy">
-                    {getPostCategory(post)}
+                    {formatPostDate(post)}
                   </span>
                 </div>
               </div>

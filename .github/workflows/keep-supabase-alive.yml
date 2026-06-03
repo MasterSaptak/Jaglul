@@ -1,0 +1,42 @@
+name: Keep Supabase Alive
+
+# Runs every 3 days at 06:00 UTC to prevent Supabase free-tier pausing
+on:
+  schedule:
+    - cron: '0 6 */3 * *'   # Every 3 days at 6:00 AM UTC
+  workflow_dispatch:          # Allow manual trigger from GitHub UI
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        run: |
+          echo "🔄 Pinging Supabase to keep project alive..."
+          
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+          
+          echo "Response status: $RESPONSE"
+          
+          if [ "$RESPONSE" -ge 200 ] && [ "$RESPONSE" -lt 400 ]; then
+            echo "✅ Supabase is alive! Status: $RESPONSE"
+          else
+            echo "❌ Ping failed with status: $RESPONSE"
+            exit 1
+          fi
+
+      - name: Ping Supabase Auth Health
+        run: |
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${{ secrets.SUPABASE_URL }}/auth/v1/health")
+          
+          echo "Auth health check status: $RESPONSE"
+          
+          if [ "$RESPONSE" -ge 200 ] && [ "$RESPONSE" -lt 400 ]; then
+            echo "✅ Auth service healthy!"
+          else
+            echo "⚠️ Auth health check returned: $RESPONSE (non-critical)"
+          fi

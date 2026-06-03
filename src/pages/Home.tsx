@@ -11,7 +11,7 @@ const ImpactAreas = lazy(() => import('../components/ImpactAreas').then(m => ({ 
 const LifeSketch = lazy(() => import('../components/LifeSketch').then(m => ({ default: m.LifeSketch })));
 const LatestUpdates = lazy(() => import('../components/LatestUpdates').then(m => ({ default: m.LatestUpdates })));
 const YoutubeGrid = lazy(() => import('../components/YoutubeGrid').then(m => ({ default: m.YoutubeGrid })));
-const GalleryPreview = lazy(() => import('../components/GalleryPreview').then(m => ({ default: m.GalleryPreview })));
+
 const ContactSection = lazy(() => import('../components/ContactSection').then(m => ({ default: m.ContactSection })));
 
 // Minimal section placeholder during lazy load
@@ -48,9 +48,7 @@ export const Home: React.FC = () => {
         <Suspense fallback={<SectionLoader />}>
           <YoutubeGrid />
         </Suspense>
-        <Suspense fallback={<SectionLoader />}>
-          <GalleryPreview />
-        </Suspense>
+
         <Suspense fallback={<SectionLoader />}>
           <ContactSection />
         </Suspense>
