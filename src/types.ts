@@ -6,6 +6,9 @@ export interface Video {
   is_featured: boolean;
   order_index: number;
   created_at: string;
+  description?: string;
+  category?: string;
+  vision_id?: string;
 }
 
 export interface Comment {
@@ -42,55 +45,6 @@ export type PostTag =
 // Thematic Focus Areas
 export type ThematicArea = 'humanitarian' | 'education' | 'security' | 'veterans' | 'civic';
 
-export interface Post {
-  id: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  date: string;
-  category: PostCategory;
-  tags: PostTag[];
-  thematicArea: ThematicArea; // Primary thematic area
-  imageUrl: string;
-  images?: string[]; // Additional images for gallery
-  author: string;
-  commentsEnabled: boolean;
-  commentCount: number;
-  // Event specific fields
-  eventDetails?: {
-    location: string;
-    eventDate: string;
-    organizer: string;
-    role?: string;
-    attendees?: number;
-    outcome?: string;
-  };
-}
-
-// Media Gallery Item
-export interface MediaItem {
-  id: string;
-  postId?: string;
-  imageUrl: string;
-  caption: string;
-  date: string;
-  year: string;
-  thematicArea: ThematicArea;
-}
-
-export interface VisionGalleryImage {
-  id: string;
-  url: string;
-}
-
-export interface VisionCategory {
-  id: string;
-  slug: string;
-  title: string;
-  description?: string;
-  images: VisionGalleryImage[];
-}
-
 export type GalleryCategory = 'media' | 'vision' | 'uploaded';
 
 export interface GalleryImage {
@@ -111,10 +65,4 @@ export interface ContactFormData {
   reason: string;
   contactPerson?: string;
   message: string;
-}
-
-export interface AdminContextType {
-  isAuthenticated: boolean;
-  login: (password: string) => boolean;
-  logout: () => void;
 }

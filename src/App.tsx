@@ -4,6 +4,9 @@ import { AuthProvider } from './context/AuthContext';
 import { GalleryProvider } from './context/GalleryContext';
 import { PostsProvider } from './features/posts/context/PostsContext';
 import { VideosProvider } from './context/VideosContext';
+import { VisionsProvider } from './context/VisionsContext';
+import { MediaLibraryProvider } from './context/MediaLibraryContext';
+import { ContentVisibilityProvider } from './context/ContentVisibilityContext';
 
 // ── Lazy-loaded pages (route-level code splitting) ──────────
 const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
@@ -33,38 +36,44 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <PostsProvider>
-        <GalleryProvider>
-          <VideosProvider>
-            <Router>
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/about" element={<About />} />
-                  <Route path="/feed" element={<Feed />} />
+        <VisionsProvider>
+          <MediaLibraryProvider>
+            <ContentVisibilityProvider>
+              <GalleryProvider>
+                <VideosProvider>
+                  <Router>
+                    <Suspense fallback={<PageLoader />}>
+                      <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/feed" element={<Feed />} />
 
-                  {/* Flexible Update Routes */}
-                  <Route path="/news/:id" element={<NewsPost />} />
-                  <Route path="/update/:slug" element={<NewsPost />} />
+                        {/* Flexible Update Routes */}
+                        <Route path="/news/:id" element={<NewsPost />} />
+                        <Route path="/update/:slug" element={<NewsPost />} />
 
-                  <Route path="/impact/:theme" element={<ImpactPage />} />
-                  <Route path="/vision/:slug" element={<VisionGallery />} />
+                        <Route path="/impact/:theme" element={<ImpactPage />} />
+                        <Route path="/vision/:slug" element={<VisionGallery />} />
 
-                  {/* Legacy / Catch-all filtered routes */}
-                  <Route path="/news" element={<NewsArchive />} />
-                  <Route path="/gallery" element={<MediaGallery />} />
+                        {/* Legacy / Catch-all filtered routes */}
+                        <Route path="/news" element={<NewsArchive />} />
+                        <Route path="/gallery" element={<MediaGallery />} />
 
-                  <Route path="/comment-policy" element={<CommentPolicy />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/admin" element={<AdminLogin />} />
-                  <Route path="/admin/login" element={<AdminLogin />} />
+                        <Route path="/comment-policy" element={<CommentPolicy />} />
+                        <Route path="/contact" element={<Contact />} />
+                        <Route path="/admin" element={<AdminLogin />} />
+                        <Route path="/admin/login" element={<AdminLogin />} />
 
-                  {/* Jaglul Studio Admin */}
-                  <Route path="/admin/studio" element={<AdminDashboard />} />
-                </Routes>
-              </Suspense>
-            </Router>
-          </VideosProvider>
-        </GalleryProvider>
+                        {/* Jaglul Studio Admin */}
+                        <Route path="/admin/studio" element={<AdminDashboard />} />
+                      </Routes>
+                    </Suspense>
+                  </Router>
+                </VideosProvider>
+              </GalleryProvider>
+            </ContentVisibilityProvider>
+          </MediaLibraryProvider>
+        </VisionsProvider>
       </PostsProvider>
     </AuthProvider>
   );

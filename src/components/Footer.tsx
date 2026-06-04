@@ -60,12 +60,17 @@ export const Footer: React.FC = () => {
           <div className="space-y-5">
             <h4 className="text-xs font-black uppercase tracking-[0.3em] text-[#D4AF37] border-l-2 border-[#DA291C] pl-3">Contact</h4>
             <div className="space-y-4">
-              <div className="flex items-start gap-3 group">
-                <MapPin size={18} className="text-[#D4AF37] flex-shrink-0 mt-1" />
-                <p className="text-sm text-gray-300 leading-snug group-hover:text-white transition-colors">
-                  Holding# 557, Road# 09, Avenue# 03, Mirpur DOHS, Dhaka-1216
+              <a 
+                href="https://www.google.com/maps/dir/?api=1&destination=Road+12+Avenue+02+House+Number+893+Mirpur+DOHS+Pallabi+Dhaka"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-3 group text-sm text-gray-300 hover:text-white transition-colors"
+              >
+                <MapPin size={18} className="text-[#D4AF37] flex-shrink-0 mt-1 group-hover:scale-110 transition-transform duration-300" />
+                <p className="leading-snug">
+                  Road: 12, Avenue: 02, House Number: 893, Mirpur DOHS, Pallabi, Dhaka
                 </p>
-              </div>
+              </a>
               <a href="tel:+8801407071631" className="flex items-center gap-3 text-sm text-gray-300 hover:text-white transition-colors group">
                 <Phone size={18} className="text-[#D4AF37] group-hover:scale-110 transition-transform" />
                 +880 1407 071 631

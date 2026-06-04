@@ -45,7 +45,7 @@ export async function uploadMedia(
   const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
   const { data, error } = await supabase.storage
-    .from('media')
+    .from('Media')
     .upload(fileName, file, { upsert: false });
 
   if (error || !data) {
@@ -55,6 +55,6 @@ export async function uploadMedia(
 
   return {
     path: data.path,
-    url: getStorageUrl('media', data.path),
+    url: getStorageUrl('Media', data.path),
   };
 }

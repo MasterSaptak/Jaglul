@@ -76,9 +76,9 @@ export const ContactSection: React.FC = () => {
     {
       icon: <MapPin className="w-6 h-6" />,
       title: "Visit",
-      primary: "Mirpur DOHS, Dhaka",
-      secondary: "By appointment only",
-      action: "#contact-form",
+      primary: "Road 12, Mirpur DOHS",
+      secondary: "Dhaka, Bangladesh",
+      action: "https://www.google.com/maps/dir/?api=1&destination=Road+12+Avenue+02+House+Number+893+Mirpur+DOHS+Pallabi+Dhaka",
       color: "from-army-gold to-amber-600",
       hoverColor: "group-hover:text-army-gold"
     }
@@ -182,18 +182,23 @@ export const ContactSection: React.FC = () => {
             </div>
 
             {/* Address Card */}
-            <div className="bg-gradient-to-br from-army-green to-army-olive rounded-2xl p-6 text-white relative overflow-hidden">
+            <a 
+              href="https://www.google.com/maps/dir/?api=1&destination=Road+12+Avenue+02+House+Number+893+Mirpur+DOHS+Pallabi+Dhaka"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block bg-gradient-to-br from-army-green to-army-olive rounded-2xl p-6 text-white relative overflow-hidden group hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+            >
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
               <div className="relative z-10">
-                <MapPin className="w-8 h-8 mb-4 text-army-gold" />
+                <MapPin className="w-8 h-8 mb-4 text-army-gold group-hover:scale-110 transition-transform duration-300" />
                 <h4 className="font-bold text-lg mb-2">Office Address</h4>
                 <p className="text-green-100 text-sm leading-relaxed">
-                  Holding# 557, Road# 09, Avenue# 03<br />
-                  Mirpur DOHS, Dhaka-1216<br />
-                  Bangladesh
+                  Road: 12, Avenue: 02<br />
+                  House Number: 893, Mirpur DOHS<br />
+                  Pallabi, Dhaka, Bangladesh
                 </p>
               </div>
-            </div>
+            </a>
           </div>
 
           {/* Right Side - Form */}

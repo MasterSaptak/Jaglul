@@ -78,6 +78,15 @@ const mapFromSupabase = (post: PostRow): Post => ({
   isFeatured: post.is_featured,
   reactions: post.reactions ?? defaultReactions,
   slug: post.slug,
+  scheduledAt: post.scheduled_at ?? undefined,
+  publishedAt: post.published_at ?? undefined,
+  contentFormat: post.content_format ?? undefined,
+  metaTitle: post.meta_title ?? undefined,
+  metaDescription: post.meta_description ?? undefined,
+  ogImage: post.og_image ?? undefined,
+  canonicalUrl: post.canonical_url ?? undefined,
+  featuredImageId: post.featured_image_id ?? undefined,
+  viewCount: post.view_count ?? undefined,
 });
 
 export const PostsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -152,6 +161,15 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
           is_pinned: newPost.isPinned ?? false,
           is_featured: newPost.isFeatured ?? false,
           created_by: user.id,
+          scheduled_at: newPost.scheduledAt ?? null,
+          published_at: newPost.publishedAt ?? null,
+          content_format: newPost.contentFormat ?? null,
+          meta_title: newPost.metaTitle ?? null,
+          meta_description: newPost.metaDescription ?? null,
+          og_image: newPost.ogImage ?? null,
+          canonical_url: newPost.canonicalUrl ?? null,
+          featured_image_id: newPost.featuredImageId ?? null,
+          view_count: newPost.viewCount ?? null,
         };
 
         const { data: postData, error: postError } = await supabase
@@ -210,6 +228,15 @@ export const PostsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         if (updates.isPinned !== undefined) dbUpdates.is_pinned = updates.isPinned;
         if (updates.isFeatured !== undefined) dbUpdates.is_featured = updates.isFeatured;
         if (updates.reactions !== undefined) dbUpdates.reactions = updates.reactions;
+        if (updates.scheduledAt !== undefined) dbUpdates.scheduled_at = toNullable(updates.scheduledAt);
+        if (updates.publishedAt !== undefined) dbUpdates.published_at = toNullable(updates.publishedAt);
+        if (updates.contentFormat !== undefined) dbUpdates.content_format = toNullable(updates.contentFormat);
+        if (updates.metaTitle !== undefined) dbUpdates.meta_title = toNullable(updates.metaTitle);
+        if (updates.metaDescription !== undefined) dbUpdates.meta_description = toNullable(updates.metaDescription);
+        if (updates.ogImage !== undefined) dbUpdates.og_image = toNullable(updates.ogImage);
+        if (updates.canonicalUrl !== undefined) dbUpdates.canonical_url = toNullable(updates.canonicalUrl);
+        if (updates.featuredImageId !== undefined) dbUpdates.featured_image_id = toNullable(updates.featuredImageId);
+        if (updates.viewCount !== undefined) dbUpdates.view_count = toNullable(updates.viewCount);
 
         dbUpdates.updated_at = new Date().toISOString();
 

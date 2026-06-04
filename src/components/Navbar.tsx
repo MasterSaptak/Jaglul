@@ -97,7 +97,7 @@ export const Navbar: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              {isAdmin ? (
+              {isAdmin && (
                 <div className="flex items-center gap-2 pl-4 border-l border-white/10 ml-2">
                   <Link
                     to="/admin/studio"
@@ -112,15 +112,14 @@ export const Navbar: React.FC = () => {
                     Logout
                   </button>
                 </div>
-              ) : (
-                <a
-                  href="/#contact"
-                  onClick={handleContactClick}
-                  className="bg-army-gold text-army-navy px-7 py-3 rounded-md font-black text-sm uppercase tracking-widest hover:bg-[#DA291C] hover:text-white hover:border-[#DA291C] transition-all active:scale-95 border border-army-gold/50"
-                >
-                  Join Me
-                </a>
               )}
+              <a
+                href="/#contact"
+                onClick={handleContactClick}
+                className="bg-army-gold text-army-navy px-7 py-3 rounded-md font-black text-sm uppercase tracking-widest hover:bg-[#DA291C] hover:text-white hover:border-[#DA291C] transition-all active:scale-95 border border-army-gold/50"
+              >
+                Join Me
+              </a>
             </div>
           </div>
 
@@ -152,9 +151,9 @@ export const Navbar: React.FC = () => {
             </Link>
           ))}
 
-          <div className="pt-4 mt-4 border-t border-white/10">
-            {isAdmin ? (
-              <div className="space-y-3">
+          <div className="pt-4 mt-4 border-t border-white/10 space-y-3">
+            {isAdmin && (
+              <>
                 <Link
                   to="/admin/studio"
                   onClick={() => setIsOpen(false)}
@@ -169,16 +168,15 @@ export const Navbar: React.FC = () => {
                 >
                   Logout
                 </button>
-              </div>
-            ) : (
-              <a
-                href="/#contact"
-                onClick={handleContactClick}
-                className="flex items-center justify-center w-full py-4 rounded-xl bg-army-gold text-army-navy font-black uppercase tracking-widest shadow-lg"
-              >
-                Join Me
-              </a>
+              </>
             )}
+            <a
+              href="/#contact"
+              onClick={handleContactClick}
+              className="flex items-center justify-center w-full py-4 rounded-xl bg-army-gold text-army-navy font-black uppercase tracking-widest shadow-lg"
+            >
+              Join Me
+            </a>
           </div>
         </div>
       </div>

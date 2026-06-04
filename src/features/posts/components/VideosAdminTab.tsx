@@ -1,42 +1,61 @@
 import React, { useState } from 'react';
 import { useVideos } from '../../../context/VideosContext';
-import { Plus, Trash2, Edit3, Star, Link as LinkIcon, Check, ArrowUp, ArrowDown, Search, X } from 'lucide-react';
+import { useVisions } from '../../../context/VisionsContext';
+import { Plus, Trash2, Edit3, Star, Link as LinkIcon, Check, ArrowUp, ArrowDown, Search, X, Save } from 'lucide-react';
 import { Video } from '../../../types';
 
 export const VideosAdminTab: React.FC = () => {
-  const { videos, addVideo, deleteVideo, updateVideoTitle, toggleFeatured, reorderVideos, isLoading } = useVideos();
+  const { videos, addVideo, deleteVideo, updateVideo, toggleFeatured, reorderVideos, isLoading } = useVideos();
+  const { visions } = useVisions();
+  
   const [newUrl, setNewUrl] = useState('');
   const [newTitle, setNewTitle] = useState('');
+  const [newDescription, setNewDescription] = useState('');
+  const [newVisionId, setNewVisionId] = useState('');
+  
   const [isAdding, setIsAdding] = useState(false);
   const [addError, setAddError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  // Edit State
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [editDescription, setEditDescription] = useState('');
+  const [editVisionId, setEditVisionId] = useState('');
 
   const filteredVideos = videos.filter(v => v.title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const handleAddSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setAddError('');
-    const { error } = await addVideo(newUrl, newTitle);
+    const { error } = await addVideo(newUrl, newTitle, newDescription, newVisionId);
     if (error) {
       setAddError(error.message);
     } else {
       setIsAdding(false);
       setNewUrl('');
       setNewTitle('');
+      setNewDescription('');
+      setNewVisionId('');
     }
   };
 
   const handleSaveEdit = async (id: string) => {
-    await updateVideoTitle(id, editTitle);
+    await updateVideo(id, { 
+      title: editTitle,
+      description: editDescription || undefined,
+      vision_id: editVisionId || null
+    } as any);
     setEditingId(null);
   };
 
   const startEdit = (video: Video) => {
     setEditingId(video.id);
     setEditTitle(video.title);
+    setEditDescription((video as any).description || '');
+    setEditVisionId((video as any).vision_id || '');
+    setIsAdding(false); // Close add form if open
   };
 
   const copyLink = (youtubeId: string, id: string) => {
@@ -70,22 +89,26 @@ export const VideosAdminTab: React.FC = () => {
           <h1 className="font-serif font-bold text-3xl text-army-navy">YouTube Videos</h1>
           <p className="text-army-olive/60 mt-1 text-sm">Manage the video gallery displayed on the homepage.</p>
         </div>
-        <button
-          onClick={() => setIsAdding(!isAdding)}
-          className="flex items-center gap-2 bg-army-green text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-army-olive transition-all"
-        >
-          {isAdding ? <Check size={16} /> : <Plus size={16} />} 
-          {isAdding ? 'Cancel' : 'Add Video'}
-        </button>
+        {!isAdding && (
+          <button
+            onClick={() => setIsAdding(true)}
+            className="flex items-center gap-2 bg-army-green text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-army-olive transition-all"
+          >
+            <Plus size={16} /> Add Video
+          </button>
+        )}
       </div>
 
       {isAdding && (
-        <div className="bg-white p-6 rounded-xl border border-army-green/20 mb-8 shadow-sm">
-          <h3 className="font-bold text-army-navy mb-4">Add New YouTube Video</h3>
+        <div className="bg-white p-6 rounded-xl border border-army-green/20 mb-8 shadow-sm relative">
+          <button onClick={() => setIsAdding(false)} className="absolute top-4 right-4 text-army-olive/50 hover:text-army-red">
+            <X size={20} />
+          </button>
+          <h3 className="font-bold text-army-navy mb-4 text-lg">Add New YouTube Video</h3>
           {addError && <div className="text-army-red text-sm mb-4 bg-army-red/10 p-2 rounded">{addError}</div>}
           <form onSubmit={handleAddSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-army-oliveDark mb-1">YouTube URL</label>
+              <label className="block text-sm font-medium text-army-oliveDark mb-1">YouTube URL *</label>
               <input 
                 type="url" 
                 required
@@ -96,7 +119,7 @@ export const VideosAdminTab: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-army-oliveDark mb-1">Video Title</label>
+              <label className="block text-sm font-medium text-army-oliveDark mb-1">Video Title *</label>
               <input 
                 type="text" 
                 required
@@ -106,8 +129,31 @@ export const VideosAdminTab: React.FC = () => {
                 onChange={(e) => setNewTitle(e.target.value)}
               />
             </div>
-            <button type="submit" className="bg-army-navy text-white px-4 py-2 rounded-lg font-bold hover:bg-army-navy/90">
-              Save Video
+            <div>
+              <label className="block text-sm font-medium text-army-oliveDark mb-1">Description</label>
+              <textarea 
+                className="w-full rounded-md border-army-green/30 shadow-sm focus:border-army-green focus:ring-army-green p-2 border"
+                placeholder="Enter video description..."
+                rows={3}
+                value={newDescription}
+                onChange={(e) => setNewDescription(e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-army-oliveDark mb-1">Related Vision</label>
+              <select 
+                className="w-full rounded-md border-army-green/30 shadow-sm focus:border-army-green focus:ring-army-green p-2 border bg-white"
+                value={newVisionId}
+                onChange={(e) => setNewVisionId(e.target.value)}
+              >
+                <option value="">-- None --</option>
+                {visions.map(vision => (
+                  <option key={vision.id} value={vision.id}>{vision.title}</option>
+                ))}
+              </select>
+            </div>
+            <button type="submit" className="bg-army-navy text-white px-6 py-2 rounded-lg font-bold hover:bg-army-navy/90 flex items-center gap-2">
+              <Save size={18} /> Save Video
             </button>
           </form>
         </div>
@@ -134,12 +180,12 @@ export const VideosAdminTab: React.FC = () => {
           {searchQuery ? 'No videos match your search.' : 'No videos added yet.'}
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {filteredVideos.map((video, index) => (
             <div key={video.id} className={`bg-white rounded-xl border p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 shadow-sm transition-all ${video.is_featured ? 'border-army-gold ring-1 ring-army-gold' : 'border-army-green/10'}`}>
               
-              {/* Order Controls */}
-              {!searchQuery && (
+              {/* Order Controls (hide when editing or searching) */}
+              {!searchQuery && editingId !== video.id && (
                 <div className="flex flex-col gap-1 items-center justify-center text-army-olive/30 mr-2">
                   <button onClick={() => moveUp(index)} disabled={index === 0} className="hover:text-army-green disabled:opacity-30 disabled:cursor-not-allowed"><ArrowUp size={16} /></button>
                   <button onClick={() => moveDown(index)} disabled={index === videos.length - 1} className="hover:text-army-green disabled:opacity-30 disabled:cursor-not-allowed"><ArrowDown size={16} /></button>
@@ -147,78 +193,120 @@ export const VideosAdminTab: React.FC = () => {
               )}
 
               {/* Thumbnail */}
-              <div className="w-full sm:w-28 aspect-video rounded-lg overflow-hidden bg-black flex-shrink-0 relative group">
+              <div className="w-full sm:w-32 aspect-video rounded-lg overflow-hidden bg-black flex-shrink-0 relative group">
                 <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover opacity-80" />
                 {video.is_featured && <div className="absolute top-1 left-1 bg-army-gold text-white text-[10px] font-bold px-1.5 py-0.5 rounded">FEATURED</div>}
               </div>
 
-              {/* Title / Edit Form */}
+              {/* Content / Edit Form */}
               <div className="flex-1 min-w-0 w-full">
                 {editingId === video.id ? (
-                  <div className="flex items-center gap-2">
-                    <input 
-                      type="text" 
-                      value={editTitle}
-                      onChange={(e) => setEditTitle(e.target.value)}
-                      className="w-full border-army-green/30 rounded p-1 text-sm border"
-                      autoFocus
-                    />
-                    <button onClick={() => handleSaveEdit(video.id)} className="p-1 bg-army-green text-white rounded hover:bg-army-olive">
-                      <Check size={16} />
-                    </button>
-                    <button onClick={() => setEditingId(null)} className="p-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
-                      <X size={16} />
-                    </button>
+                  <div className="space-y-3 bg-gray-50/50 p-3 rounded-lg border border-army-green/5">
+                    <div>
+                      <label className="block text-xs font-bold text-army-olive mb-1">Title</label>
+                      <input 
+                        type="text" 
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        className="w-full border-army-green/30 rounded p-2 text-sm border focus:border-army-green focus:ring-army-green"
+                        autoFocus
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-army-olive mb-1">Description</label>
+                      <textarea 
+                        value={editDescription}
+                        onChange={(e) => setEditDescription(e.target.value)}
+                        rows={2}
+                        className="w-full border-army-green/30 rounded p-2 text-sm border focus:border-army-green focus:ring-army-green"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-army-olive mb-1">Related Vision</label>
+                      <select 
+                        value={editVisionId}
+                        onChange={(e) => setEditVisionId(e.target.value)}
+                        className="w-full border-army-green/30 rounded p-2 text-sm border bg-white focus:border-army-green focus:ring-army-green"
+                      >
+                        <option value="">-- None --</option>
+                        {visions.map(vision => (
+                          <option key={vision.id} value={vision.id}>{vision.title}</option>
+                        ))}
+                      </select>
+                    </div>
+                    
+                    <div className="flex gap-2 pt-2">
+                      <button 
+                        onClick={() => handleSaveEdit(video.id)} 
+                        className="px-4 py-2 bg-army-green text-white font-bold text-sm rounded-lg hover:bg-army-olive flex items-center gap-2"
+                      >
+                        <Save size={16} /> Save Changes
+                      </button>
+                      <button 
+                        onClick={() => setEditingId(null)} 
+                        className="px-4 py-2 bg-gray-200 text-gray-700 font-bold text-sm rounded-lg hover:bg-gray-300"
+                      >
+                        Cancel
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <>
-                    <h4 className="font-serif font-bold text-army-navy text-base leading-tight">
+                    <h4 className="font-serif font-bold text-army-navy text-lg leading-tight mb-1">
                       {video.title}
                     </h4>
-                    <p className="text-xs text-army-olive/50 mt-1 flex items-center gap-2">
-                      <span>{new Date(video.created_at).toLocaleDateString()}</span>
-                      <span>•</span>
-                      <span className="truncate">{video.youtube_id}</span>
-                    </p>
+                    {(video as any).description && (
+                      <p className="text-sm text-army-olive/80 line-clamp-2 mb-2">{(video as any).description}</p>
+                    )}
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-army-olive/60 mt-1">
+                      <span className="flex items-center gap-1"><Star size={12}/> {new Date(video.created_at).toLocaleDateString()}</span>
+                      {(video as any).vision_id && (
+                        <span className="bg-army-cream px-2 py-0.5 rounded text-army-olive font-medium border border-army-green/10">
+                          {visions.find(v => v.id === (video as any).vision_id)?.title || 'Vision Linked'}
+                        </span>
+                      )}
+                    </div>
                   </>
                 )}
               </div>
 
-              {/* Actions */}
-              <div className="flex items-center gap-1 flex-shrink-0 mt-2 sm:mt-0">
-                <button
-                  onClick={() => toggleFeatured(video.id)}
-                  title={video.is_featured ? "Remove Featured" : "Set Featured"}
-                  className={`p-2 rounded-lg transition-all ${video.is_featured ? 'text-army-gold bg-army-gold/10' : 'text-army-olive/50 hover:text-army-gold'} hover:bg-army-gold/5`}
-                >
-                  <Star size={18} className={video.is_featured ? 'fill-army-gold' : ''} />
-                </button>
-                <button
-                  onClick={() => copyLink(video.youtube_id, video.id)}
-                  title="Copy Link"
-                  className="p-2 rounded-lg text-army-olive/50 hover:text-army-navy hover:bg-army-navy/5 transition-all"
-                >
-                  {copiedId === video.id ? <Check size={18} className="text-army-green" /> : <LinkIcon size={18} />}
-                </button>
-                <button
-                  onClick={() => startEdit(video)}
-                  title="Edit Title"
-                  className="p-2 rounded-lg text-army-olive/50 hover:text-army-green hover:bg-army-green/5 transition-all"
-                >
-                  <Edit3 size={18} />
-                </button>
-                <button
-                  onClick={() => {
-                    if (window.confirm('Are you sure you want to delete this video?')) {
-                      deleteVideo(video.id);
-                    }
-                  }}
-                  title="Delete Video"
-                  className="p-2 rounded-lg text-army-olive/50 hover:text-army-red hover:bg-army-red/5 transition-all"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
+              {/* Actions (hide when editing) */}
+              {editingId !== video.id && (
+                <div className="flex items-center gap-1 flex-shrink-0 mt-2 sm:mt-0">
+                  <button
+                    onClick={() => toggleFeatured(video.id)}
+                    title={video.is_featured ? "Remove Featured" : "Set Featured"}
+                    className={`p-2 rounded-lg transition-all ${video.is_featured ? 'text-army-gold bg-army-gold/10' : 'text-army-olive/50 hover:text-army-gold'} hover:bg-army-gold/5`}
+                  >
+                    <Star size={18} className={video.is_featured ? 'fill-army-gold' : ''} />
+                  </button>
+                  <button
+                    onClick={() => copyLink(video.youtube_id, video.id)}
+                    title="Copy Link"
+                    className="p-2 rounded-lg text-army-olive/50 hover:text-army-navy hover:bg-army-navy/5 transition-all"
+                  >
+                    {copiedId === video.id ? <Check size={18} className="text-army-green" /> : <LinkIcon size={18} />}
+                  </button>
+                  <button
+                    onClick={() => startEdit(video)}
+                    title="Edit Details"
+                    className="p-2 rounded-lg text-army-olive/50 hover:text-army-green hover:bg-army-green/5 transition-all"
+                  >
+                    <Edit3 size={18} />
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (window.confirm('Are you sure you want to delete this video?')) {
+                        deleteVideo(video.id);
+                      }
+                    }}
+                    title="Delete Video"
+                    className="p-2 rounded-lg text-army-olive/50 hover:text-army-red hover:bg-army-red/5 transition-all"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>

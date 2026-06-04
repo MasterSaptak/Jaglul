@@ -5,9 +5,9 @@ import { Video } from '../types';
 interface VideosContextType {
   videos: Video[];
   isLoading: boolean;
-  addVideo: (url: string, title: string) => Promise<{ error: Error | null }>;
+  addVideo: (url: string, title: string, description?: string, visionId?: string) => Promise<{ error: Error | null }>;
   deleteVideo: (id: string) => Promise<{ error: Error | null }>;
-  updateVideoTitle: (id: string, title: string) => Promise<{ error: Error | null }>;
+  updateVideo: (id: string, updates: Partial<Video>) => Promise<{ error: Error | null }>;
   toggleFeatured: (id: string) => Promise<{ error: Error | null }>;
   reorderVideos: (reorderedVideos: Video[]) => Promise<{ error: Error | null }>;
 }
@@ -56,7 +56,7 @@ export const VideosProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     return match && match[2].length === 11 ? match[2] : null;
   };
 
-  const addVideo = async (url: string, title: string) => {
+  const addVideo = async (url: string, title: string, description?: string, visionId?: string) => {
     const youtubeId = extractYoutubeId(url);
     if (!youtubeId) {
       return { error: new Error('Invalid YouTube URL') };
@@ -68,6 +68,8 @@ export const VideosProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     const { error } = await (supabase as any).from('videos').insert([
       {
         title,
+        description: description || null,
+        vision_id: visionId || null,
         youtube_id: youtubeId,
         thumbnail: safeThumbnail,
         is_featured: videos.length === 0,
@@ -75,16 +77,22 @@ export const VideosProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       }
     ]);
 
+    if (!error) {
+      await fetchVideos();
+    }
+
     return { error };
   };
 
   const deleteVideo = async (id: string) => {
     const { error } = await (supabase as any).from('videos').delete().eq('id', id);
+    if (!error) await fetchVideos();
     return { error };
   };
 
-  const updateVideoTitle = async (id: string, title: string) => {
-    const { error } = await (supabase as any).from('videos').update({ title }).eq('id', id);
+  const updateVideo = async (id: string, updates: Partial<Video>) => {
+    const { error } = await (supabase as any).from('videos').update(updates).eq('id', id);
+    if (!error) await fetchVideos();
     return { error };
   };
 
@@ -92,6 +100,7 @@ export const VideosProvider: React.FC<{ children: ReactNode }> = ({ children }) 
     await (supabase as any).from('videos').update({ is_featured: false }).neq('id', id);
     const video = videos.find(v => v.id === id);
     const { error } = await (supabase as any).from('videos').update({ is_featured: !video?.is_featured }).eq('id', id);
+    if (!error) await fetchVideos();
     return { error };
   };
 
@@ -122,7 +131,7 @@ export const VideosProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       isLoading,
       addVideo,
       deleteVideo,
-      updateVideoTitle,
+      updateVideo,
       toggleFeatured,
       reorderVideos
     }}>
