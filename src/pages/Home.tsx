@@ -2,16 +2,13 @@ import React, { lazy, Suspense } from 'react';
 import { Navbar } from '../components/Navbar';
 import { Hero } from '../components/Hero';
 import { QuickStats } from '../components/QuickStats';
-import { usePosts } from '../features/posts/context/PostsContext';
 import { Footer } from '../components/Footer';
 
 // ── Lazy load below-the-fold sections ───────────────────────
 const VisionSection = lazy(() => import('../components/VisionSection').then(m => ({ default: m.VisionSection })));
 const ImpactAreas = lazy(() => import('../components/ImpactAreas').then(m => ({ default: m.ImpactAreas })));
 const LifeSketch = lazy(() => import('../components/LifeSketch').then(m => ({ default: m.LifeSketch })));
-const LatestUpdates = lazy(() => import('../components/LatestUpdates').then(m => ({ default: m.LatestUpdates })));
 const YoutubeGrid = lazy(() => import('../components/YoutubeGrid').then(m => ({ default: m.YoutubeGrid })));
-
 const ContactSection = lazy(() => import('../components/ContactSection').then(m => ({ default: m.ContactSection })));
 
 // Minimal section placeholder during lazy load
@@ -22,8 +19,6 @@ const SectionLoader = () => (
 );
 
 export const Home: React.FC = () => {
-  const { posts } = usePosts();
-
   return (
     <div className="min-h-screen flex flex-col bg-army-cream/10">
       <Navbar />
@@ -41,9 +36,6 @@ export const Home: React.FC = () => {
         </Suspense>
         <Suspense fallback={<SectionLoader />}>
           <LifeSketch />
-        </Suspense>
-        <Suspense fallback={<SectionLoader />}>
-          <LatestUpdates posts={posts} />
         </Suspense>
         <Suspense fallback={<SectionLoader />}>
           <YoutubeGrid />
